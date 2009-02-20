@@ -1,0 +1,11 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:u="/util">
+	<f:entry title="${%SLOCCount reports}" description="${%description.pattern}">
+		<f:textbox name="pattern" value="${instance.pattern}"/>
+	</f:entry>
+   <f:advanced>
+     <f:entry title="${%Report charset}" description="${%description.encoding}">
+       <f:textbox name="encoding" value="${instance.encoding}"/>
+     </f:entry>
+  </f:advanced>
+</j:jelly>
