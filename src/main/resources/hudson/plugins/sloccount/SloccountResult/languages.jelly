@@ -6,14 +6,17 @@
     <tr>
       <td class="pane-header">${%Language}</td>
       <td class="pane-header" style="width:2em">${%Files}</td>
-      <td class="pane-header" style="width:60%">${%Lines}</td>
+      <td class="pane-header" style="width:2em">${%Lines}</td>
+      <td class="pane-header" style="width:60%">${%Distribution}</td>
     </tr>
     <tbody>
-      <j:forEach var="language" items="${it.report.languages}">
+      <j:set var="max" value="${it.report.longestLanguage.lineCount}"/>
+      <j:forEach var="container" items="${it.report.languages}">
         <tr>
-          <td class="pane"><a href="languageResult/${language.name}">${language.name}</a></td>
-          <td class="pane">${language.fileCount}</td>
-          <td class="pane">${language.lineCount}</td>
+          <td class="pane"><a href="languageResult/${container.name}">${container.name}</a></td>
+          <td class="pane">${container.fileCount}</td>
+          <td class="pane">${container.lineCount}</td>
+          <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
       <tfoot>
@@ -21,6 +24,7 @@
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
           <td class="pane-header">${it.report.lineCount}</td>
+          <td class="pane-header"> </td>
         </tr>
       </tfoot>
     </tbody>

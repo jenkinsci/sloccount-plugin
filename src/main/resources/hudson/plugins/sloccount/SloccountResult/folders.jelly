@@ -6,14 +6,17 @@
     <tr>
       <td class="pane-header">${%Folder}</td>
       <td class="pane-header" style="width:2em">${%Files}</td>
-      <td class="pane-header" style="width:60%">${%Lines}</td>
+      <td class="pane-header" style="width:2em">${%Lines}</td>
+      <td class="pane-header" style="width:60%">${%Distribution}</td>
     </tr>
     <tbody>
-      <j:forEach var="folder" items="${it.report.folders}">
+      <j:set var="max" value="${it.report.longestFolder.lineCount}"/>
+      <j:forEach var="container" items="${it.report.folders}">
         <tr>
-          <td class="pane"><a href="folderResult/${folder.urlName}">${folder.name}</a></td>
-          <td class="pane">${folder.fileCount}</td>
-          <td class="pane">${folder.lineCount}</td>
+          <td class="pane"><a href="folderResult/${container.urlName}">${container.name}</a></td>
+          <td class="pane">${container.fileCount}</td>
+          <td class="pane">${container.lineCount}</td>
+          <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
       <tfoot>
@@ -21,6 +24,7 @@
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
           <td class="pane-header">${it.report.lineCount}</td>
+          <td class="pane-header"> </td>
         </tr>
       </tfoot>
     </tbody>

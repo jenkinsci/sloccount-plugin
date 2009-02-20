@@ -23,7 +23,7 @@ public class SloccountPublisher extends Publisher {
 
     public static final SloccountDescriptor DESCRIPTOR = new SloccountDescriptor();
 
-    private static final String DEFAULT_PATTERN = "**/report.sc";
+    private static final String DEFAULT_PATTERN = "**/sloccount.sc";
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     private final String pattern;

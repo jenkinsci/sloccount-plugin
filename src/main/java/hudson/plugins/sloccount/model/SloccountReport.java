@@ -130,6 +130,36 @@ public class SloccountReport extends FileContainer implements Serializable {
         }
     }
 
+    public File getLongestFile(){
+        File longest = null;
+        for(File f : this.getFiles()){
+            if(longest == null || f.getLineCount() > longest.getLineCount()){
+                longest = f;
+            }
+        }
+        return longest;
+    }
+
+    public Folder getLongestFolder(){
+        Folder longest = null;
+        for(Folder f : this.getFolders()){
+            if(longest == null || f.getLineCount() > longest.getLineCount()){
+                longest = f;
+            }
+        }
+        return longest;
+    }
+
+    public Language getLongestLanguage(){
+        Language longest = null;
+        for(Language l : this.getLanguages()){
+            if(longest == null || l.getLineCount() > longest.getLineCount()){
+                longest = l;
+            }
+        }
+        return longest;
+    }
+
     public void simplifyNames(){
         String root = this.getRootFolder();
         for(File f : this.getFiles()){
