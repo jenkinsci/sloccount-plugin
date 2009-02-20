@@ -23,7 +23,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     }
 
     public String getIconFileName() {
-        return "/plugin/SLOCCount/icons/sloccount-24.png";
+        return "/plugin/sloccount/icons/sloccount-24.png";
     }
 
     public String getDisplayName() {

@@ -99,14 +99,20 @@ public class SloccountReport extends FileContainer implements Serializable {
     }
 
     public String getRootFolder(){
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < this.rootFolderPath.length; i++){
-            if(i > 0){
-                builder.append("/");
+        if(this.rootFolderPath == null){
+            // this can happen if no report files were found to match the pattern
+            return "";
+            
+        }else{
+            StringBuilder builder = new StringBuilder();
+            for(int i = 0; i < this.rootFolderPath.length; i++){
+                if(i > 0){
+                    builder.append("/");
+                }
+                builder.append(this.rootFolderPath[i]);
             }
-            builder.append(this.rootFolderPath[i]);
+            return builder.toString();
         }
-        return builder.toString();
     }
 
     private void updateRootFolderPath(String newFolderName){
