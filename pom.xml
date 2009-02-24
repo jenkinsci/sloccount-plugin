@@ -12,7 +12,7 @@
   <artifactId>sloccount</artifactId>
   <packaging>hpi</packaging>
   <name>Hudson SLOCCount Plug-in</name>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <url>http://hudson.gotdns.com/wiki/display/HUDSON/SLOCCount+Plugin</url>
   <description>This plug-in generates the trend report for SLOCCount,
     an open source program which counts the number of lines of codes in over
@@ -175,10 +175,4 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/sloccount-1.1</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/sloccount-1.1</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/hudson/plugins/sloccount/tags/sloccount-1.1</url>
-  </scm>
 </project>
