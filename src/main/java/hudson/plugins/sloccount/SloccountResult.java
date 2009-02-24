@@ -1,6 +1,7 @@
 package hudson.plugins.sloccount;
 
 import hudson.model.AbstractBuild;
+import hudson.model.ModelObject;
 import hudson.plugins.sloccount.model.File;
 import hudson.plugins.sloccount.model.FileFilter;
 import hudson.plugins.sloccount.model.SloccountReport;
@@ -30,14 +31,13 @@ public class SloccountResult implements Serializable {
 
     public SloccountResult getLanguageResult(String language){
         SloccountReport filtered = new SloccountReport(this.report, new LanguageFileFilter(language));
-        return new SloccountResult(filtered, this.owner);
+        return new BreadCrumbResult(filtered, this.owner, language);
     }
 
     public SloccountResult getFolderResult(String jumbledFolder){
         String folder = jumbledFolder.replace("|", System.getProperty("file.separator"));
-        System.out.println("filtering for folder: " + folder);
         SloccountReport filtered = new SloccountReport(this.report, new FolderFileFilter(folder));
-        return new SloccountResult(filtered, this.owner);
+        return new BreadCrumbResult(filtered, this.owner, folder);
     }
 
     private static class LanguageFileFilter implements FileFilter {
@@ -66,6 +66,20 @@ public class SloccountResult implements Serializable {
             String fileFolder = file.getName().substring(0, index);
 
             return this.folder.equals(fileFolder);
+        }
+    }
+
+    private static class BreadCrumbResult extends SloccountResult implements ModelObject {
+
+        private String displayName = null;
+        
+        public BreadCrumbResult(SloccountReport report, AbstractBuild<?,?> owner, String displayName){
+            super(report, owner);
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return this.displayName;
         }
     }
 }
