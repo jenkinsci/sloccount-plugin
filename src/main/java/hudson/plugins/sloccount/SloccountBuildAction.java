@@ -12,7 +12,7 @@ import org.kohsuke.stapler.StaplerProxy;
  */
 public class SloccountBuildAction implements Action, Serializable, StaplerProxy {
 
-    public static final String URL_NAME = "sloccountResuts";
+    public static final String URL_NAME = "sloccountResult";
 
     private AbstractBuild<?,?> build;
     private SloccountResult result;

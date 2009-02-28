@@ -15,7 +15,7 @@ import org.kohsuke.stapler.StaplerResponse;
  */
 public class SloccountProjectAction implements Action, Serializable {
     
-    public static final String URL_NAME = "sloccountResuts";
+    public static final String URL_NAME = "sloccountResult";
 
     public static final int CHART_WIDTH = 500;
     public static final int CHART_HEIGHT = 200;
@@ -52,7 +52,7 @@ public class SloccountProjectAction implements Action, Serializable {
     public void doIndex(final StaplerRequest request, final StaplerResponse response) throws IOException {
         AbstractBuild<?, ?> build = getLastFinishedBuild();
         if (build != null) {
-            response.sendRedirect2(String.format("../%d/sloccountResults", build.getNumber()));
+            response.sendRedirect2(String.format("../%d/%s", build.getNumber(), SloccountBuildAction.URL_NAME));
         }
     }
 
