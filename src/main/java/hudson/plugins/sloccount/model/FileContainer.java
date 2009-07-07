@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.Serializable;
 
 /**
  *
  * @author lordofthepigs
  */
-public abstract class FileContainer {
+public abstract class FileContainer implements Serializable {
     
     private Map<String, File> files = new LinkedHashMap<String, File>();
     private int lineCount = 0;

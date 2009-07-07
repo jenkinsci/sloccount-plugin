@@ -13,13 +13,15 @@ import hudson.plugins.sloccount.model.SloccountParser;
 import hudson.tasks.Publisher;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
+
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
  *
  * @author lordofthepigs
  */
-public class SloccountPublisher extends Publisher {
+public class SloccountPublisher extends Publisher implements Serializable {
 
     public static final SloccountDescriptor DESCRIPTOR = new SloccountDescriptor();
 

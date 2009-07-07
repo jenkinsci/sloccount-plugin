@@ -6,6 +6,8 @@ import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 import hudson.util.DataSetBuilder;
 import hudson.util.ShiftedCategoryAxis;
 import java.awt.Color;
+import java.io.Serializable;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -20,7 +22,7 @@ import org.jfree.ui.RectangleInsets;
  *
  * @author lordofthepigs
  */
-public class SloccountChartBuilder {
+public class SloccountChartBuilder implements Serializable {
 
     private SloccountChartBuilder(){
         super();

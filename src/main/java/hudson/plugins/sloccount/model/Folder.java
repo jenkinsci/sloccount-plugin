@@ -1,10 +1,12 @@
 package hudson.plugins.sloccount.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author lordofthepigs
  */
-public class Folder extends FileContainer implements Countable {
+public class Folder extends FileContainer implements Countable, Serializable {
 
     private String name;
 

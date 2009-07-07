@@ -40,7 +40,7 @@ public class SloccountResult implements Serializable {
         return new BreadCrumbResult(filtered, this.owner, folder);
     }
 
-    private static class LanguageFileFilter implements FileFilter {
+    private static class LanguageFileFilter implements FileFilter, Serializable {
         private String language;
 
         public LanguageFileFilter(String language){
@@ -52,7 +52,7 @@ public class SloccountResult implements Serializable {
         }
     }
 
-    private static class FolderFileFilter implements FileFilter {
+    private static class FolderFileFilter implements FileFilter, Serializable {
         private String folder;
 
         public FolderFileFilter(String folder){
@@ -69,7 +69,7 @@ public class SloccountResult implements Serializable {
         }
     }
 
-    private static class BreadCrumbResult extends SloccountResult implements ModelObject {
+    private static class BreadCrumbResult extends SloccountResult implements ModelObject, Serializable {
 
         private String displayName = null;
         

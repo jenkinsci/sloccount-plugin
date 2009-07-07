@@ -20,7 +20,7 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
 
     private final String encoding;
     private final String filePattern;
-    private PrintStream logger;
+    private transient PrintStream logger = null;
 
     public SloccountParser(String encoding, String filePattern, PrintStream logger){
         this.logger = logger;
@@ -58,7 +58,7 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
             this.parseLine(line, report);
         }
 
-        if(LOG_ENABLED){
+        if(LOG_ENABLED && (this.logger != null)){
             this.logger.println("Root folder is: " + report.getRootFolder());
         }
     }
@@ -68,13 +68,13 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
 
         if(tokens.length != 4){
             // line is not a line count report line, ignore
-            if(LOG_ENABLED){
+            if(LOG_ENABLED && (this.logger != null)){
                 logger.println("Ignoring line: " + line);
             }
             return;
         }
 
-        if(LOG_ENABLED){
+        if(LOG_ENABLED && (this.logger != null)){
             logger.println("Parsing line: " + line);
         }
 
@@ -82,7 +82,7 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
         String languageName = tokens[1];
         String filePath = tokens[3];
 
-        if(LOG_ENABLED){
+        if(LOG_ENABLED && (this.logger != null)){
             logger.println("lineCount: " + lineCount);
             logger.println("language : " + languageName);
             logger.println("file     : " + filePath);

@@ -3,11 +3,13 @@ package hudson.plugins.sloccount;
 import hudson.plugins.sloccount.model.Language;
 import hudson.plugins.sloccount.model.SloccountReport;
 
+import java.io.Serializable;
+
 /**
  *
  * @author lordofthepigs
  */
-public class ReportSummary {
+public class ReportSummary  implements Serializable {
 
     private ReportSummary(){
         super();
