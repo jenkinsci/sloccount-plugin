@@ -21,6 +21,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>maven-plugin</artifactId>
+    </dependency>
+    <dependency>
       <groupId>findbugs</groupId>
       <artifactId>annotations</artifactId>
       <version>1.0.0</version>
