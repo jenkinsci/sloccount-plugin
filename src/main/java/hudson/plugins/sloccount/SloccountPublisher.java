@@ -6,11 +6,11 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
 import hudson.model.Result;
 import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.plugins.sloccount.model.SloccountParser;
-import hudson.tasks.Publisher;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Recorder;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
@@ -21,19 +21,13 @@ import org.kohsuke.stapler.DataBoundConstructor;
  *
  * @author lordofthepigs
  */
-public class SloccountPublisher extends Publisher implements Serializable {
-
-    public static final SloccountDescriptor DESCRIPTOR = new SloccountDescriptor();
+public class SloccountPublisher extends Recorder implements Serializable {
 
     private static final String DEFAULT_PATTERN = "**/sloccount.sc";
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     private final String pattern;
     private final String encoding;
-    
-    public Descriptor<Publisher> getDescriptor() {
-        return DESCRIPTOR;
-    }
     
     @DataBoundConstructor
     public SloccountPublisher(String pattern, String encoding){
@@ -54,7 +48,7 @@ public class SloccountPublisher extends Publisher implements Serializable {
     public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener){
 
         if(this.canContinue(build.getResult())){
-            FilePath workspace = build.getProject().getWorkspace();
+            FilePath workspace = build.getWorkspace();
             PrintStream logger = listener.getLogger();
             SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
             SloccountReport report;
@@ -76,6 +70,10 @@ public class SloccountPublisher extends Publisher implements Serializable {
             build.addAction(buildAction);
         }
         return true;
+    }
+
+    public BuildStepMonitor getRequiredMonitorService() {
+        return BuildStepMonitor.BUILD;
     }
 
     private String getRealEncoding(){

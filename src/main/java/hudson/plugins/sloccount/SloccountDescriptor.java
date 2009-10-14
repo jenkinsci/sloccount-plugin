@@ -1,15 +1,17 @@
 package hudson.plugins.sloccount;
 
+import hudson.Extension;
 import hudson.maven.AbstractMavenProject;
 import hudson.model.AbstractProject;
-import hudson.model.Descriptor;
+import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 
 /**
  *
  * @author lordofthepigs
  */
-public class SloccountDescriptor extends Descriptor<Publisher> {
+@Extension
+public class SloccountDescriptor extends BuildStepDescriptor<Publisher> {
 
     public SloccountDescriptor(){
         super(SloccountPublisher.class);
