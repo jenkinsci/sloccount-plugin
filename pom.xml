@@ -19,6 +19,13 @@
     25 different languages, including C/C++, Ada, COBOL, Fortran, SQL, Ruby,
     Python, etc... </description>
 
+  <developers>
+    <developer>
+      <id>npiguet</id>
+      <name>Nicolas Piguet</name>
+    </developer>
+  </developers>
+
   <dependencies>
     <dependency>
       <groupId>org.jvnet.hudson.main</groupId>
