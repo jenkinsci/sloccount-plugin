@@ -36,7 +36,7 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
     }
 
     /**
-     * Returns the Hudson build label at the specified column.
+     * Returns the build label at the specified column.
      *
      * @param dataset
      *            data set of values

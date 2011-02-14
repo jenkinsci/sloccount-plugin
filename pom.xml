@@ -4,16 +4,16 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.319</version>
+    <version>1.377</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>hudson.plugins.sloccount</groupId>
   <artifactId>sloccount</artifactId>
   <packaging>hpi</packaging>
-  <name>Hudson SLOCCount Plug-in</name>
+  <name>Jenkins SLOCCount Plug-in</name>
   <version>1.5-SNAPSHOT</version>
-  <url>http://wiki.hudson-ci.org/display/HUDSON/SLOCCount+Plugin</url>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin</url>
   <description>This plug-in generates the trend report for SLOCCount,
     an open source program which counts the number of lines of codes in over
     25 different languages, including C/C++, Ada, COBOL, Fortran, SQL, Ruby,
