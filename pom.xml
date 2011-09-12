@@ -5,7 +5,6 @@
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
     <version>1.377</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>hudson.plugins.sloccount</groupId>
@@ -37,4 +36,23 @@
       <version>1.0.0</version>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/sloccount-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/sloccount-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/sloccount-plugin</url>
+  </scm>
 </project>
