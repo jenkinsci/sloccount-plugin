@@ -23,6 +23,15 @@
       <id>npiguet</id>
       <name>Nicolas Piguet</name>
     </developer>
+    <developer>
+      <id>ohtake</id>
+      <name>OHTAKE Tomohiro</name>
+    </developer>
+    <developer>
+      <id>jieryn</id>
+      <name>Jesse Farinacci</name>
+      <email>jieryn@gmail.com</email>
+    </developer>
   </developers>
 
   <dependencies>
