@@ -3,6 +3,7 @@ package hudson.plugins.sloccount;
 import hudson.Extension;
 import hudson.maven.AbstractMavenProject;
 import hudson.model.AbstractProject;
+import hudson.model.FreeStyleProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 
@@ -18,7 +19,7 @@ public class SloccountDescriptor extends BuildStepDescriptor<Publisher> {
     }
 
     public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-        return !AbstractMavenProject.class.isAssignableFrom(jobType);
+        return AbstractMavenProject.class.isAssignableFrom(jobType) || FreeStyleProject.class.isAssignableFrom(jobType);
     }
 
     @Override
