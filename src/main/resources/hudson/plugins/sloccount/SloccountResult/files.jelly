@@ -20,7 +20,7 @@
         </tr>
       </j:forEach>
       <tfoot>
-        <tr>
+        <tr class="sortbottom">
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
           <td class="pane-header">${it.report.lineCount}</td>
