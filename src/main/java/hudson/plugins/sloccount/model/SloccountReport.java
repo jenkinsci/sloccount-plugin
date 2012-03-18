@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
- *
  * @author lordofthepigs
  */
 public class SloccountReport extends FileContainer implements Serializable {
@@ -22,10 +22,6 @@ public class SloccountReport extends FileContainer implements Serializable {
     public SloccountReport(){
         super();
         this.fileSeparator = System.getProperty("file.separator");
-        if(this.fileSeparator.equals("\\")){
-            // escape the backslash if required (fileSeparator is used as a regex)
-            this.fileSeparator = "\\\\";
-        }
     }
 
     public SloccountReport(SloccountReport old, FileFilter filter){
@@ -59,7 +55,7 @@ public class SloccountReport extends FileContainer implements Serializable {
         language.addFile(file);
     }
 
-    private String extractFolder(String filePath){
+    String extractFolder(String filePath){
         int index = filePath.lastIndexOf(this.fileSeparator);
         return filePath.substring(0, index);
     }
@@ -90,7 +86,6 @@ public class SloccountReport extends FileContainer implements Serializable {
 
     public void addFolder(Folder folder){
         this.folders.put(folder.getName(), folder);
-
         this.updateRootFolderPath(folder.getName());
     }
 
@@ -115,8 +110,9 @@ public class SloccountReport extends FileContainer implements Serializable {
         }
     }
 
-    private void updateRootFolderPath(String newFolderName){
-        String[] newFolderPath = newFolderName.split(this.fileSeparator);
+    void updateRootFolderPath(String newFolderName){
+        String splitRegex = Matcher.quoteReplacement(this.fileSeparator);
+    	String[] newFolderPath = newFolderName.split(splitRegex);
 
         if(this.rootFolderPath == null){
             this.rootFolderPath = newFolderPath;
