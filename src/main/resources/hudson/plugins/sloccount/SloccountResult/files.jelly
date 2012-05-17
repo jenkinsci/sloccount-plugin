@@ -31,6 +31,6 @@
   </table>
 
   <script type="text/javascript">
-          Behaviour.apply(document);
+          Behaviour.applySubtree(document.getElementById('statistics'));
   </script>
 </j:jelly>
