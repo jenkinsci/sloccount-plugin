@@ -15,7 +15,7 @@
         <tr>
           <td class="pane">${container.name}</td>
           <td class="pane">${container.language}</td>
-          <td class="pane">${container.lineCount}</td>
+          <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
           <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
@@ -23,7 +23,7 @@
         <tr class="sortbottom">
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
-          <td class="pane-header">${it.report.lineCount}</td>
+          <td class="pane-header number" data="${it.report.lineCount}">${it.report.lineCountString}</td>
           <td class="pane-header"> </td>
         </tr>
       </tfoot>

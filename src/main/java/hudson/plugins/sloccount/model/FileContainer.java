@@ -1,5 +1,6 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.StringUtil;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.io.Serializable;
  *
  * @author lordofthepigs
  */
-public abstract class FileContainer implements Serializable {
+public abstract class FileContainer implements Countable, Serializable {
     
     private Map<String, File> files = new LinkedHashMap<String, File>();
     private int lineCount = 0;
@@ -27,6 +28,10 @@ public abstract class FileContainer implements Serializable {
     public int getFileCount(){
         return this.files.size();
     }
+    
+    public String getFileCountString() {
+        return StringUtil.grouping(getFileCount());
+    }
 
     public void addFile(File file){
         this.files.put(file.getName(), file);
@@ -36,4 +41,9 @@ public abstract class FileContainer implements Serializable {
     public int getLineCount(){
         return this.lineCount;
     }
+    
+    public String getLineCountString() {
+        return StringUtil.grouping(getLineCount());
+    }
+
 }
