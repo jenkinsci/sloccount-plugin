@@ -2,6 +2,7 @@ package hudson.plugins.sloccount;
 
 import hudson.plugins.sloccount.model.Language;
 import hudson.plugins.sloccount.model.SloccountReport;
+import hudson.plugins.sloccount.util.StringUtil;
 
 import java.io.Serializable;
 
@@ -19,17 +20,17 @@ public class ReportSummary  implements Serializable {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<a href=\"" + SloccountBuildAction.URL_NAME + "\">");
-        builder.append(report.getLineCount());
+        builder.append(report.getLineCountString());
         if(previous != null){
             printDifference(report.getLineCount(), previous.getLineCount(), builder);
         }
         builder.append(" lines</a> in ");
-        builder.append(report.getFileCount());
+        builder.append(report.getFileCountString());
         if(previous != null){
             printDifference(report.getFileCount(), previous.getFileCount(), builder);
         }
         builder.append(" files and ");
-        builder.append(report.getLanguageCount());
+        builder.append(report.getLanguageCountString());
         if(previous != null){
             printDifference(report.getLanguageCount(), previous.getLanguageCount(), builder);
         }
@@ -60,12 +61,12 @@ public class ReportSummary  implements Serializable {
         builder.append("\">");
         builder.append(language.getName());
         builder.append("</a> : ");
-        builder.append(language.getLineCount());
+        builder.append(language.getLineCountString());
         if(previous != null){
             printDifference(language.getLineCount(), previous.getLineCount(), builder);
         }
         builder.append(" lines in ");
-        builder.append(language.getFileCount());
+        builder.append(language.getFileCountString());
         if(previous != null){
             printDifference(language.getFileCount(), previous.getFileCount(), builder);
         }
@@ -79,7 +80,7 @@ public class ReportSummary  implements Serializable {
         if(difference >= 0){
             builder.append('+');
         }
-        builder.append(difference);
+        builder.append(StringUtil.grouping(difference));
         builder.append(")");
     }
 }

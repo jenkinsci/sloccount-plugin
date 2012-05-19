@@ -1,5 +1,6 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.StringUtil;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -87,6 +88,10 @@ public class SloccountReport extends FileContainer {
         return this.languages.size();
     }
 
+    public String getLanguageCountString() {
+        return StringUtil.grouping(getLanguageCount());
+    }
+    
     public void addFolder(Folder folder){
         this.folders.put(folder.getName(), folder);
 
