@@ -99,6 +99,9 @@
             background-image:url(${rootURL}/plugin/findbugs/icons/clearpixel.gif);
         }
 
+        .number {
+            text-align: right;
+        }
 
       </style>
 </j:jelly>

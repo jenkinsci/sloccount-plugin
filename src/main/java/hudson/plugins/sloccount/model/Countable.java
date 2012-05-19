@@ -6,8 +6,10 @@ package hudson.plugins.sloccount.model;
  */
 public interface Countable {
 
-    public int getLineCount();
+    int getLineCount();
 
-    public String getName();
+    String getLineCountString();
+    
+    String getName();
 
 }
