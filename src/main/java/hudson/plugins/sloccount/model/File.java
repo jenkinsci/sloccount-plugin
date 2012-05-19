@@ -1,5 +1,6 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.StringUtil;
 import java.io.Serializable;
 
 /**
@@ -22,6 +23,10 @@ public class File implements Countable, Serializable {
         return this.lineCount;
     }
 
+    public String getLineCountString() {
+        return StringUtil.grouping(getLineCount());
+    }
+    
     public String getName() {
         return this.name;
     }

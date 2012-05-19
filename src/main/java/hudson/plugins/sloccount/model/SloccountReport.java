@@ -1,6 +1,5 @@
 package hudson.plugins.sloccount.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Map;
  *
  * @author lordofthepigs
  */
-public class SloccountReport extends FileContainer implements Serializable {
+public class SloccountReport extends FileContainer {
 
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
@@ -175,4 +174,9 @@ public class SloccountReport extends FileContainer implements Serializable {
             f.simplifyName(root);
         }
     }
+
+    public String getName() {
+        return "SlocCount Report";
+    }
+        
 }

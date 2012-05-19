@@ -14,8 +14,8 @@
       <j:forEach var="container" items="${it.report.languages}">
         <tr>
           <td class="pane"><a href="languageResult/${container.name}">${container.name}</a></td>
-          <td class="pane number" data="${container.fileCount}">${container.fileCount}</td>
-          <td class="pane number" data="${container.lineCount}">${container.lineCount}</td>
+          <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
+          <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
           <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
@@ -23,7 +23,7 @@
         <tr class="sortbottom">
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
-          <td class="pane-header number" data="${it.report.lineCount}">${it.report.lineCount}</td>
+          <td class="pane-header number" data="${it.report.lineCount}">${it.report.lineCountString}</td>
           <td class="pane-header"> </td>
         </tr>
       </tfoot>
