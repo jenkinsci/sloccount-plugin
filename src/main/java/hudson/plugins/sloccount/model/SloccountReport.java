@@ -136,7 +136,9 @@ public class SloccountReport extends FileContainer {
                     return;
                 }
             }
-            // no mismatch, the rootFolderPath remains unchanged
+            if (newFolderPath.length < this.rootFolderPath.length) {
+                this.rootFolderPath = newFolderPath;
+            }
         }
     }
 
