@@ -71,13 +71,33 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     public final boolean hasValidResults() {
+       
         AbstractBuild<?, ?> build = getLastFinishedBuild();
+        
         if (build != null) {
+            
             SloccountBuildAction resultAction = build.getAction(SloccountBuildAction.class);
-            if (resultAction != null) {
-                return resultAction.getPreviousResult() != null;
-            }
+            int nbr_results = 0;
+
+            do{
+
+               SloccountResult result = resultAction.getResult();
+               
+               if(result != null){
+                  
+                  nbr_results++;
+                  
+                  if(nbr_results > 1){
+                     
+                     return true;
+                  }
+               }
+               
+               resultAction = resultAction.getPreviousAction();
+
+            }while(resultAction != null);            
         }
+        
         return false;
     }
 

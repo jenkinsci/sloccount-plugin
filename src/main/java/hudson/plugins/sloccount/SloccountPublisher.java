@@ -46,8 +46,11 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     @Override
     public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener){
-
+       
+        SloccountResult result = null;
+        
         if(this.canContinue(build.getResult())){
+            
             FilePath workspace = build.getWorkspace();
             PrintStream logger = listener.getLogger();
             SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
@@ -65,10 +68,13 @@ public class SloccountPublisher extends Recorder implements Serializable {
                 return false;
             }
 
-            SloccountResult result = new SloccountResult(report, build);
-            SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
-            build.addAction(buildAction);
+            result = new SloccountResult(report, build);
         }
+        
+        SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
+        
+        build.addAction(buildAction);
+        
         return true;
     }
 
