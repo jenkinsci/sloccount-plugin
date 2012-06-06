@@ -35,11 +35,26 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     }
 
     public String getSummary(){
-        return ReportSummary.createReportSummary(result.getReport(), this.getPreviousReport());
+        
+        String retVal = "";
+        
+        if(this.result != null){
+            
+            retVal =  ReportSummary.createReportSummary(this.result.getReport(), this.getPreviousReport());
+        }
+        
+        return retVal;
     }
 
     public String getDetails(){
-        return ReportSummary.createReportSummaryDetails(result.getReport(), this.getPreviousReport());
+        
+        String retVal = "";
+        
+        if(this.result != null){
+            retVal =  ReportSummary.createReportSummaryDetails(this.result.getReport(), this.getPreviousReport());
+        }
+        
+        return retVal;
     }
 
     public SloccountResult getResult(){
@@ -66,9 +81,15 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     }
 
     SloccountBuildAction getPreviousAction(){
-        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
-        if(previousBuild != null){
-            return previousBuild.getAction(SloccountBuildAction.class);
+        
+        if(this.build != null){
+            
+            AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+            
+            if(previousBuild != null){
+                
+                return previousBuild.getAction(SloccountBuildAction.class);
+            }
         }
         return null;
     }
