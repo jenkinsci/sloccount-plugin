@@ -49,29 +49,30 @@ public class SloccountPublisher extends Recorder implements Serializable {
        
         SloccountResult result;
             
-        FilePath workspace = build.getWorkspace();
         PrintStream logger = listener.getLogger();
-        SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
-        SloccountReport report;
+        SloccountReport report = new SloccountReport();
+        SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger, report);
 
-        try{
-            if(this.canContinue(build.getResult())){
+        if(this.canContinue(build.getResult())){
+            
+            try{
+                FilePath workspace = build.getWorkspace();
                 report = workspace.act(parser);
-            }else{
-                // generate an empty report 
-                // TODO: Replace this empty report with the last valid one?
-                report = new SloccountReport();
+
+            }catch(IOException ioe){
+                ioe.printStackTrace(logger);
+                return false;
+
+            }catch(InterruptedException ie){
+                ie.printStackTrace(logger);
+                return false;
             }
             
-        }catch(IOException ioe){
-            ioe.printStackTrace(logger);
-            return false;
-
-        }catch(InterruptedException ie){
-            ie.printStackTrace(logger);
-            return false;
+        }else{
+            
+            // continue with empty report object
         }
-
+  
         result = new SloccountResult(report, build);
         
         SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
