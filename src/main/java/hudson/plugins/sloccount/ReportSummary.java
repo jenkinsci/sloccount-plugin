@@ -19,40 +19,45 @@ public class ReportSummary  implements Serializable {
     public static String createReportSummary(SloccountReport report, SloccountReport previous){
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<a href=\"" + SloccountBuildAction.URL_NAME + "\">");
-        builder.append(report.getLineCountString());
-        if(previous != null){
-            printDifference(report.getLineCount(), previous.getLineCount(), builder);
-        }
-        builder.append(" lines</a> in ");
-        builder.append(report.getFileCountString());
-        if(previous != null){
-            printDifference(report.getFileCount(), previous.getFileCount(), builder);
-        }
-        builder.append(" files and ");
-        builder.append(report.getLanguageCountString());
-        if(previous != null){
-            printDifference(report.getLanguageCount(), previous.getLanguageCount(), builder);
-        }
-        builder.append(" languages.");
+        if((report != null)&&(previous != null)){
 
+            builder.append("<a href=\"" + SloccountBuildAction.URL_NAME + "\">");
+            builder.append(report.getLineCountString());
+            printDifference(report.getLineCount(), previous.getLineCount(), builder);
+
+            builder.append(" lines</a> in ");
+            builder.append(report.getFileCountString());
+            printDifference(report.getFileCount(), previous.getFileCount(), builder);
+
+            builder.append(" files and ");
+            builder.append(report.getLanguageCountString());
+            printDifference(report.getLanguageCount(), previous.getLanguageCount(), builder);
+
+            builder.append(" languages.");
+        }
+        
         return builder.toString();
     }
 
     public static String createReportSummaryDetails(SloccountReport report, SloccountReport previous){
+        
         StringBuilder builder = new StringBuilder();
 
-        for(Language language : report.getLanguages()){
-            Language previousLanguage = null;
-            if(previous != null){
+        if((report != null)&&(previous != null)){
+            
+            for(Language language : report.getLanguages()){
+                
+                Language previousLanguage = null;
                 previousLanguage = previous.getLanguage(language.getName());
+                
+                appendLanguageDetails(language, previousLanguage, builder);
             }
-            appendLanguageDetails(language, previousLanguage, builder);
         }
+        
         return builder.toString();
     }
 
-    public static void appendLanguageDetails(Language language, Language previous, StringBuilder builder){
+    private static void appendLanguageDetails(Language language, Language previous, StringBuilder builder){
         builder.append("<li>");
         builder.append("<a href=\"");
         builder.append(SloccountBuildAction.URL_NAME);
