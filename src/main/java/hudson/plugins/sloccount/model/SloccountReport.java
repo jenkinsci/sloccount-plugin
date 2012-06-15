@@ -18,13 +18,18 @@ public class SloccountReport extends FileContainer {
     /** The longest folder path common to all folders. */
     private String[] rootFolderPath = null;
     private transient String fileSeparator;
+    private transient String regex_fileSeparator;
 
     public SloccountReport(){
         super();
         this.fileSeparator = System.getProperty("file.separator");
+        
         if(this.fileSeparator.equals("\\")){
-            // escape the backslash if required (fileSeparator is used as a regex)
-            this.fileSeparator = "\\\\";
+            // Windows environment -> escape the backslash for regex
+            this.regex_fileSeparator = "\\\\";
+        }else{ 
+            // Unix environment -> use as given
+            this.regex_fileSeparator = this.fileSeparator;            
         }
     }
 
@@ -120,7 +125,7 @@ public class SloccountReport extends FileContainer {
     }
 
     private void updateRootFolderPath(String newFolderName){
-        String[] newFolderPath = newFolderName.split(this.fileSeparator);
+        String[] newFolderPath = newFolderName.split(this.regex_fileSeparator);
 
         if(this.rootFolderPath == null){
             this.rootFolderPath = newFolderPath;
@@ -185,5 +190,4 @@ public class SloccountReport extends FileContainer {
     public String getName() {
         return "SlocCount Report";
     }
-        
 }
