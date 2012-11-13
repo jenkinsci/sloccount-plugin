@@ -21,10 +21,8 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
     private final String encoding;
     private final String filePattern;
     private transient PrintStream logger = null;
-    private transient SloccountReport report = null;
 
-    public SloccountParser(String encoding, String filePattern, PrintStream logger, SloccountReport report){
-        this.report = report;
+    public SloccountParser(String encoding, String filePattern, PrintStream logger){
         this.logger = logger;
         this.filePattern = filePattern;
         this.encoding = encoding;
@@ -32,16 +30,17 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
 
 
     public SloccountReport invoke(java.io.File workspace, VirtualChannel channel) throws IOException {
+        SloccountReport report = new SloccountReport();
         
         FileFinder finder = new FileFinder(this.filePattern);
         String[] found = finder.find(workspace);
 
         for(String fileName : found){
-            this.parse(workspace, fileName, this.report);
+            this.parse(workspace, fileName, report);
         }
 
-        this.report.simplifyNames();
-        return this.report;
+        report.simplifyNames();
+        return report;
     }
 
     private void parse(java.io.File workspace, String fileName, SloccountReport report) throws IOException {
@@ -86,7 +85,7 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
         if(LOG_ENABLED && (this.logger != null)){
             logger.println("lineCount: " + lineCount);
             logger.println("language : " + languageName);
-            logger.println("file     : " + filePath);
+            logger.println("file : " + filePath);
         }
 
         report.add(filePath, languageName, lineCount);
