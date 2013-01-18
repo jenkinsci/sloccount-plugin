@@ -89,12 +89,22 @@ public class ReportSummary  implements Serializable {
 
     private static void printDifference(int current, int previous, StringBuilder builder){
         int difference = current - previous;
-        builder.append(" (");
 
-        if(difference >= 0){
-            builder.append('+');
+        if(difference > 0)
+        {
+            builder.append(" (+");
+            builder.append(StringUtil.grouping(difference));
+            builder.append(")");
         }
-        builder.append(StringUtil.grouping(difference));
-        builder.append(")");
+        else if(difference == 0)
+        {
+            // do nothing
+        }
+        else
+        {
+            builder.append(" ("); // minus sign is part of the difference variable (negative number)
+            builder.append(StringUtil.grouping(difference));
+            builder.append(")");
+        }
     }
 }
