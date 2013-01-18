@@ -25,7 +25,6 @@ import org.jfree.ui.RectangleInsets;
 public class SloccountChartBuilder implements Serializable {
 
     private SloccountChartBuilder(){
-        super();
     }
 
     public static JFreeChart buildChart(SloccountBuildAction action){
