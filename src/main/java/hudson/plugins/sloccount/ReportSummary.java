@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class ReportSummary  implements Serializable {
 
     private ReportSummary(){
-        super();
+        //super();
     }
 
     public static String createReportSummary(SloccountReport report, SloccountReport previous){
@@ -21,19 +21,24 @@ public class ReportSummary  implements Serializable {
 
         if((report != null)&&(previous != null)){
 
+            String strLines     = Messages.Sloccount_ReportSummary_Lines();
+            String strFiles     = Messages.Sloccount_ReportSummary_Files();
+            String strAnd       = Messages.Sloccount_ReportSummary_and();
+            String strLanguages = Messages.Sloccount_ReportSummary_Languages();
+
             builder.append("<a href=\"" + SloccountBuildAction.URL_NAME + "\">");
             builder.append(report.getLineCountString());
             printDifference(report.getLineCount(), previous.getLineCount(), builder);
 
-            builder.append(" lines</a> in ");
+            builder.append(" " + strLines + "</a> in ");
             builder.append(report.getFileCountString());
             printDifference(report.getFileCount(), previous.getFileCount(), builder);
 
-            builder.append(" files and ");
+            builder.append(" " + strFiles + " " + strAnd + " ");
             builder.append(report.getLanguageCountString());
             printDifference(report.getLanguageCount(), previous.getLanguageCount(), builder);
 
-            builder.append(" languages.");
+            builder.append(" " + strLanguages + ".");
         }
         
         return builder.toString();
@@ -58,6 +63,10 @@ public class ReportSummary  implements Serializable {
     }
 
     private static void appendLanguageDetails(Language language, Language previous, StringBuilder builder){
+
+        String strLines     = Messages.Sloccount_ReportSummary_Lines();
+        String strFiles     = Messages.Sloccount_ReportSummary_Files();
+       
         builder.append("<li>");
         builder.append("<a href=\"");
         builder.append(SloccountBuildAction.URL_NAME);
@@ -70,12 +79,12 @@ public class ReportSummary  implements Serializable {
         if(previous != null){
             printDifference(language.getLineCount(), previous.getLineCount(), builder);
         }
-        builder.append(" lines in ");
+        builder.append(" " + strLines + " in ");
         builder.append(language.getFileCountString());
         if(previous != null){
             printDifference(language.getFileCount(), previous.getFileCount(), builder);
         }
-        builder.append(" files.</li>");
+        builder.append(" " + strFiles + ".</li>");
     }
 
     private static void printDifference(int current, int previous, StringBuilder builder){
