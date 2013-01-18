@@ -28,7 +28,10 @@ public class SloccountChartBuilder implements Serializable {
     }
 
     public static JFreeChart buildChart(SloccountBuildAction action){
-        JFreeChart chart = ChartFactory.createStackedAreaChart(null, null, "lines", buildDataset(action), PlotOrientation.VERTICAL, true, false, true);
+       
+        String strLines = Messages.Sloccount_ReportSummary_Lines();
+
+        JFreeChart chart = ChartFactory.createStackedAreaChart(null, null, strLines, buildDataset(action), PlotOrientation.VERTICAL, true, false, true);
 
         chart.setBackgroundPaint(Color.white);
 
