@@ -21,7 +21,9 @@ public class SloccountReport extends FileContainer {
     private transient String regex_fileSeparator;
 
     public SloccountReport(){
+        
         super();
+        
         this.fileSeparator = System.getProperty("file.separator");
         
         if(this.fileSeparator.equals("\\")){
