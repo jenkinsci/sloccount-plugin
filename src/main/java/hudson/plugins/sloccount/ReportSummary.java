@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class ReportSummary  implements Serializable {
 
     private ReportSummary(){
-        //super();
+
     }
 
     public static String createReportSummary(SloccountReport report, SloccountReport previous){
