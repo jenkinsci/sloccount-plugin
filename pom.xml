@@ -37,6 +37,10 @@
       <name>Seiji Sogabe</name>
       <email>s.sogabe@gmail.com</email>
     </developer>      
+    <developer>
+      <id>kbrandt</id>
+      <name>Karsten Brandt</name>
+    </developer>      
   </developers>
 
 
