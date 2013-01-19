@@ -84,15 +84,7 @@
             background-repeat:no-repeat;
         }
 
-        .priority-high {
-            background: #EF2929;
-        }
-
-        .priority-normal {
-            background: #FCE94F;
-        }
-
-        .priority-low {
+        .distribution_bar {
             background: #729FCF;
         }
 
