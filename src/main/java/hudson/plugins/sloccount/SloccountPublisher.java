@@ -31,6 +31,9 @@ public class SloccountPublisher extends Recorder implements Serializable {
     
     @DataBoundConstructor
     public SloccountPublisher(String pattern, String encoding){
+       
+        super();
+        
         this.pattern = pattern;
         this.encoding = encoding;
     }
