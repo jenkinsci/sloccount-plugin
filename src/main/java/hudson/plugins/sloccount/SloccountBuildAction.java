@@ -2,8 +2,12 @@ package hudson.plugins.sloccount;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
 import hudson.plugins.sloccount.model.SloccountReport;
+
 import java.io.Serializable;
+import java.util.List;
+
 import org.kohsuke.stapler.StaplerProxy;
 
 /**
@@ -40,7 +44,8 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         
         if(this.result != null){
             
-            retVal =  ReportSummary.createReportSummary(this.result.getReport(), this.getPreviousReport());
+            retVal =  ReportSummary.createReportSummary(this.result.getStatistics(),
+            		this.getPreviousStatistics());
         }
         
         return retVal;
@@ -51,7 +56,8 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         String retVal = "";
         
         if(this.result != null){
-            retVal =  ReportSummary.createReportSummaryDetails(this.result.getReport(), this.getPreviousReport());
+            retVal =  ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
+            		this.getPreviousStatistics());
         }
         
         return retVal;
@@ -61,12 +67,12 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return this.result;
     }
 
-    private SloccountReport getPreviousReport(){
+    private List<SloccountLanguageStatistics> getPreviousStatistics(){
         SloccountResult previous = this.getPreviousResult();
         if(previous == null){
             return null;
         }else{
-           return previous.getReport();
+           return previous.getStatistics();
         }
     }
 

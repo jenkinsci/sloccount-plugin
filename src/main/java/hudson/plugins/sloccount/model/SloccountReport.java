@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author lordofthepigs
  */
-public class SloccountReport extends FileContainer {
+public class SloccountReport extends FileContainer implements SloccountReportInterface {
 
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
@@ -192,4 +192,8 @@ public class SloccountReport extends FileContainer {
     public String getName() {
         return "SlocCount Report";
     }
+
+	public void addSourceFile(java.io.File sourceFile) {
+		// Empty, method is not needed in this class
+	}
 }

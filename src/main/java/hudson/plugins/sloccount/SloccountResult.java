@@ -4,8 +4,15 @@ import hudson.model.AbstractBuild;
 import hudson.model.ModelObject;
 import hudson.plugins.sloccount.model.File;
 import hudson.plugins.sloccount.model.FileFilter;
+import hudson.plugins.sloccount.model.Language;
+import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
+import hudson.plugins.sloccount.model.SloccountParser;
 import hudson.plugins.sloccount.model.SloccountReport;
+
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -14,29 +21,88 @@ import java.io.Serializable;
 public class SloccountResult implements Serializable {
 
     private SloccountReport report;
-    private AbstractBuild owner;
-
-    public SloccountResult(SloccountReport report, AbstractBuild<?,?> owner){
+    private final AbstractBuild owner;
+    
+    /** The SLOCCount statistics. */
+    private List<SloccountLanguageStatistics> statistics;
+    
+    /** The encoding that was active at the time of the build. */
+    private final String encoding;
+    
+    public SloccountResult(List<SloccountLanguageStatistics> statistics, String encoding,
+    		SloccountReport report, AbstractBuild<?,?> owner){
+    	this.statistics = statistics;
+        this.encoding = encoding;
         this.report = report;
         this.owner = owner;
     }
 
-    public SloccountReport getReport(){
+    public SloccountReport getReport() {
+    	lazyLoad();
         return report;
     }
 
-    public AbstractBuild<?,?> getOwner(){
+    public AbstractBuild<?,?> getOwner() {
         return owner;
+    }
+    
+    /**
+     * Get the statistics.
+     * 
+     * @return the statistics per language
+     */
+    public List<SloccountLanguageStatistics> getStatistics() {
+    	convertLegacyData();
+        return Collections.unmodifiableList(statistics);
+    }
+    
+    /**
+     * Convert legacy data in format of sloccount plugin version 1.10
+     * to the new one that uses statistics.
+     */
+    private void convertLegacyData() {
+    	if(statistics != null) {
+    		return;
+    	}
+
+        statistics = new LinkedList<SloccountLanguageStatistics>();
+        
+        if(report != null) {
+	        for(Language language : report.getLanguages()){
+	        	statistics.add(new SloccountLanguageStatistics(language.getName(),
+	                    language.getLineCount(), language.getFileCount()));
+	        }
+        }
+    }
+    
+    /**
+     * Lazy load report data if they are not already loaded.
+     */
+    private void lazyLoad() {
+    	if(report != null) {
+    		return;    		
+    	}
+    	
+    	java.io.File destDir = new java.io.File(owner.getRootDir(),
+    			SloccountPublisher.BUILD_SUBDIR);
+
+		if (!destDir.exists()) {
+			report = new SloccountReport();
+			return;
+		}
+
+		SloccountParser parser = new SloccountParser(encoding, null, null);
+		report = parser.parseFiles(destDir.listFiles());
     }
 
     public SloccountResult getLanguageResult(String language){
-        SloccountReport filtered = new SloccountReport(this.report, new LanguageFileFilter(language));
+        SloccountReport filtered = new SloccountReport(this.getReport(), new LanguageFileFilter(language));
         return new BreadCrumbResult(filtered, this.owner, language);
     }
 
     public SloccountResult getFolderResult(String jumbledFolder){
         String folder = jumbledFolder.replace("|", System.getProperty("file.separator"));
-        SloccountReport filtered = new SloccountReport(this.report, new FolderFileFilter(folder));
+        SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
         return new BreadCrumbResult(filtered, this.owner, folder);
     }
 
@@ -74,7 +140,7 @@ public class SloccountResult implements Serializable {
         private String displayName = null;
         
         public BreadCrumbResult(SloccountReport report, AbstractBuild<?,?> owner, String displayName){
-            super(report, owner);
+            super(null, null, report, owner);
             this.displayName = displayName;
         }
 

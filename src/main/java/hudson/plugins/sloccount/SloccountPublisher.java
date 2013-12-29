@@ -7,13 +7,19 @@ import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
+import hudson.plugins.sloccount.model.SloccountPublisherReport;
 import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.plugins.sloccount.model.SloccountParser;
+import hudson.remoting.VirtualChannel;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Recorder;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.List;
+import java.io.File;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -22,6 +28,9 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @author lordofthepigs
  */
 public class SloccountPublisher extends Recorder implements Serializable {
+
+    /** Subdirectory of build results directory where source files are stored. */
+    public static final String BUILD_SUBDIR = "sloccount-plugin";
 
     private static final String DEFAULT_PATTERN = "**/sloccount.sc";
     private static final String DEFAULT_ENCODING = "UTF-8";
@@ -49,13 +58,10 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     @Override
     public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener){
-          
-        SloccountResult result;
-            
         FilePath workspace = build.getWorkspace();
         PrintStream logger = listener.getLogger();
         SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
-        SloccountReport report;
+        SloccountPublisherReport report;
 
         try{
             if(this.canContinue(build.getResult())){
@@ -63,9 +69,8 @@ public class SloccountPublisher extends Recorder implements Serializable {
             }else{
                 // generate an empty report
                 // TODO: Replace this empty report with the last valid one?
-                report = new SloccountReport();
+                report = new SloccountPublisherReport();
             }
-            
         }catch(IOException ioe){
             ioe.printStackTrace(logger);
             return false;
@@ -75,13 +80,65 @@ public class SloccountPublisher extends Recorder implements Serializable {
             return false;
         }
 
-        result = new SloccountResult(report, build);
+        SloccountResult result = new SloccountResult(report.getStatistics(),
+        		getRealEncoding(), null, build);
         
         SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
         
         build.addAction(buildAction);
-        
+
+        try{
+            copyFilesToBuildDirectory(report.getSourceFiles(),
+                    build.getRootDir(), launcher.getChannel());
+        }catch(IOException e){
+            e.printStackTrace(logger);
+            return false;
+        }catch(InterruptedException e){
+            e.printStackTrace(logger);
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Copy files to a build results directory. The copy of a file will be
+     * stored in plugin's subdirectory and a hashcode of its absolute path will
+     * be used in its name prefix to distinguish files with the same names from
+     * different directories.
+     * 
+     * @param sourceFiles
+     *            the files to copy
+     * @param rootDir
+     *            the root directory where build results are stored
+     * @param channel
+     *            the communication channel
+     * @throws IOException
+     *             if something fails
+     * @throws InterruptedException
+     *             if something fails
+     */
+    private void copyFilesToBuildDirectory(List<File> sourceFiles,
+            File rootDir, VirtualChannel channel) throws IOException,
+            InterruptedException{
+        File destDir = new File(rootDir, BUILD_SUBDIR);
+
+        if(!destDir.exists() && !destDir.mkdir()){
+            throw new IOException(
+                    "Creating directory for copy of workspace files failed: "
+                            + destDir.getAbsolutePath());
+        }
+
+        for(File sourceFile : sourceFiles){
+            File masterFile = new File(destDir, Integer.toHexString(sourceFile
+                    .hashCode()) + "_" + sourceFile.getName());
+
+            if(!masterFile.exists()){
+                FileOutputStream outputStream = new FileOutputStream(masterFile);
+                new FilePath(channel, sourceFile.getAbsolutePath())
+                        .copyTo(outputStream);
+            }
+        }
     }
 
     public BuildStepMonitor getRequiredMonitorService() {

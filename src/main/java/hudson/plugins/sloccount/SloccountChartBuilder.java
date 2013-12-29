@@ -1,10 +1,12 @@
 package hudson.plugins.sloccount;
 
 import hudson.plugins.sloccount.model.Language;
+import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
 import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 import hudson.util.DataSetBuilder;
 import hudson.util.ShiftedCategoryAxis;
+
 import java.awt.Color;
 import java.io.Serializable;
 
@@ -68,10 +70,9 @@ public class SloccountChartBuilder implements Serializable {
         do{
             SloccountResult result = action.getResult();
             if(result != null){
-                SloccountReport report = result.getReport();
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
 
-                for(Language l : report.getLanguages()){
+                for(SloccountLanguageStatistics l : result.getStatistics()){
                     builder.add(l.getLineCount(), l.getName(), buildLabel);
                 }
             }
