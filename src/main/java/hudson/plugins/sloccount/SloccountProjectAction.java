@@ -53,6 +53,9 @@ public class SloccountProjectAction implements Action, Serializable {
         AbstractBuild<?, ?> build = getLastFinishedBuild();
         if (build != null) {
             response.sendRedirect2(String.format("../%d/%s", build.getNumber(), SloccountBuildAction.URL_NAME));
+        }else{
+        	// Click to the link in menu on the job page before the first build
+        	response.sendRedirect2("..");
         }
     }
 
