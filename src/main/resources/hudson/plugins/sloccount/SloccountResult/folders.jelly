@@ -10,8 +10,9 @@
       <td class="pane-header" style="width:60%">${%Distribution}</td>
     </tr>
     <tbody>
-      <j:set var="max" value="${it.report.longestFolder.lineCount}"/>
-      <j:forEach var="container" items="${it.report.folders}">
+      <j:set var="cachedReport" value="${it.report}"/>
+      <j:set var="max" value="${cachedReport.longestFolder.lineCount}"/>
+      <j:forEach var="container" items="${cachedReport.folders}">
         <tr>
           <td class="pane"><a href="folderResult/${container.urlName}">${container.name}</a></td>
           <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
@@ -23,7 +24,7 @@
         <tr class="sortbottom">
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
-          <td class="pane-header number" data="${it.report.lineCount}">${it.report.lineCountString}</td>
+          <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
           <td class="pane-header"> </td>
         </tr>
       </tfoot>

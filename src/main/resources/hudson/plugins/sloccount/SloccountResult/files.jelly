@@ -10,8 +10,9 @@
       <td class="pane-header" style="width:60%">${%Distribution}</td>
     </tr>
     <tbody>
-      <j:set var="max" value="${it.report.longestFile.lineCount}"/>
-      <j:forEach var="container" items="${it.report.files}">
+      <j:set var="cachedReport" value="${it.report}"/>
+      <j:set var="max" value="${cachedReport.longestFile.lineCount}"/>
+      <j:forEach var="container" items="${cachedReport.files}">
         <tr>
           <td class="pane">${container.name}</td>
           <td class="pane">${container.language}</td>
@@ -23,7 +24,7 @@
         <tr class="sortbottom">
           <td class="pane-header">${%Total}</td>
           <td class="pane-header"> </td>
-          <td class="pane-header number" data="${it.report.lineCount}">${it.report.lineCountString}</td>
+          <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
           <td class="pane-header"> </td>
         </tr>
       </tfoot>
