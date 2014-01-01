@@ -40,7 +40,12 @@
     <developer>
       <id>kbrandt</id>
       <name>Karsten Brandt</name>
-    </developer>      
+    </developer>
+    <developer>
+      <id>mixalturek</id>
+      <name>Michal Turek</name>
+      <email>mixalturek@users.sf.net</email>
+    </developer>
   </developers>
 
 
