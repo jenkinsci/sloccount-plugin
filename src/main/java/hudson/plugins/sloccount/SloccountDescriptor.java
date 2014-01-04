@@ -2,10 +2,7 @@ package hudson.plugins.sloccount;
 
 
 import hudson.Extension;
-import hudson.maven.AbstractMavenProject;
 import hudson.model.AbstractProject;
-import hudson.model.FreeStyleProject;
-import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 
@@ -20,10 +17,11 @@ public class SloccountDescriptor extends BuildStepDescriptor<Publisher> {
         super(SloccountPublisher.class);
     }
 
+	@SuppressWarnings("rawtypes")
+	@Override
     public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-        return AbstractMavenProject.class.isAssignableFrom(jobType) ||
-               FreeStyleProject.class.isAssignableFrom(jobType) ||
-               jobType.getSimpleName().equals("JobGenerator");
+        // The plugin is applicable for all job types
+        return true;
     }
 
     @Override
