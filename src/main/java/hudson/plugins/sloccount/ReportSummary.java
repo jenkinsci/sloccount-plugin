@@ -17,7 +17,7 @@ public class ReportSummary  implements Serializable {
     }
 
     public static String createReportSummary(List<SloccountLanguageStatistics> current,
-    		List<SloccountLanguageStatistics> previous){
+            List<SloccountLanguageStatistics> previous){
         StringBuilder builder = new StringBuilder();
 
         if(current != null){
@@ -55,7 +55,7 @@ public class ReportSummary  implements Serializable {
     }
 
     public static String createReportSummaryDetails(List<SloccountLanguageStatistics> current,
-    		List<SloccountLanguageStatistics> previous){
+            List<SloccountLanguageStatistics> previous){
         
         StringBuilder builder = new StringBuilder();
 
@@ -63,7 +63,7 @@ public class ReportSummary  implements Serializable {
             
             for(SloccountLanguageStatistics language : current){
                 
-            	SloccountLanguageStatistics previousLanguage = null;
+                SloccountLanguageStatistics previousLanguage = null;
                 
                 if(previous != null) {
                     previousLanguage = getLanguage(previous, language.getName());
@@ -77,7 +77,7 @@ public class ReportSummary  implements Serializable {
     }
 
     private static void appendLanguageDetails(SloccountLanguageStatistics current,
-    		SloccountLanguageStatistics previous, StringBuilder builder){
+            SloccountLanguageStatistics previous, StringBuilder builder){
 
         String strLines     = Messages.Sloccount_ReportSummary_Lines();
         String strFiles     = Messages.Sloccount_ReportSummary_Files();
@@ -136,7 +136,7 @@ public class ReportSummary  implements Serializable {
             lineCount += it.getLineCount();
         }
 
-        return lineCount;    	
+        return lineCount;
     }
     
     private static int getFileCount(List<SloccountLanguageStatistics> statistics)
@@ -147,7 +147,7 @@ public class ReportSummary  implements Serializable {
             fileCount += it.getFileCount();
         }
 
-        return fileCount; 	
+        return fileCount;
     }
     
     private static int getLanguageCount(List<SloccountLanguageStatistics> statistics)
@@ -155,14 +155,14 @@ public class ReportSummary  implements Serializable {
         return statistics.size();
     }
     
-    private static SloccountLanguageStatistics getLanguage(List<SloccountLanguageStatistics> statistics, String name)
+    static SloccountLanguageStatistics getLanguage(List<SloccountLanguageStatistics> statistics, String name)
     {
-    	for(SloccountLanguageStatistics it : statistics) {
+        for(SloccountLanguageStatistics it : statistics) {
             if(it.getName().equals(name)) {
-            	return it;
+                return it;
             }
         }
-    	
-    	return new SloccountLanguageStatistics(name, 0, 0);
+        
+        return new SloccountLanguageStatistics(name, 0, 0);
     }
 }

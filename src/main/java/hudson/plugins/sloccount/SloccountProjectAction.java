@@ -54,8 +54,8 @@ public class SloccountProjectAction implements Action, Serializable {
         if (build != null) {
             response.sendRedirect2(String.format("../%d/%s", build.getNumber(), SloccountBuildAction.URL_NAME));
         }else{
-        	// Click to the link in menu on the job page before the first build
-        	response.sendRedirect2("..");
+            // Click to the link in menu on the job page before the first build
+            response.sendRedirect2("..");
         }
     }
 
@@ -151,6 +151,53 @@ public class SloccountProjectAction implements Action, Serializable {
                 request,
                 response,
                 SloccountChartBuilder.buildChart(lastAction),
+                CHART_WIDTH,
+                CHART_HEIGHT);
+    }
+    
+    /**
+     * Display the trend delta map. Delegates to the the associated
+     * {@link ResultAction}.
+     *
+     * @param request
+     *            Stapler request
+     * @param response
+     *            Stapler response
+     * @throws IOException
+     *             in case of an error
+     */
+    public void doTrendDeltaMap(final StaplerRequest request, final StaplerResponse response) throws IOException {
+        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
+        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+
+        ChartUtil.generateClickableMap(
+                request,
+                response,
+                SloccountChartBuilder.buildChartDelta(lastAction),
+                CHART_WIDTH,
+                CHART_HEIGHT);
+    }
+
+    /**
+     * Display the trend delta graph. Delegates to the the associated
+     * {@link ResultAction}.
+     *
+     * @param request
+     *            Stapler request
+     * @param response
+     *            Stapler response
+     * @throws IOException
+     *             in case of an error in
+     *             {@link ResultAction#doGraph(StaplerRequest, StaplerResponse, int)}
+     */
+    public void doTrendDelta(final StaplerRequest request, final StaplerResponse response) throws IOException {
+        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
+        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+
+        ChartUtil.generateGraph(
+                request,
+                response,
+                SloccountChartBuilder.buildChartDelta(lastAction),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }
