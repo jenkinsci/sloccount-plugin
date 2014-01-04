@@ -1,8 +1,6 @@
 package hudson.plugins.sloccount;
 
-import hudson.plugins.sloccount.model.Language;
 import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
-import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.plugins.sloccount.util.StringUtil;
 
 import java.io.Serializable;

@@ -8,7 +8,6 @@ import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.plugins.sloccount.model.SloccountPublisherReport;
-import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.plugins.sloccount.model.SloccountParser;
 import hudson.remoting.VirtualChannel;
 import hudson.tasks.BuildStepMonitor;
@@ -58,30 +57,28 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     @Override
     public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener){
-        FilePath workspace = build.getWorkspace();
         PrintStream logger = listener.getLogger();
+
+        if (!canContinue(build.getResult())) {
+            logger.println("[SLOCCount] Skipping results publication since the build is not successful");
+            return true;
+        }
+
         SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
         SloccountPublisherReport report;
 
         try{
-            if(this.canContinue(build.getResult())){
-                report = workspace.act(parser);
-            }else{
-                // generate an empty report
-                // TODO: Replace this empty report with the last valid one?
-                report = new SloccountPublisherReport();
-            }
+            report = build.getWorkspace().act(parser);
         }catch(IOException ioe){
             ioe.printStackTrace(logger);
             return false;
-
         }catch(InterruptedException ie){
             ie.printStackTrace(logger);
             return false;
         }
 
         SloccountResult result = new SloccountResult(report.getStatistics(),
-        		getRealEncoding(), null, build);
+                getRealEncoding(), null, build);
         
         SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
         

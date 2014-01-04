@@ -3,7 +3,6 @@ package hudson.plugins.sloccount;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
-import hudson.plugins.sloccount.model.SloccountReport;
 
 import java.io.Serializable;
 import java.util.List;
@@ -86,18 +85,30 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return previousResult;
     }
 
+	/**
+	 * Get the previous valid action.
+	 * 
+	 * @return the action or null
+	 */
     SloccountBuildAction getPreviousAction(){
-        
-        if(this.build != null){
-            
-            AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
-            
-            if(previousBuild != null){
-                
-                return previousBuild.getAction(SloccountBuildAction.class);
-            }
-        }
-        return null;
+		if(this.build == null){
+			return null;
+		}
+
+		AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+
+		while(previousBuild != null){
+			SloccountBuildAction action = previousBuild
+					.getAction(SloccountBuildAction.class);
+
+			if (action != null) {
+				return action;
+			}
+
+			previousBuild = previousBuild.getPreviousBuild();
+		}
+
+		return null;
     }
 
     AbstractBuild<?,?> getBuild(){
