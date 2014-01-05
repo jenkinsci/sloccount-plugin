@@ -3,12 +3,14 @@
   xmlns:i="jelly:fmt" xmlns:local="local">
   <st:header name="Content-Type" value="text/html;charset=UTF-8" />
   <table class="pane sortable" id="files">
-    <tr>
-      <td class="pane-header">${%Language}</td>
-      <td class="pane-header" style="width:2em">${%Files}</td>
-      <td class="pane-header" style="width:2em">${%Lines}</td>
-      <td class="pane-header" style="width:60%">${%Distribution}</td>
-    </tr>
+    <thead>
+      <tr>
+        <td class="pane-header">${%Language}</td>
+        <td class="pane-header" style="width:2em">${%Files}</td>
+        <td class="pane-header" style="width:2em">${%Lines}</td>
+        <td class="pane-header" style="width:60%">${%Distribution}</td>
+      </tr>
+    </thead>
     <tbody>
       <j:set var="cachedReport" value="${it.report}"/>
       <j:set var="max" value="${cachedReport.longestLanguage.lineCount}"/>
@@ -20,15 +22,15 @@
           <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
-      <tfoot>
-        <tr class="sortbottom">
-          <td class="pane-header">${%Total}</td>
-          <td class="pane-header"> </td>
-          <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
-          <td class="pane-header"> </td>
-        </tr>
-      </tfoot>
     </tbody>
+    <tfoot>
+      <tr class="sortbottom">
+        <td class="pane-header">${%Total} ${cachedReport.languageCountString}</td>
+        <td class="pane-header number" data="${cachedReport.fileCount}">${cachedReport.fileCountString}</td>
+        <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
+        <td class="pane-header"> </td>
+      </tr>
+    </tfoot>
   </table>
 
   <script type="text/javascript">

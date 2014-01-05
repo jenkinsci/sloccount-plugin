@@ -83,6 +83,10 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         return this.folders.size();
     }
 
+    public String getFolderCountString(){
+        return StringUtil.grouping(this.folders.size());
+    }
+
     public Language getLanguage(String name){
         return this.languages.get(name);
     }
