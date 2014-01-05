@@ -58,20 +58,25 @@ public class SloccountParser implements
 
         for (java.io.File file : files) {
             try {
-				parse(file, report);
-			} catch (IOException e) {
-				// Silently ignore, there is still a possibility that other
-				// files can be parsed successfully
-			}
+                parse(file, report);
+            } catch (IOException e) {
+                // Silently ignore, there is still a possibility that other
+                // files can be parsed successfully
+            }
         }
 
         return report;
     }
 
     private void parse(java.io.File file, SloccountReportInterface report) throws IOException {
-        InputStreamReader in = new InputStreamReader(new FileInputStream(file), encoding);
-        this.parse(in, report);
-        in.close();
+        InputStreamReader in = null;
+        
+        try {
+            in = new InputStreamReader(new FileInputStream(file), encoding);
+            this.parse(in, report);
+        } finally {
+            in.close();
+        }
     }
 
     private void parse(Reader reader, SloccountReportInterface report) throws IOException {
