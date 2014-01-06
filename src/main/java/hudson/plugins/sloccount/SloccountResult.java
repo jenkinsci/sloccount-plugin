@@ -30,15 +30,15 @@ public class SloccountResult implements Serializable {
     private final String encoding;
     
     public SloccountResult(List<SloccountLanguageStatistics> statistics, String encoding,
-    		SloccountReport report, AbstractBuild<?,?> owner){
-    	this.statistics = statistics;
+            SloccountReport report, AbstractBuild<?,?> owner){
+        this.statistics = statistics;
         this.encoding = encoding;
         this.report = report;
         this.owner = owner;
     }
 
     public SloccountReport getReport() {
-    	lazyLoad();
+        lazyLoad();
         return report;
     }
 
@@ -52,7 +52,7 @@ public class SloccountResult implements Serializable {
      * @return the statistics per language
      */
     public List<SloccountLanguageStatistics> getStatistics() {
-    	convertLegacyData();
+        convertLegacyData();
         return Collections.unmodifiableList(statistics);
     }
     
@@ -61,17 +61,17 @@ public class SloccountResult implements Serializable {
      * to the new one that uses statistics.
      */
     private void convertLegacyData() {
-    	if(statistics != null) {
-    		return;
-    	}
+        if(statistics != null) {
+            return;
+        }
 
         statistics = new LinkedList<SloccountLanguageStatistics>();
         
         if(report != null) {
-	        for(Language language : report.getLanguages()){
-	        	statistics.add(new SloccountLanguageStatistics(language.getName(),
-	                    language.getLineCount(), language.getFileCount()));
-	        }
+            for(Language language : report.getLanguages()){
+                statistics.add(new SloccountLanguageStatistics(language.getName(),
+                        language.getLineCount(), language.getFileCount()));
+            }
         }
     }
     
@@ -79,20 +79,38 @@ public class SloccountResult implements Serializable {
      * Lazy load report data if they are not already loaded.
      */
     private void lazyLoad() {
-    	if(report != null) {
-    		return;    		
-    	}
-    	
-    	java.io.File destDir = new java.io.File(owner.getRootDir(),
-    			SloccountPublisher.BUILD_SUBDIR);
+        if(report != null) {
+            return;
+        }
 
-		if (!destDir.exists()) {
-			report = new SloccountReport();
-			return;
-		}
+        java.io.File destDir = new java.io.File(owner.getRootDir(),
+                SloccountPublisher.BUILD_SUBDIR);
 
-		SloccountParser parser = new SloccountParser(encoding, null, null);
-		report = parser.parseFiles(destDir.listFiles());
+        if (!destDir.exists()) {
+            report = new SloccountReport();
+            return;
+        }
+
+        SloccountParser parser = new SloccountParser(encoding, null, null);
+        report = parser.parseFiles(destDir.listFiles());
+    }
+
+    /**
+     * Check that the result is empty.
+     * 
+     * @return true if the result is empty, otherwise false
+     */
+    public boolean isEmpty() {
+        if(statistics != null) {
+            return statistics.isEmpty();
+        }
+
+        // Legacy data in format of sloccount plugin version 1.10 and less
+        if(report != null) {
+            return report.getLineCount() <= 0;
+        }
+
+        return true;
     }
 
     public SloccountResult getLanguageResult(String language){

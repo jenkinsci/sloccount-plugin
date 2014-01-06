@@ -44,7 +44,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         if(this.result != null){
             
             retVal =  ReportSummary.createReportSummary(this.result.getStatistics(),
-            		this.getPreviousStatistics());
+                    this.getPreviousStatistics());
         }
         
         return retVal;
@@ -56,7 +56,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         
         if(this.result != null){
             retVal =  ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
-            		this.getPreviousStatistics());
+                    this.getPreviousStatistics());
         }
         
         return retVal;
@@ -85,30 +85,34 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return previousResult;
     }
 
-	/**
-	 * Get the previous valid action.
-	 * 
-	 * @return the action or null
-	 */
+    /**
+     * Get the previous valid and non-empty action.
+     * 
+     * @return the action or null
+     */
     SloccountBuildAction getPreviousAction(){
-		if(this.build == null){
-			return null;
-		}
+        if(this.build == null){
+            return null;
+        }
 
-		AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
 
-		while(previousBuild != null){
-			SloccountBuildAction action = previousBuild
-					.getAction(SloccountBuildAction.class);
+        while(previousBuild != null){
+            SloccountBuildAction action = previousBuild
+                    .getAction(SloccountBuildAction.class);
 
-			if (action != null) {
-				return action;
-			}
+            if (action != null) {
+                SloccountResult result = action.getResult();
+                
+                if(result != null && !result.isEmpty()) {
+                    return action;
+                }
+            }
 
-			previousBuild = previousBuild.getPreviousBuild();
-		}
+            previousBuild = previousBuild.getPreviousBuild();
+        }
 
-		return null;
+        return null;
     }
 
     AbstractBuild<?,?> getBuild(){
