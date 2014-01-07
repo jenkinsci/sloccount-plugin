@@ -1,25 +1,25 @@
 package hudson.plugins.sloccount;
 
 import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
+import hudson.plugins.sloccount.model.SloccountReportStatistics;
 import hudson.plugins.sloccount.util.StringUtil;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
  * @author lordofthepigs
  */
 public class ReportSummary  implements Serializable {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private ReportSummary(){
 
     }
 
-    public static String createReportSummary(List<SloccountLanguageStatistics> current,
-            List<SloccountLanguageStatistics> previous){
+    public static String createReportSummary(SloccountReportStatistics current,
+            SloccountReportStatistics previous){
         StringBuilder builder = new StringBuilder();
 
         if(current != null){
@@ -30,51 +30,49 @@ public class ReportSummary  implements Serializable {
             String strLanguages = Messages.Sloccount_ReportSummary_Languages();
 
             builder.append("<a href=\"" + SloccountBuildAction.URL_NAME + "\">");
-            builder.append(StringUtil.grouping(getLineCount(current)));
+            builder.append(StringUtil.grouping(current.getLineCount()));
             
             if(previous != null) {
-                printDifference(getLineCount(current), getLineCount(previous), builder);
+                printDifference(current.getLineCount(), previous.getLineCount(), builder);
             }
 
             builder.append(" " + strLines + "</a> " + strIn + " ");
-            builder.append(StringUtil.grouping(getFileCount(current)));
+            builder.append(StringUtil.grouping(current.getFileCount()));
             
             if(previous != null) {
-                printDifference(getFileCount(current), getFileCount(previous), builder);
+                printDifference(current.getFileCount(), previous.getFileCount(), builder);
             }
 
             builder.append(" " + strFiles + " " + strAnd + " ");
-            builder.append(StringUtil.grouping(getLanguageCount(current)));
+            builder.append(StringUtil.grouping(current.getLanguageCount()));
             
             if(previous != null) {
-                printDifference(getLanguageCount(current), getLanguageCount(previous), builder);
+                printDifference(current.getLanguageCount(), previous.getLanguageCount(), builder);
             }
 
             builder.append(" " + strLanguages + ".");
         }
-        
+
         return builder.toString();
     }
 
-    public static String createReportSummaryDetails(List<SloccountLanguageStatistics> current,
-            List<SloccountLanguageStatistics> previous){
-        
+    public static String createReportSummaryDetails(SloccountReportStatistics current,
+            SloccountReportStatistics previous){
         StringBuilder builder = new StringBuilder();
 
         if(current != null){
-            
-            for(SloccountLanguageStatistics language : current){
-                
+
+            for(SloccountLanguageStatistics language : current.getStatistics()){
                 SloccountLanguageStatistics previousLanguage = null;
-                
+
                 if(previous != null) {
-                    previousLanguage = getLanguage(previous, language.getName());
+                    previousLanguage = previous.getLanguage(language.getName());
                 }
-                
+
                 appendLanguageDetails(language, previousLanguage, builder);
             }
         }
-        
+
         return builder.toString();
     }
 
@@ -84,7 +82,7 @@ public class ReportSummary  implements Serializable {
         String strLines     = Messages.Sloccount_ReportSummary_Lines();
         String strFiles     = Messages.Sloccount_ReportSummary_Files();
         String strIn        = Messages.Sloccount_ReportSummary_in();
-       
+
         builder.append("<li>");
         builder.append("<a href=\"");
         builder.append(SloccountBuildAction.URL_NAME);
@@ -94,18 +92,18 @@ public class ReportSummary  implements Serializable {
         builder.append(current.getName());
         builder.append("</a> : ");
         builder.append(StringUtil.grouping(current.getLineCount()));
-        
+
         if(previous != null){
             printDifference(current.getLineCount(), previous.getLineCount(), builder);
         }
-        
+
         builder.append(" " + strLines + " " + strIn + " ");
         builder.append(StringUtil.grouping(current.getFileCount()));
         
         if(previous != null){
             printDifference(current.getFileCount(), previous.getFileCount(), builder);
         }
-        
+
         builder.append(" " + strFiles + ".</li>");
     }
 
@@ -128,60 +126,5 @@ public class ReportSummary  implements Serializable {
             builder.append(StringUtil.grouping(difference));
             builder.append(")");
         }
-    }
-
-    private static int getLineCount(List<SloccountLanguageStatistics> statistics)
-    {
-        int lineCount = 0;
-
-        for(SloccountLanguageStatistics it : statistics) {
-            lineCount += it.getLineCount();
-        }
-
-        return lineCount;
-    }
-    
-    private static int getFileCount(List<SloccountLanguageStatistics> statistics)
-    {
-        int fileCount = 0;
-
-        for(SloccountLanguageStatistics it : statistics) {
-            fileCount += it.getFileCount();
-        }
-
-        return fileCount;
-    }
-    
-    private static int getLanguageCount(List<SloccountLanguageStatistics> statistics)
-    {
-        return statistics.size();
-    }
-    
-    static SloccountLanguageStatistics getLanguage(List<SloccountLanguageStatistics> statistics, String name)
-    {
-        for(SloccountLanguageStatistics it : statistics) {
-            if(it.getName().equals(name)) {
-                return it;
-            }
-        }
-        
-        return new SloccountLanguageStatistics(name, 0, 0);
-    }
-    
-    /**
-     * Get names of all languages.
-     * 
-     * @param statistics the source statistics
-     * @return the names
-     */
-    static List<String> getAllLanguages(List<SloccountLanguageStatistics> statistics)
-    {
-        List<String> languages = new LinkedList<String>();
-
-        for(SloccountLanguageStatistics it : statistics) {
-            languages.add(it.getName());
-        }
-
-        return languages;
     }
 }

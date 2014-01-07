@@ -27,12 +27,14 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @author lordofthepigs
  */
 public class SloccountPublisher extends Recorder implements Serializable {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     /** Subdirectory of build results directory where source files are stored. */
     public static final String BUILD_SUBDIR = "sloccount-plugin";
 
     private static final String DEFAULT_PATTERN = "**/sloccount.sc";
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    static final String DEFAULT_ENCODING = "UTF-8";
 
     private final String pattern;
     private final String encoding;
@@ -145,7 +147,6 @@ public class SloccountPublisher extends Recorder implements Serializable {
     private String getRealEncoding(){
         if(this.getEncoding() == null || this.getEncoding().length() == 0){
             return DEFAULT_ENCODING;
-
         }else{
             return this.getEncoding();
         }
@@ -154,7 +155,6 @@ public class SloccountPublisher extends Recorder implements Serializable {
     private String getRealPattern(){
         if(this.getPattern() == null || this.getPattern().length() == 0){
             return DEFAULT_PATTERN;
-
         }else{
             return this.getPattern();
         }

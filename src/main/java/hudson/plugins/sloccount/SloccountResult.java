@@ -8,9 +8,9 @@ import hudson.plugins.sloccount.model.Language;
 import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
 import hudson.plugins.sloccount.model.SloccountParser;
 import hudson.plugins.sloccount.model.SloccountReport;
+import hudson.plugins.sloccount.model.SloccountReportStatistics;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,17 +19,19 @@ import java.util.List;
  * @author lordofthepigs
  */
 public class SloccountResult implements Serializable {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private SloccountReport report;
-    private final AbstractBuild owner;
-    
-    /** The SLOCCount statistics. */
-    private List<SloccountLanguageStatistics> statistics;
-    
+    private final AbstractBuild<?,?> owner;
+
+    /** The statistics. */
+    private SloccountReportStatistics statistics;
+
     /** The encoding that was active at the time of the build. */
     private final String encoding;
-    
-    public SloccountResult(List<SloccountLanguageStatistics> statistics, String encoding,
+
+    public SloccountResult(SloccountReportStatistics statistics, String encoding,
             SloccountReport report, AbstractBuild<?,?> owner){
         this.statistics = statistics;
         this.encoding = encoding;
@@ -45,17 +47,17 @@ public class SloccountResult implements Serializable {
     public AbstractBuild<?,?> getOwner() {
         return owner;
     }
-    
+
     /**
      * Get the statistics.
      * 
-     * @return the statistics per language
+     * @return the statistics
      */
-    public List<SloccountLanguageStatistics> getStatistics() {
+    public SloccountReportStatistics getStatistics() {
         convertLegacyData();
-        return Collections.unmodifiableList(statistics);
+        return statistics;
     }
-    
+
     /**
      * Convert legacy data in format of sloccount plugin version 1.10
      * to the new one that uses statistics.
@@ -65,16 +67,18 @@ public class SloccountResult implements Serializable {
             return;
         }
 
-        statistics = new LinkedList<SloccountLanguageStatistics>();
-        
+        List<SloccountLanguageStatistics> languages = new LinkedList<SloccountLanguageStatistics>();
+
         if(report != null) {
             for(Language language : report.getLanguages()){
-                statistics.add(new SloccountLanguageStatistics(language.getName(),
+            	languages.add(new SloccountLanguageStatistics(language.getName(),
                         language.getLineCount(), language.getFileCount()));
             }
         }
+
+        statistics = new SloccountReportStatistics(languages);
     }
-    
+
     /**
      * Lazy load report data if they are not already loaded.
      */
@@ -91,7 +95,10 @@ public class SloccountResult implements Serializable {
             return;
         }
 
-        SloccountParser parser = new SloccountParser(encoding, null, null);
+        String realEncoding = (encoding != null && !encoding.isEmpty())
+                ? encoding : SloccountPublisher.DEFAULT_ENCODING;
+
+        SloccountParser parser = new SloccountParser(realEncoding, null, null);
         report = parser.parseFiles(destDir.listFiles());
     }
 
@@ -102,7 +109,7 @@ public class SloccountResult implements Serializable {
      */
     public boolean isEmpty() {
         if(statistics != null) {
-            return statistics.isEmpty();
+            return statistics.getLineCount() <= 0;
         }
 
         // Legacy data in format of sloccount plugin version 1.10 and less
@@ -125,6 +132,9 @@ public class SloccountResult implements Serializable {
     }
 
     private static class LanguageFileFilter implements FileFilter, Serializable {
+        /** Serial version UID. */
+        private static final long serialVersionUID = 0L;
+
         private String language;
 
         public LanguageFileFilter(String language){
@@ -137,6 +147,9 @@ public class SloccountResult implements Serializable {
     }
 
     private static class FolderFileFilter implements FileFilter, Serializable {
+        /** Serial version UID. */
+        private static final long serialVersionUID = 0L;
+
         private String folder;
 
         public FolderFileFilter(String folder){
@@ -154,6 +167,8 @@ public class SloccountResult implements Serializable {
     }
 
     private static class BreadCrumbResult extends SloccountResult implements ModelObject, Serializable {
+        /** Serial version UID. */
+        private static final long serialVersionUID = 0L;
 
         private String displayName = null;
         

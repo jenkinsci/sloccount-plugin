@@ -1,6 +1,7 @@
 package hudson.plugins.sloccount;
 
 import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
+import hudson.plugins.sloccount.model.SloccountReportStatistics;
 import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 import hudson.util.DataSetBuilder;
 import hudson.util.ShiftedCategoryAxis;
@@ -8,7 +9,6 @@ import hudson.util.ShiftedCategoryAxis;
 import java.awt.Color;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
@@ -26,6 +26,8 @@ import org.jfree.ui.RectangleInsets;
  * @author lordofthepigs
  */
 public class SloccountChartBuilder implements Serializable {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private SloccountChartBuilder(){
     }
@@ -76,10 +78,10 @@ public class SloccountChartBuilder implements Serializable {
             if(result != null){
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
 
-                allLanguages.addAll(ReportSummary.getAllLanguages(result.getStatistics()));
+                allLanguages.addAll(result.getStatistics().getAllLanguages());
                 Set<String> remainingLanguages = new HashSet<String>(allLanguages);
 
-                for(SloccountLanguageStatistics l : result.getStatistics()){
+                for(SloccountLanguageStatistics l : result.getStatistics().getStatistics()){
                     builder.add(l.getLineCount(), l.getName(), buildLabel);
                     remainingLanguages.remove(l.getName());
                 }
@@ -140,14 +142,13 @@ public class SloccountChartBuilder implements Serializable {
 
         // Initial languages from the first action
         if(action != null && action.getResult() != null) {
-            allLanguages.addAll(ReportSummary.getAllLanguages(
-                    action.getResult().getStatistics()));
+            allLanguages.addAll(action.getResult().getStatistics().getAllLanguages());
         }
 
         while(action != null){
             SloccountBuildAction previousAction = action.getPreviousAction();
             SloccountResult result = action.getResult();
-            List<SloccountLanguageStatistics> previousStatistics = null;
+            SloccountReportStatistics previousStatistics = null;
 
             if(result != null){
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
@@ -159,11 +160,11 @@ public class SloccountChartBuilder implements Serializable {
                     previousStatistics = result.getStatistics();
                 }
 
-                allLanguages.addAll(ReportSummary.getAllLanguages(previousStatistics));
+                allLanguages.addAll(previousStatistics.getAllLanguages());
                 Set<String> remainingLanguages = new HashSet<String>(allLanguages);
 
-                for(SloccountLanguageStatistics current : result.getStatistics()){
-                    SloccountLanguageStatistics previous = ReportSummary.getLanguage(previousStatistics, current.getName());
+                for(SloccountLanguageStatistics current : result.getStatistics().getStatistics()){
+                    SloccountLanguageStatistics previous = previousStatistics.getLanguage(current.getName());
 
                     builder.add(current.getLineCount() - previous.getLineCount(),
                             current.getName(), buildLabel);
@@ -173,7 +174,7 @@ public class SloccountChartBuilder implements Serializable {
 
                 for(String language : remainingLanguages) {
                     SloccountLanguageStatistics previous
-                            = ReportSummary.getLanguage(previousStatistics, language);
+                            = previousStatistics.getLanguage(language);
 
                     // Language disappeared (current - previous = 0 - previous)
                     builder.add(-previous.getLineCount(), language, buildLabel);

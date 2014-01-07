@@ -17,6 +17,8 @@ import java.io.Reader;
  */
 public class SloccountParser implements
         FilePath.FileCallable<SloccountPublisherReport> {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private static final boolean LOG_ENABLED = false;
 

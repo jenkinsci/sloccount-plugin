@@ -29,7 +29,7 @@ public class SloccountPublisherReport implements Serializable,
      * 
      * @return the statistics
      */
-    public List<SloccountLanguageStatistics> getStatistics(){
+    public SloccountReportStatistics getStatistics(){
         List<SloccountLanguageStatistics> ret = new LinkedList<SloccountLanguageStatistics>();
 
         for(Map.Entry<String, LanguageStatistics> it : statistics.entrySet()){
@@ -37,7 +37,7 @@ public class SloccountPublisherReport implements Serializable,
                     it.getValue().numLines, it.getValue().numFiles));
         }
 
-        return ret;
+        return new SloccountReportStatistics(ret);
     }
 
     /**

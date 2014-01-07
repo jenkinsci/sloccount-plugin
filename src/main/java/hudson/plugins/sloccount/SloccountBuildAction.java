@@ -2,10 +2,9 @@ package hudson.plugins.sloccount;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
-import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
+import hudson.plugins.sloccount.model.SloccountReportStatistics;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.kohsuke.stapler.StaplerProxy;
 
@@ -14,6 +13,8 @@ import org.kohsuke.stapler.StaplerProxy;
  * @author lordofthepigs
  */
 public class SloccountBuildAction implements Action, Serializable, StaplerProxy {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     public static final String URL_NAME = "sloccountResult";
 
@@ -42,8 +43,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         String retVal = "";
         
         if(this.result != null){
-            
-            retVal =  ReportSummary.createReportSummary(this.result.getStatistics(),
+            retVal = ReportSummary.createReportSummary(this.result.getStatistics(),
                     this.getPreviousStatistics());
         }
         
@@ -55,7 +55,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         String retVal = "";
         
         if(this.result != null){
-            retVal =  ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
+            retVal = ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
                     this.getPreviousStatistics());
         }
         
@@ -66,7 +66,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return this.result;
     }
 
-    private List<SloccountLanguageStatistics> getPreviousStatistics(){
+    private SloccountReportStatistics getPreviousStatistics(){
         SloccountResult previous = this.getPreviousResult();
         if(previous == null){
             return null;
@@ -122,5 +122,4 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     public Object getTarget() {
         return this.result;
     }
-
 }

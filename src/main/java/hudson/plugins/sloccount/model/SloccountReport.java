@@ -11,6 +11,8 @@ import java.util.Map;
  * @author lordofthepigs
  */
 public class SloccountReport extends FileContainer implements SloccountReportInterface {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();

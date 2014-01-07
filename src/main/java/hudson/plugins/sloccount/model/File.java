@@ -8,6 +8,8 @@ import java.io.Serializable;
  * @author lordofthepigs
  */
 public class File implements Countable, Serializable {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private String name;
     private String language;

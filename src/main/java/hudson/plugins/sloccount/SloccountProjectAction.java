@@ -14,7 +14,9 @@ import org.kohsuke.stapler.StaplerResponse;
  * @author lordofthepigs
  */
 public class SloccountProjectAction implements Action, Serializable {
-    
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
+
     public static final String URL_NAME = "sloccountResult";
 
     public static final int CHART_WIDTH = 500;
@@ -37,7 +39,7 @@ public class SloccountProjectAction implements Action, Serializable {
     public String getUrlName() {
         return URL_NAME;
     }
-    
+
     /**
      *
      * Redirects the index page to the last result.
@@ -74,37 +76,28 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     public final boolean hasValidResults() {
-       
         AbstractBuild<?, ?> build = getLastFinishedBuild();
-        
+
         if (build != null) {
-            
             SloccountBuildAction resultAction = build.getAction(SloccountBuildAction.class);
 
-            if (resultAction != null) {
+            int nbr_results = 0;
 
-                int nbr_results = 0;
+            while(resultAction != null){
+                SloccountResult result = resultAction.getResult();
 
-                do{
+                if(result != null){
+                    nbr_results++;
 
-                    SloccountResult result = resultAction.getResult();
-
-                    if(result != null){
-
-                        nbr_results++;
-
-                        if(nbr_results > 1){
-
-                            return true;
-                        }
+                    if(nbr_results > 1){
+                        return true;
                     }
+                }
 
-                    resultAction = resultAction.getPreviousAction();
-
-                }while(resultAction != null);            
+                resultAction = resultAction.getPreviousAction();
             }
         }
-        
+
         return false;
     }
 
