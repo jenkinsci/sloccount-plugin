@@ -4,7 +4,9 @@ import hudson.plugins.sloccount.model.SloccountLanguageStatistics;
 import hudson.plugins.sloccount.util.StringUtil;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -164,5 +166,22 @@ public class ReportSummary  implements Serializable {
         }
         
         return new SloccountLanguageStatistics(name, 0, 0);
+    }
+    
+    /**
+     * Get names of all languages.
+     * 
+     * @param statistics the source statistics
+     * @return the names
+     */
+    static List<String> getAllLanguages(List<SloccountLanguageStatistics> statistics)
+    {
+        List<String> languages = new LinkedList<String>();
+
+        for(SloccountLanguageStatistics it : statistics) {
+            languages.add(it.getName());
+        }
+
+        return languages;
     }
 }

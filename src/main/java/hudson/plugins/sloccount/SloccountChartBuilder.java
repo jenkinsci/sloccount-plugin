@@ -7,7 +7,9 @@ import hudson.util.ShiftedCategoryAxis;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -66,20 +68,30 @@ public class SloccountChartBuilder implements Serializable {
 
     private static CategoryDataset buildDataset(SloccountBuildAction lastAction){
         DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
+        Set<String> allLanguages = new HashSet<String>();
 
         SloccountBuildAction action = lastAction;
-        do{
+        while(action != null){
             SloccountResult result = action.getResult();
             if(result != null){
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
 
+                allLanguages.addAll(ReportSummary.getAllLanguages(result.getStatistics()));
+                Set<String> remainingLanguages = new HashSet<String>(allLanguages);
+
                 for(SloccountLanguageStatistics l : result.getStatistics()){
                     builder.add(l.getLineCount(), l.getName(), buildLabel);
+                    remainingLanguages.remove(l.getName());
+                }
+                
+                for(String language : remainingLanguages) {
+                    // Language disappeared
+                    builder.add(0, language, buildLabel);
                 }
             }
 
             action = action.getPreviousAction();
-        }while(action != null);
+        }
 
         return builder.build();
     }
@@ -123,17 +135,23 @@ public class SloccountChartBuilder implements Serializable {
 
     private static CategoryDataset buildDatasetDelta(SloccountBuildAction lastAction){
         DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
-
+        Set<String> allLanguages = new HashSet<String>();
         SloccountBuildAction action = lastAction;
-        
+
+        // Initial languages from the first action
+        if(action != null && action.getResult() != null) {
+            allLanguages.addAll(ReportSummary.getAllLanguages(
+                    action.getResult().getStatistics()));
+        }
+
         while(action != null){
             SloccountBuildAction previousAction = action.getPreviousAction();
             SloccountResult result = action.getResult();
             List<SloccountLanguageStatistics> previousStatistics = null;
-            
+
             if(result != null){
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
-                
+
                 if(previousAction != null && previousAction.getResult() != null){
                     previousStatistics = previousAction.getResult().getStatistics();
                 } else {
@@ -141,11 +159,24 @@ public class SloccountChartBuilder implements Serializable {
                     previousStatistics = result.getStatistics();
                 }
 
+                allLanguages.addAll(ReportSummary.getAllLanguages(previousStatistics));
+                Set<String> remainingLanguages = new HashSet<String>(allLanguages);
+
                 for(SloccountLanguageStatistics current : result.getStatistics()){
                     SloccountLanguageStatistics previous = ReportSummary.getLanguage(previousStatistics, current.getName());
-                    
+
                     builder.add(current.getLineCount() - previous.getLineCount(),
                             current.getName(), buildLabel);
+
+                    remainingLanguages.remove(current.getName());
+                }
+
+                for(String language : remainingLanguages) {
+                    SloccountLanguageStatistics previous
+                            = ReportSummary.getLanguage(previousStatistics, language);
+
+                    // Language disappeared (current - previous = 0 - previous)
+                    builder.add(-previous.getLineCount(), language, buildLabel);
                 }
             }
 
