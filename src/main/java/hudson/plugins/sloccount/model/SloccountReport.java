@@ -185,6 +185,9 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         return longest;
     }
 
+    /**
+     * Simplify the names.
+     */
     public void simplifyNames(){
         String root = this.getRootFolder();
         for(File f : this.getFiles()){
@@ -198,8 +201,4 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     public String getName() {
         return "SlocCount Report";
     }
-
-	public void addSourceFile(java.io.File sourceFile) {
-		// Empty, method is not needed in this class
-	}
 }

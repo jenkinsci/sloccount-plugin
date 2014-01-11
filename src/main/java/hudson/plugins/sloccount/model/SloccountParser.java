@@ -44,7 +44,6 @@ public class SloccountParser implements
             report.addSourceFile(new java.io.File(workspace, fileName));
         }
 
-        report.simplifyNames();
         return report;
     }
     
@@ -67,6 +66,7 @@ public class SloccountParser implements
             }
         }
 
+        report.simplifyNames();
         return report;
     }
 

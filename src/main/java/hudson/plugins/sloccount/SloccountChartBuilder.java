@@ -182,7 +182,7 @@ public class SloccountChartBuilder implements Serializable {
             }
 
             action = previousAction;
-        };
+        }
 
         return builder.build();
     }

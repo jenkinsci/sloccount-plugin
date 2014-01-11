@@ -49,6 +49,12 @@ public class SloccountPublisherReport implements Serializable,
         return Collections.unmodifiableList(sourceFiles);
     }
 
+    /**
+     * Add a source file.
+     * 
+     * @param sourceFile
+     *            the source file
+     */
     public void addSourceFile(File sourceFile){
         sourceFiles.add(sourceFile);
     }
@@ -63,10 +69,6 @@ public class SloccountPublisherReport implements Serializable,
 
         stat.numLines += lineCount;
         ++stat.numFiles;
-    }
-
-    public void simplifyNames(){
-        // Empty, method is not needed in this class
     }
 
     public String getRootFolder(){

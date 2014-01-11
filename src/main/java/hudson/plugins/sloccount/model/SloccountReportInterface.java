@@ -1,6 +1,5 @@
 package hudson.plugins.sloccount.model;
 
-import java.io.File;
 
 /**
  * Generic parsing results.
@@ -19,19 +18,6 @@ public interface SloccountReportInterface {
      *            the line count
      */
     void add(String filePath, String languageName, int lineCount);
-
-    /**
-     * Add a source file.
-     * 
-     * @param sourceFile
-     *            the source file
-     */
-    void addSourceFile(File sourceFile);
-
-    /**
-     * Simplify the names.
-     */
-    void simplifyNames();
 
     /**
      * Get the root folder.
