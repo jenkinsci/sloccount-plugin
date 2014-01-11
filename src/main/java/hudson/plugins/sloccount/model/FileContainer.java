@@ -12,11 +12,12 @@ import java.io.Serializable;
  * @author lordofthepigs
  */
 public abstract class FileContainer implements Countable, Serializable {
-    
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
+
     private Map<String, File> files = new LinkedHashMap<String, File>();
     private int lineCount = 0;
-  
-    
+
     public File getFile(String name){
         return this.files.get(name);
     }
@@ -41,9 +42,8 @@ public abstract class FileContainer implements Countable, Serializable {
     public int getLineCount(){
         return this.lineCount;
     }
-    
+
     public String getLineCountString() {
         return StringUtil.grouping(getLineCount());
     }
-
 }

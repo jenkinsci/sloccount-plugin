@@ -3,6 +3,7 @@ package hudson.plugins.sloccount.model;
 import hudson.FilePath;
 import hudson.plugins.sloccount.util.FileFinder;
 import hudson.remoting.VirtualChannel;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,12 +12,15 @@ import java.io.PrintStream;
 import java.io.Reader;
 
 /**
- *
+ * 
  * @author lordofthepigs
  */
-public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
+public class SloccountParser implements
+        FilePath.FileCallable<SloccountPublisherReport> {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
-    private boolean LOG_ENABLED = false;
+    private static final boolean LOG_ENABLED = false;
 
     private final String encoding;
     private final String filePattern;
@@ -29,28 +33,55 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
     }
 
 
-    public SloccountReport invoke(java.io.File workspace, VirtualChannel channel) throws IOException {
-        SloccountReport report = new SloccountReport();
-        
+    public SloccountPublisherReport invoke(java.io.File workspace, VirtualChannel channel) throws IOException {
+        SloccountPublisherReport report = new SloccountPublisherReport();
+
         FileFinder finder = new FileFinder(this.filePattern);
         String[] found = finder.find(workspace);
 
         for(String fileName : found){
-            this.parse(workspace, fileName, report);
+            this.parse(new java.io.File(workspace, fileName), report);
+            report.addSourceFile(new java.io.File(workspace, fileName));
+        }
+
+        return report;
+    }
+    
+    /**
+     * Parse a list of input files. All errors are silently ignored.
+     * 
+     * @param files
+     *            the files
+     * @return the content of the parsed files in form of a report
+     */
+    public SloccountReport parseFiles(java.io.File[] files) {
+        SloccountReport report = new SloccountReport();
+
+        for (java.io.File file : files) {
+            try {
+                parse(file, report);
+            } catch (IOException e) {
+                // Silently ignore, there is still a possibility that other
+                // files can be parsed successfully
+            }
         }
 
         report.simplifyNames();
         return report;
     }
 
-    private void parse(java.io.File workspace, String fileName, SloccountReport report) throws IOException {
-        java.io.File file = new java.io.File(workspace, fileName);
-        InputStreamReader in = new InputStreamReader(new FileInputStream(file), encoding);
-        this.parse(in, report);
-        in.close();
+    private void parse(java.io.File file, SloccountReportInterface report) throws IOException {
+        InputStreamReader in = null;
+        
+        try {
+            in = new InputStreamReader(new FileInputStream(file), encoding);
+            this.parse(in, report);
+        } finally {
+            in.close();
+        }
     }
 
-    private void parse(Reader reader, SloccountReport report) throws IOException {
+    private void parse(Reader reader, SloccountReportInterface report) throws IOException {
         BufferedReader in = new BufferedReader(reader);
 
         String line;
@@ -63,7 +94,7 @@ public class SloccountParser implements FilePath.FileCallable<SloccountReport> {
         }
     }
 
-    private void parseLine(String line, SloccountReport report){
+    private void parseLine(String line, SloccountReportInterface report){
         String[] tokens = line.split("\t");
 
         if(tokens.length != 4){

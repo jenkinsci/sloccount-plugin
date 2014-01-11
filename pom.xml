@@ -40,7 +40,12 @@
     <developer>
       <id>kbrandt</id>
       <name>Karsten Brandt</name>
-    </developer>      
+    </developer>
+    <developer>
+      <id>mixalturek</id>
+      <name>Michal Turek</name>
+      <email>mixalturek@users.sf.net</email>
+    </developer>
   </developers>
 
 
@@ -49,15 +54,7 @@
   </properties>
   
   <dependencies>
-    <dependency>
-      <groupId>org.jenkins-ci.main</groupId>
-      <artifactId>maven-plugin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>1.0.0</version>
-    </dependency>
+    <!-- None -->
   </dependencies>
 
   <repositories>

@@ -10,7 +10,9 @@ import java.util.Map;
  *
  * @author lordofthepigs
  */
-public class SloccountReport extends FileContainer {
+public class SloccountReport extends FileContainer implements SloccountReportInterface {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
@@ -81,6 +83,10 @@ public class SloccountReport extends FileContainer {
 
     public int getFolderCount(){
         return this.folders.size();
+    }
+
+    public String getFolderCountString(){
+        return StringUtil.grouping(this.folders.size());
     }
 
     public Language getLanguage(String name){
@@ -179,6 +185,9 @@ public class SloccountReport extends FileContainer {
         return longest;
     }
 
+    /**
+     * Simplify the names.
+     */
     public void simplifyNames(){
         String root = this.getRootFolder();
         for(File f : this.getFiles()){

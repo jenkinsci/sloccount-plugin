@@ -14,7 +14,9 @@ import org.kohsuke.stapler.StaplerResponse;
  * @author lordofthepigs
  */
 public class SloccountProjectAction implements Action, Serializable {
-    
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
+
     public static final String URL_NAME = "sloccountResult";
 
     public static final int CHART_WIDTH = 500;
@@ -37,7 +39,7 @@ public class SloccountProjectAction implements Action, Serializable {
     public String getUrlName() {
         return URL_NAME;
     }
-    
+
     /**
      *
      * Redirects the index page to the last result.
@@ -53,6 +55,9 @@ public class SloccountProjectAction implements Action, Serializable {
         AbstractBuild<?, ?> build = getLastFinishedBuild();
         if (build != null) {
             response.sendRedirect2(String.format("../%d/%s", build.getNumber(), SloccountBuildAction.URL_NAME));
+        }else{
+            // Click to the link in menu on the job page before the first build
+            response.sendRedirect2("..");
         }
     }
 
@@ -71,37 +76,28 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     public final boolean hasValidResults() {
-       
         AbstractBuild<?, ?> build = getLastFinishedBuild();
-        
+
         if (build != null) {
-            
             SloccountBuildAction resultAction = build.getAction(SloccountBuildAction.class);
 
-            if (resultAction != null) {
+            int nbr_results = 0;
 
-                int nbr_results = 0;
+            while(resultAction != null){
+                SloccountResult result = resultAction.getResult();
 
-                do{
+                if(result != null){
+                    nbr_results++;
 
-                    SloccountResult result = resultAction.getResult();
-
-                    if(result != null){
-
-                        nbr_results++;
-
-                        if(nbr_results > 1){
-
-                            return true;
-                        }
+                    if(nbr_results > 1){
+                        return true;
                     }
+                }
 
-                    resultAction = resultAction.getPreviousAction();
-
-                }while(resultAction != null);            
+                resultAction = resultAction.getPreviousAction();
             }
         }
-        
+
         return false;
     }
 
@@ -148,6 +144,53 @@ public class SloccountProjectAction implements Action, Serializable {
                 request,
                 response,
                 SloccountChartBuilder.buildChart(lastAction),
+                CHART_WIDTH,
+                CHART_HEIGHT);
+    }
+    
+    /**
+     * Display the trend delta map. Delegates to the the associated
+     * {@link ResultAction}.
+     *
+     * @param request
+     *            Stapler request
+     * @param response
+     *            Stapler response
+     * @throws IOException
+     *             in case of an error
+     */
+    public void doTrendDeltaMap(final StaplerRequest request, final StaplerResponse response) throws IOException {
+        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
+        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+
+        ChartUtil.generateClickableMap(
+                request,
+                response,
+                SloccountChartBuilder.buildChartDelta(lastAction),
+                CHART_WIDTH,
+                CHART_HEIGHT);
+    }
+
+    /**
+     * Display the trend delta graph. Delegates to the the associated
+     * {@link ResultAction}.
+     *
+     * @param request
+     *            Stapler request
+     * @param response
+     *            Stapler response
+     * @throws IOException
+     *             in case of an error in
+     *             {@link ResultAction#doGraph(StaplerRequest, StaplerResponse, int)}
+     */
+    public void doTrendDelta(final StaplerRequest request, final StaplerResponse response) throws IOException {
+        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
+        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+
+        ChartUtil.generateGraph(
+                request,
+                response,
+                SloccountChartBuilder.buildChartDelta(lastAction),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }

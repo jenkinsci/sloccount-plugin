@@ -2,8 +2,10 @@ package hudson.plugins.sloccount;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
-import hudson.plugins.sloccount.model.SloccountReport;
+import hudson.plugins.sloccount.model.SloccountReportStatistics;
+
 import java.io.Serializable;
+
 import org.kohsuke.stapler.StaplerProxy;
 
 /**
@@ -11,6 +13,8 @@ import org.kohsuke.stapler.StaplerProxy;
  * @author lordofthepigs
  */
 public class SloccountBuildAction implements Action, Serializable, StaplerProxy {
+    /** Serial version UID. */
+    private static final long serialVersionUID = 0L;
 
     public static final String URL_NAME = "sloccountResult";
 
@@ -39,8 +43,8 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         String retVal = "";
         
         if(this.result != null){
-            
-            retVal =  ReportSummary.createReportSummary(this.result.getReport(), this.getPreviousReport());
+            retVal = ReportSummary.createReportSummary(this.result.getStatistics(),
+                    this.getPreviousStatistics());
         }
         
         return retVal;
@@ -51,7 +55,8 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         String retVal = "";
         
         if(this.result != null){
-            retVal =  ReportSummary.createReportSummaryDetails(this.result.getReport(), this.getPreviousReport());
+            retVal = ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
+                    this.getPreviousStatistics());
         }
         
         return retVal;
@@ -61,12 +66,12 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return this.result;
     }
 
-    private SloccountReport getPreviousReport(){
+    private SloccountReportStatistics getPreviousStatistics(){
         SloccountResult previous = this.getPreviousResult();
         if(previous == null){
             return null;
         }else{
-           return previous.getReport();
+           return previous.getStatistics();
         }
     }
 
@@ -80,17 +85,33 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return previousResult;
     }
 
+    /**
+     * Get the previous valid and non-empty action.
+     * 
+     * @return the action or null
+     */
     SloccountBuildAction getPreviousAction(){
-        
-        if(this.build != null){
-            
-            AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
-            
-            if(previousBuild != null){
-                
-                return previousBuild.getAction(SloccountBuildAction.class);
-            }
+        if(this.build == null){
+            return null;
         }
+
+        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+
+        while(previousBuild != null){
+            SloccountBuildAction action = previousBuild
+                    .getAction(SloccountBuildAction.class);
+
+            if (action != null) {
+                SloccountResult result = action.getResult();
+                
+                if(result != null && !result.isEmpty()) {
+                    return action;
+                }
+            }
+
+            previousBuild = previousBuild.getPreviousBuild();
+        }
+
         return null;
     }
 
@@ -101,5 +122,4 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     public Object getTarget() {
         return this.result;
     }
-
 }
