@@ -21,8 +21,6 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
      *
      * @param url
      *            base URL of the graph links
-     * @param toolTipProvider
-     *            tooltip provider for the clickable map
      */
     public SloccountAreaRenderer(final String url) {
         super();

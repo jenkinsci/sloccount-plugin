@@ -94,7 +94,6 @@ public class SloccountReportStatistics implements Serializable {
     /**
      * Get names of all languages.
      * 
-     * @param statistics the source statistics
      * @return the names
      */
     public List<String> getAllLanguages() {
