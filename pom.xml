@@ -76,15 +76,4 @@
     <url>https://github.com/jenkinsci/sloccount-plugin</url>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>java.net-m2-repository</id>
-      <url>http://maven.jenkins-ci.org/content/repositories/releases/</url>
-    </repository>
-    <site>
-      <id>github-project-site</id>
-      <url>gitsite:git@github.com/jenkinsci/sloccount-plugin</url>
-    </site>
-  </distributionManagement>
-
 </project>
