@@ -102,8 +102,7 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     /**
-     * Display the trend map. Delegates to the the associated
-     * {@link ResultAction}.
+     * Display the trend map.
      *
      * @param request
      *            Stapler request
@@ -125,16 +124,14 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     /**
-     * Display the trend graph. Delegates to the the associated
-     * {@link ResultAction}.
+     * Display the trend graph.
      *
      * @param request
      *            Stapler request
      * @param response
      *            Stapler response
      * @throws IOException
-     *             in case of an error in
-     *             {@link ResultAction#doGraph(StaplerRequest, StaplerResponse, int)}
+     *             in case of an error
      */
     public void doTrend(final StaplerRequest request, final StaplerResponse response) throws IOException {
         AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
@@ -149,8 +146,7 @@ public class SloccountProjectAction implements Action, Serializable {
     }
     
     /**
-     * Display the trend delta map. Delegates to the the associated
-     * {@link ResultAction}.
+     * Display the trend delta map.
      *
      * @param request
      *            Stapler request
@@ -172,16 +168,14 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     /**
-     * Display the trend delta graph. Delegates to the the associated
-     * {@link ResultAction}.
+     * Display the trend delta graph.
      *
      * @param request
      *            Stapler request
      * @param response
      *            Stapler response
      * @throws IOException
-     *             in case of an error in
-     *             {@link ResultAction#doGraph(StaplerRequest, StaplerResponse, int)}
+     *             in case of an error
      */
     public void doTrendDelta(final StaplerRequest request, final StaplerResponse response) throws IOException {
         AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
