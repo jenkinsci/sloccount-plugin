@@ -14,27 +14,17 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
 
+    /** Only Unix directory separator is used in the code. */
+    public static final String DIRECTORY_SEPARATOR = "/";
+
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
 
     /** The longest folder path common to all folders. */
     private String[] rootFolderPath = null;
-    private transient String fileSeparator;
-    private transient String regex_fileSeparator;
 
     public SloccountReport(){
-        
         super();
-        
-        this.fileSeparator = System.getProperty("file.separator");
-        
-        if(this.fileSeparator.equals("\\")){
-            // Windows environment -> escape the backslash for regex
-            this.regex_fileSeparator = "\\\\";
-        }else{ 
-            // Unix environment -> use as given
-            this.regex_fileSeparator = this.fileSeparator;            
-        }
     }
 
     public SloccountReport(SloccountReport old, FileFilter filter){
@@ -47,9 +37,11 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     public void add(String filePath, String languageName, int lineCount){
+        // Get rid of Microsoft's incompatibility once and forever
+        filePath = filePath.replace("\\", DIRECTORY_SEPARATOR);
 
-        String folderPath = this.extractFolder(filePath);
-        
+        String folderPath = extractFolder(filePath);
+
         File file = new File(filePath, languageName, lineCount);
         this.addFile(file);
 
@@ -68,9 +60,34 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         language.addFile(file);
     }
 
-    private String extractFolder(String filePath){
-        int index = filePath.lastIndexOf(this.fileSeparator);
-        return filePath.substring(0, index);
+    /**
+     * Extract directory part of a path. The method searches first directory
+     * separator from right.
+     * 
+     * Examples of input and output:
+     * (empty string) - (empty string)
+     * file.java - (empty string)
+     * /test/file.java - /test
+     * /cygdrive/c/test/file.java - /cygdrive/c/test
+     * c:/test/file.java - c:/test
+     * /test/ - /test
+     * /test - (empty string) ... is it file or directory?
+     * 
+     * @param filePath
+     *            the path containing folders and file name, Unix separators '/'
+     *            are expected
+     * @return the path without the file name; if no separator is found in
+     *            the input path an empty string will be returned
+     */
+    public static String extractFolder(String filePath){
+        int index = filePath.lastIndexOf(DIRECTORY_SEPARATOR);
+
+        if(index != -1) {
+            return filePath.substring(0, index);
+        }
+
+        // No separator found, probably only a file name
+        return "";
     }
 
     public Folder getFolder(String name){
@@ -124,7 +141,7 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
             StringBuilder builder = new StringBuilder();
             for(int i = 0; i < this.rootFolderPath.length; i++){
                 if(i > 0){
-                    builder.append("/");
+                    builder.append(DIRECTORY_SEPARATOR);
                 }
                 builder.append(this.rootFolderPath[i]);
             }
@@ -133,11 +150,10 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     private void updateRootFolderPath(String newFolderName){
-        String[] newFolderPath = newFolderName.split(this.regex_fileSeparator);
+        String[] newFolderPath = newFolderName.split(DIRECTORY_SEPARATOR);
 
         if(this.rootFolderPath == null){
             this.rootFolderPath = newFolderPath;
-        
         }else{
             for(int i = 0; i < this.rootFolderPath.length && i < newFolderPath.length; i ++){
                 if(!this.rootFolderPath[i].equals(newFolderPath[i])){

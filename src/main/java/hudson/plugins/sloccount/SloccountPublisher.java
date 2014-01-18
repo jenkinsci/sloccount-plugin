@@ -79,12 +79,14 @@ public class SloccountPublisher extends Recorder implements Serializable {
             return false;
         }
 
+        if (report.getSourceFiles().size() == 0) {
+            logger.format("[SLOCCount] No file is matching the input pattern: %s\n",
+                    getRealPattern());
+        }
+
         SloccountResult result = new SloccountResult(report.getStatistics(),
                 getRealEncoding(), null, build);
-        
-        SloccountBuildAction buildAction = new SloccountBuildAction(build, result);
-        
-        build.addAction(buildAction);
+        build.addAction(new SloccountBuildAction(build, result));
 
         try{
             copyFilesToBuildDirectory(report.getSourceFiles(),

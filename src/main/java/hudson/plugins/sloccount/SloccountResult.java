@@ -71,7 +71,7 @@ public class SloccountResult implements Serializable {
 
         if(report != null) {
             for(Language language : report.getLanguages()){
-            	languages.add(new SloccountLanguageStatistics(language.getName(),
+                languages.add(new SloccountLanguageStatistics(language.getName(),
                         language.getLineCount(), language.getFileCount()));
             }
         }
@@ -126,7 +126,7 @@ public class SloccountResult implements Serializable {
     }
 
     public SloccountResult getFolderResult(String jumbledFolder){
-        String folder = jumbledFolder.replace("|", System.getProperty("file.separator"));
+        String folder = jumbledFolder.replace("|", SloccountReport.DIRECTORY_SEPARATOR);
         SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
         return new BreadCrumbResult(filtered, this.owner, folder);
     }
@@ -157,11 +157,7 @@ public class SloccountResult implements Serializable {
         }
 
         public boolean include(File file) {
-            String separator = System.getProperty("file.separator");
-
-            int index = file.getName().lastIndexOf(separator);
-            String fileFolder = file.getName().substring(0, index);
-
+            String fileFolder = SloccountReport.extractFolder(file.getName());
             return this.folder.equals(fileFolder);
         }
     }
