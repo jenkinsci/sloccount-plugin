@@ -19,22 +19,9 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
 
     /** The longest folder path common to all folders. */
     private String[] rootFolderPath = null;
-    private transient String fileSeparator;
-    private transient String regex_fileSeparator;
 
     public SloccountReport(){
-        
         super();
-        
-        this.fileSeparator = System.getProperty("file.separator");
-        
-        if(this.fileSeparator.equals("\\")){
-            // Windows environment -> escape the backslash for regex
-            this.regex_fileSeparator = "\\\\";
-        }else{ 
-            // Unix environment -> use as given
-            this.regex_fileSeparator = this.fileSeparator;            
-        }
     }
 
     public SloccountReport(SloccountReport old, FileFilter filter){
@@ -47,8 +34,7 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     public void add(String filePath, String languageName, int lineCount){
-
-        String folderPath = this.extractFolder(filePath);
+        String folderPath = extractFolder(filePath);
         
         File file = new File(filePath, languageName, lineCount);
         this.addFile(file);
@@ -68,9 +54,41 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         language.addFile(file);
     }
 
-    private String extractFolder(String filePath){
-        int index = filePath.lastIndexOf(this.fileSeparator);
-        return filePath.substring(0, index);
+    /**
+     * Extract directory part of a path. The method searches the directory
+     * separator from right in the following order: unix '/', windows '\'.
+     * 
+     * Examples of input and output:
+     * (empty string) - (empty string)
+     * file.java - (empty string)
+     * /test/file.java - /test
+     * /cygdrive/c/test/file.java - /cygdrive/c/test
+     * c:\test\file.java - c:\test
+     * /test/ - /test
+     * /test - (empty string) ... is it file or directory?
+     * 
+     * @param filePath
+     *            the path containing folders and file name
+     * @return the path without the file name; if no separator is found in
+     *            the input path an empty string will be returned
+     */
+    public static String extractFolder(String filePath){
+        // Try Unix separator
+        int index = filePath.lastIndexOf("/");
+
+        if(index != -1) {
+            return filePath.substring(0, index);
+        }
+
+        // Try Windows separator
+        index = filePath.lastIndexOf("\\");
+
+        if(index != -1) {
+            return filePath.substring(0, index);
+        }
+
+        // No separator found, probably only a file name
+        return "";
     }
 
     public Folder getFolder(String name){
@@ -133,11 +151,16 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     private void updateRootFolderPath(String newFolderName){
-        String[] newFolderPath = newFolderName.split(this.regex_fileSeparator);
+        // Unix directory separator
+        String[] newFolderPath = newFolderName.split("/");
+
+        if(newFolderPath.length == 1){
+            // Windows directory separator '\'
+            newFolderPath = newFolderName.split("\\\\");
+        }
 
         if(this.rootFolderPath == null){
             this.rootFolderPath = newFolderPath;
-        
         }else{
             for(int i = 0; i < this.rootFolderPath.length && i < newFolderPath.length; i ++){
                 if(!this.rootFolderPath[i].equals(newFolderPath[i])){
