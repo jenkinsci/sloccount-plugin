@@ -14,6 +14,9 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
 
+    /** Only Unix directory separator is used in the code. */
+    public static final String DIRECTORY_SEPARATOR = "/";
+
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
 
@@ -34,8 +37,11 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     public void add(String filePath, String languageName, int lineCount){
+        // Get rid of Microsoft's incompatibility once and forever
+        filePath = filePath.replace("\\", DIRECTORY_SEPARATOR);
+
         String folderPath = extractFolder(filePath);
-        
+
         File file = new File(filePath, languageName, lineCount);
         this.addFile(file);
 
@@ -55,33 +61,26 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     /**
-     * Extract directory part of a path. The method searches the directory
-     * separator from right in the following order: unix '/', windows '\'.
+     * Extract directory part of a path. The method searches first directory
+     * separator from right.
      * 
      * Examples of input and output:
      * (empty string) - (empty string)
      * file.java - (empty string)
      * /test/file.java - /test
      * /cygdrive/c/test/file.java - /cygdrive/c/test
-     * c:\test\file.java - c:\test
+     * c:/test/file.java - c:/test
      * /test/ - /test
      * /test - (empty string) ... is it file or directory?
      * 
      * @param filePath
-     *            the path containing folders and file name
+     *            the path containing folders and file name, Unix separators '/'
+     *            are expected
      * @return the path without the file name; if no separator is found in
      *            the input path an empty string will be returned
      */
     public static String extractFolder(String filePath){
-        // Try Unix separator
-        int index = filePath.lastIndexOf("/");
-
-        if(index != -1) {
-            return filePath.substring(0, index);
-        }
-
-        // Try Windows separator
-        index = filePath.lastIndexOf("\\");
+        int index = filePath.lastIndexOf(DIRECTORY_SEPARATOR);
 
         if(index != -1) {
             return filePath.substring(0, index);
@@ -142,7 +141,7 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
             StringBuilder builder = new StringBuilder();
             for(int i = 0; i < this.rootFolderPath.length; i++){
                 if(i > 0){
-                    builder.append("/");
+                    builder.append(DIRECTORY_SEPARATOR);
                 }
                 builder.append(this.rootFolderPath[i]);
             }
@@ -151,13 +150,7 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     private void updateRootFolderPath(String newFolderName){
-        // Unix directory separator
-        String[] newFolderPath = newFolderName.split("/");
-
-        if(newFolderPath.length == 1){
-            // Windows directory separator '\'
-            newFolderPath = newFolderName.split("\\\\");
-        }
+        String[] newFolderPath = newFolderName.split(DIRECTORY_SEPARATOR);
 
         if(this.rootFolderPath == null){
             this.rootFolderPath = newFolderPath;

@@ -23,6 +23,6 @@ public class Folder extends FileContainer {
     }
 
     public String getUrlName(){
-        return this.name.replace(System.getProperty("file.separator"), "|");
+        return this.name.replace(SloccountReport.DIRECTORY_SEPARATOR, "|");
     }
 }

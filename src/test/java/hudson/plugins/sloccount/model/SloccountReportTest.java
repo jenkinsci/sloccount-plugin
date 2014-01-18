@@ -20,9 +20,6 @@ public class SloccountReportTest {
         Assert.assertEquals("c:/test",
                 SloccountReport.extractFolder("c:/test/file.java"));
 
-        Assert.assertEquals("c:\\test",
-                SloccountReport.extractFolder("c:\\test\\file.java"));
-
         Assert.assertEquals("",
                 SloccountReport.extractFolder("file.java"));
 
@@ -31,9 +28,6 @@ public class SloccountReportTest {
 
         Assert.assertEquals("test",
                 SloccountReport.extractFolder("test/file.java"));
-
-        Assert.assertEquals("test",
-                SloccountReport.extractFolder("test\\file.java"));
 
         // It searches the separator from right
         Assert.assertEquals("/test",
