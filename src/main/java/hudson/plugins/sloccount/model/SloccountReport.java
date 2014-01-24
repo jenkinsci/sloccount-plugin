@@ -67,11 +67,12 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
      * Examples of input and output:
      * (empty string) - (empty string)
      * file.java - (empty string)
-     * /test/file.java - /test
-     * /cygdrive/c/test/file.java - /cygdrive/c/test
-     * c:/test/file.java - c:/test
-     * /test/ - /test
-     * /test - (empty string) ... is it file or directory?
+     * / - /
+     * /test/file.java - /test/
+     * /cygdrive/c/test/file.java - /cygdrive/c/test/
+     * c:/test/file.java - c:/test/
+     * /test/ - /test/
+     * /test - / ... is it file or directory?
      * 
      * @param filePath
      *            the path containing folders and file name, Unix separators '/'
@@ -83,7 +84,8 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         int index = filePath.lastIndexOf(DIRECTORY_SEPARATOR);
 
         if(index != -1) {
-            return filePath.substring(0, index);
+            // +1 means include also the ending slash '/'
+            return filePath.substring(0, index + 1);
         }
 
         // No separator found, probably only a file name

@@ -16,13 +16,13 @@ import java.util.Map;
 public class SloccountPublisherReport implements Serializable,
         SloccountReportInterface {
     /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
 
     /** The language statistics. */
     private final Map<String, LanguageStatistics> statistics = new HashMap<String, LanguageStatistics>();
 
     /** The list of files from which the original report was created. */
-    private final List<File> sourceFiles = new LinkedList<File>();
+    private final List<SlaveFile> sourceFiles = new LinkedList<SlaveFile>();
 
     /**
      * Get the statistics.
@@ -45,7 +45,7 @@ public class SloccountPublisherReport implements Serializable,
      * 
      * @return the source files
      */
-    public List<File> getSourceFiles(){
+    public List<SlaveFile> getSourceFiles(){
         return Collections.unmodifiableList(sourceFiles);
     }
 
@@ -56,7 +56,7 @@ public class SloccountPublisherReport implements Serializable,
      *            the source file
      */
     public void addSourceFile(File sourceFile){
-        sourceFiles.add(sourceFile);
+        sourceFiles.add(new SlaveFile(sourceFile));
     }
 
     public void add(String filePath, String languageName, int lineCount){
@@ -90,5 +90,51 @@ public class SloccountPublisherReport implements Serializable,
 
         /** The number of files. */
         int numFiles = 0;
+    }
+
+    /**
+     * Helper class to store a file name and an absolute path relative to the
+     * slave machine.
+     * 
+     * @author Michal Turek
+     */
+    public static class SlaveFile implements Serializable {
+        /** Serial version UID. */
+        private static final long serialVersionUID = 0L;
+
+        /** The file name. */
+        private final String name;
+
+        /** The absolute path to the file. */
+        private final String absolutePath;
+
+        /**
+         * Constructor.
+         * 
+         * @param file
+         *            the file in the file system
+         */
+        public SlaveFile(File file) {
+            this.name = file.getName();
+            this.absolutePath = file.getAbsolutePath();
+        }
+
+        /**
+         * Get the file name.
+         * 
+         * @return the file name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Get the absolute path to the file.
+         * 
+         * @return the absolute path
+         */
+        public String getAbsolutePath() {
+            return absolutePath;
+        }
     }
 }
