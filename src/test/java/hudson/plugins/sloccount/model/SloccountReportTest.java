@@ -11,13 +11,13 @@ import org.junit.Test;
 public class SloccountReportTest {
     @Test
     public void testExtractFolder() {
-        Assert.assertEquals("/test",
+        Assert.assertEquals("/test/",
                 SloccountReport.extractFolder("/test/file.java"));
 
-        Assert.assertEquals("/cygdrive/c/test",
+        Assert.assertEquals("/cygdrive/c/test/",
                 SloccountReport.extractFolder("/cygdrive/c/test/file.java"));
 
-        Assert.assertEquals("c:/test",
+        Assert.assertEquals("c:/test/",
                 SloccountReport.extractFolder("c:/test/file.java"));
 
         Assert.assertEquals("",
@@ -26,16 +26,18 @@ public class SloccountReportTest {
         Assert.assertEquals("",
                 SloccountReport.extractFolder(""));
 
-        Assert.assertEquals("test",
+        Assert.assertEquals("test/",
                 SloccountReport.extractFolder("test/file.java"));
 
-        // It searches the separator from right
-        Assert.assertEquals("/test",
+        Assert.assertEquals("/test/",
                 SloccountReport.extractFolder("/test/"));
 
         // It searches the separator from right
-        Assert.assertEquals("",
+        Assert.assertEquals("/",
                 SloccountReport.extractFolder("/test"));
+
+        Assert.assertEquals("/",
+                SloccountReport.extractFolder("/"));
     }
     
     @Test
