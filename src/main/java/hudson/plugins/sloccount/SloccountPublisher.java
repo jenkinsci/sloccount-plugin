@@ -103,6 +103,39 @@ public class SloccountPublisher extends Recorder implements Serializable {
     }
 
     /**
+     * Let's try to find out the original file name.
+     * <p>
+     * If the OS we are running on the master and the slave are different,
+     * there are some back slash forward conversion to apply.
+     *
+     * @param source the file object representing the source file
+     * @return see description
+     */
+    private String revertToOriginalFileName(final File source) {
+
+        String fileSeparator = System.getProperty("file.separator");
+        if (source.getPath().startsWith(fileSeparator)) {
+            // well, for sure the file comes from unix like OS
+            if (fileSeparator.equals("\\")) {
+                // but as we are running on windows, we must revert the mapping
+                return source.getPath().replaceAll("\\\\", "/");
+            } else {
+                // unix file but we are running on unix... no problem
+                return source.getAbsolutePath();
+            }
+        } else {
+            // starts with a drive letter...
+            if (source.getPath().startsWith(fileSeparator)) {
+                // and we are running on windows. Too easy !
+                return source.getAbsolutePath();
+            } else {
+                // hum... revert the back slashes
+                return source.getPath().replaceAll("/", "\\");
+            }
+        }
+    }
+
+    /**
      * Copy files to a build results directory. The copy of a file will be
      * stored in plugin's subdirectory and a hashcode of its absolute path will
      * be used in its name prefix to distinguish files with the same names from
@@ -136,7 +169,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
             if(!masterFile.exists()){
                 FileOutputStream outputStream = new FileOutputStream(masterFile);
-                new FilePath(channel, sourceFile.getAbsolutePath())
+                new FilePath(channel, revertToOriginalFileName(sourceFile))
                         .copyTo(outputStream);
             }
         }
