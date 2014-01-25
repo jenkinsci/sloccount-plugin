@@ -79,7 +79,7 @@ public class SloccountReportStatistics implements Serializable {
      * Get language statistics for a concrete language.
      * 
      * @param name the language name
-     * @return the statistics
+     * @return the statistics or empty (non-null) object if not found
      */
     public SloccountLanguageStatistics getLanguage(String name) {
         for(SloccountLanguageStatistics it : statistics) {

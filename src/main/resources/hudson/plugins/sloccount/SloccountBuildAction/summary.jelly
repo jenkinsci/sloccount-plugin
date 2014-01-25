@@ -1,13 +1,49 @@
 <j:jelly xmlns:j="jelly:core"
-	xmlns:d="jelly:define"
+    xmlns:d="jelly:define"
     xmlns:l="/lib/layout"
     xmlns:t="/lib/hudson"
-	xmlns:f="/lib/form"
+    xmlns:f="/lib/form"
     xmlns:i="jelly:fmt">
+
     <t:summary icon="/plugin/sloccount/icons/sloccount-48.png">
-		${it.summary}
-		<ul>
-		${it.details}
-		</ul>
-	</t:summary>
+        <div><a href="sloccountResult">${%SLOCCount}</a></div>
+
+        <j:set var="diff" value="${it.diffSummary}"/>
+        
+        <style type="text/css">
+        #sloccountSummary .number { text-align: right; }
+        </style>
+
+        <table class="pane sortable" id="sloccountSummary">
+            <thead>
+                <tr>
+                    <td class="pane-header">${%Language}</td>
+                    <td class="pane-header">${%Lines}</td>
+                    <td class="pane-header">${%Lines} ${%Delta}</td>
+                    <td class="pane-header">${%Files}</td>
+                    <td class="pane-header">${%Files} ${%Delta}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <j:forEach var="language" items="${diff.languageDiffs}">
+                <tr>
+                    <td class="pane"><a href="sloccountResult/languageResult/${language.name}">${language.name}</a></td>
+                    <td class="pane number" data="${language.lineCount}">${language.lineCountString}</td>
+                    <td class="pane number" data="${language.lineCountDelta}">${language.lineCountDeltaString}</td>
+                    <td class="pane number" data="${language.fileCount}">${language.fileCountString}</td>
+                    <td class="pane number" data="${language.fileCountDelta}">${language.fileCountDeltaString}</td>
+                </tr>
+                </j:forEach>
+            </tbody>
+            <tfoot>
+                <tr class="sortbottom">
+                    <td class="pane-header">${%Total}</td>
+                    <td class="pane-header number" data="${diff.lineCount}">${diff.lineCountString}</td>
+                    <td class="pane-header number" data="${diff.lineCountDelta}">${diff.lineCountDeltaString}</td>
+                    <td class="pane-header number" data="${diff.fileCount}">${diff.fileCountString}</td>
+                    <td class="pane-header number" data="${diff.fileCountDelta}">${diff.fileCountDeltaString}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </t:summary>
 </j:jelly>

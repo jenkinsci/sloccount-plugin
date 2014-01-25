@@ -38,28 +38,14 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return URL_NAME;
     }
 
-    public String getSummary(){
-        
-        String retVal = "";
-        
-        if(this.result != null){
-            retVal = ReportSummary.createReportSummary(this.result.getStatistics(),
-                    this.getPreviousStatistics());
-        }
-        
-        return retVal;
-    }
-
-    public String getDetails(){
-        
-        String retVal = "";
-        
-        if(this.result != null){
-            retVal = ReportSummary.createReportSummaryDetails(this.result.getStatistics(),
-                    this.getPreviousStatistics());
-        }
-        
-        return retVal;
+    /**
+     * Get differences between two report statistics.
+     * 
+     * @return the differences
+     */
+    public SloccountDiffSummary getDiffSummary() {
+        return SloccountDiffSummary.getDiffSummary(getPreviousStatistics(),
+                result.getStatistics());
     }
 
     public SloccountResult getResult(){

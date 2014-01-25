@@ -34,7 +34,7 @@ public class SloccountChartBuilder implements Serializable {
 
     public static JFreeChart buildChart(SloccountBuildAction action){
        
-        String strLines = Messages.Sloccount_ReportSummary_Lines();
+        String strLines = Messages.Sloccount_Trend_Lines();
 
         JFreeChart chart = ChartFactory.createStackedAreaChart(null, null,
                 strLines, buildDataset(action), PlotOrientation.VERTICAL,
@@ -100,7 +100,7 @@ public class SloccountChartBuilder implements Serializable {
     
     public static JFreeChart buildChartDelta(SloccountBuildAction action){
         
-        String strLinesDelta = Messages.Sloccount_ReportSummary_Lines()
+        String strLinesDelta = Messages.Sloccount_Trend_Lines()
                 + " " + Messages.Sloccount_Trend_Delta();
 
         JFreeChart chart = ChartFactory.createStackedAreaChart(null, null,
