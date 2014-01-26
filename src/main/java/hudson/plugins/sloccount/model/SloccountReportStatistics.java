@@ -1,5 +1,7 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.StringUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +75,33 @@ public class SloccountReportStatistics implements Serializable {
      */
     public int getLanguageCount() {
         return statistics.size();
+    }
+
+    /**
+     * Get total lines count.
+     * 
+     * @return the lines count
+     */
+    public String getLineCountString() {
+        return StringUtil.grouping(getLineCount());
+    }
+
+    /**
+     * Get total files count.
+     * 
+     * @return the files count
+     */
+    public String getFileCountString() {
+        return StringUtil.grouping(getFileCount());
+    }
+
+    /**
+     * Get total files count.
+     * 
+     * @return the files count
+     */
+    public String getLanguageCountString() {
+        return StringUtil.grouping(getLanguageCount());
     }
 
     /**

@@ -1,0 +1,47 @@
+<j:jelly xmlns:j="jelly:core"
+    xmlns:st="jelly:stapler" 
+    xmlns:l="/lib/layout"
+    xmlns:t="/lib/hudson"
+    xmlns:dp="/hudson/plugins/view/dashboard">
+
+    <style type="text/css">
+        .sloccountTablePortlet .number { text-align: right; }
+    </style>
+
+    <table class="pane sortable sloccountTablePortlet">
+        <j:set var="totalLines" value="${0}"/>
+        <j:set var="totalFiles" value="${0}"/>
+
+        <thead>
+            <tr>
+                <td class="pane-header">${%Job}</td>
+                <td class="pane-header">${%Lines}</td>
+                <td class="pane-header">${%Files}</td>
+                <td class="pane-header">${%Languages}</td>
+            </tr>
+        </thead>
+        <tbody>
+            <j:forEach var="job" items="${jobs}">
+                <tr>
+                    <j:set var="stats" value="${it.getStatistics(job)}" />
+
+                    <td class="pane"><dp:jobLink job="${job}" /></td>
+                    <td class="pane number" data="${stats.lineCount}">${stats.lineCountString}</td>
+                    <td class="pane number" data="${stats.fileCount}">${stats.fileCountString}</td>
+                    <td class="pane number" data="${stats.languageCount}">${stats.languageCountString}</td>
+
+                    <j:set var="totalLines" value="${totalLines + stats.lineCount}"/>
+                    <j:set var="totalFiles" value="${totalFiles + stats.fileCount}"/>
+                </tr>
+            </j:forEach>
+        </tbody>
+        <tfoot>
+            <tr class="sortbottom">
+                <td class="pane-header">${%Total}</td>
+                <td class="pane-header number" data="${totalLines}">${it.grouping(totalLines)}</td>
+                <td class="pane-header number" data="${totalFiles}">${it.grouping(totalFiles)}</td>
+                <td class="pane-header number" data="0">-</td>
+            </tr>
+        </tfoot>
+    </table>
+</j:jelly>
