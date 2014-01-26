@@ -6,7 +6,7 @@
     xmlns:t="/lib/hudson"
     xmlns:f="/lib/form">
 
-	<!-- According to https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View -->
+    <!-- According to https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View -->
     <dp:decorate portlet="${it}">
         <tr><td>
             <div align="center">
