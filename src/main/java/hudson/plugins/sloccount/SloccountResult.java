@@ -51,7 +51,7 @@ public class SloccountResult implements Serializable {
     /**
      * Get the statistics.
      * 
-     * @return the statistics
+     * @return the statistics, always non-null value
      */
     public SloccountReportStatistics getStatistics() {
         convertLegacyData();
@@ -61,6 +61,10 @@ public class SloccountResult implements Serializable {
     /**
      * Convert legacy data in format of sloccount plugin version 1.10
      * to the new one that uses statistics.
+     * 
+     * If statistics are null for any reason, the object will be created.
+     * Statistics will be always non-null after this method is called (side
+     * effect).
      */
     private void convertLegacyData() {
         if(statistics != null) {
