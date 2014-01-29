@@ -39,19 +39,25 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     private final String pattern;
     private final String encoding;
-    
-    @DataBoundConstructor
-    public SloccountPublisher(String pattern, String encoding){
-       
+
+    /** 
+     * Maximal number of last successful builds displayed in the trend graphs.
+     * One or less means unlimited.
+     */
+    private final int numBuildsInGraph;
+
+	@DataBoundConstructor
+    public SloccountPublisher(String pattern, String encoding,
+            int numBuildsInGraph){
         super();
-        
         this.pattern = pattern;
         this.encoding = encoding;
+        this.numBuildsInGraph = numBuildsInGraph;
     }
 
     @Override
     public Action getProjectAction(AbstractProject<?,?> project){
-        return new SloccountProjectAction(project);
+        return new SloccountProjectAction(project, numBuildsInGraph);
     }
 
     protected boolean canContinue(final Result result) {
@@ -169,5 +175,9 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     public String getEncoding() {
         return encoding;
+    }
+
+    public int getNumBuildsInGraph() {
+        return numBuildsInGraph;
     }
 }

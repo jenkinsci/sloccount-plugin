@@ -24,8 +24,16 @@ public class SloccountProjectAction implements Action, Serializable {
 
     public AbstractProject<?,?> project;
 
-    public SloccountProjectAction(final AbstractProject<?, ?> project) {
+    /** 
+     * Maximal number of last successful builds displayed in the trend graphs.
+     * One or less means unlimited.
+     */
+    private final int numBuildsInGraph;
+
+    public SloccountProjectAction(final AbstractProject<?, ?> project,
+            int numBuildsInGraph) {
         this.project = project;
+        this.numBuildsInGraph = numBuildsInGraph;
     }
 
     public String getIconFileName() {
@@ -118,7 +126,7 @@ public class SloccountProjectAction implements Action, Serializable {
         ChartUtil.generateClickableMap(
                 request,
                 response,
-                SloccountChartBuilder.buildChart(lastAction),
+                SloccountChartBuilder.buildChart(lastAction, numBuildsInGraph),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }
@@ -140,7 +148,7 @@ public class SloccountProjectAction implements Action, Serializable {
         ChartUtil.generateGraph(
                 request,
                 response,
-                SloccountChartBuilder.buildChart(lastAction),
+                SloccountChartBuilder.buildChart(lastAction, numBuildsInGraph),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }
@@ -162,7 +170,7 @@ public class SloccountProjectAction implements Action, Serializable {
         ChartUtil.generateClickableMap(
                 request,
                 response,
-                SloccountChartBuilder.buildChartDelta(lastAction),
+                SloccountChartBuilder.buildChartDelta(lastAction, numBuildsInGraph),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }
@@ -184,7 +192,7 @@ public class SloccountProjectAction implements Action, Serializable {
         ChartUtil.generateGraph(
                 request,
                 response,
-                SloccountChartBuilder.buildChartDelta(lastAction),
+                SloccountChartBuilder.buildChartDelta(lastAction, numBuildsInGraph),
                 CHART_WIDTH,
                 CHART_HEIGHT);
     }

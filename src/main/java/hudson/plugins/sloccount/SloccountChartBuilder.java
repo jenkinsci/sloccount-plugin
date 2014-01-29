@@ -32,13 +32,13 @@ public class SloccountChartBuilder implements Serializable {
     private SloccountChartBuilder(){
     }
 
-    public static JFreeChart buildChart(SloccountBuildAction action){
-       
+    public static JFreeChart buildChart(SloccountBuildAction action,
+            int numBuildsInGraph){
         String strLines = Messages.Sloccount_Trend_Lines();
 
         JFreeChart chart = ChartFactory.createStackedAreaChart(null, null,
-                strLines, buildDataset(action), PlotOrientation.VERTICAL,
-                true, false, true);
+                strLines, buildDataset(action, numBuildsInGraph),
+                PlotOrientation.VERTICAL, true, false, true);
 
         chart.setBackgroundPaint(Color.white);
 
@@ -68,12 +68,16 @@ public class SloccountChartBuilder implements Serializable {
         return chart;
     }
 
-    private static CategoryDataset buildDataset(SloccountBuildAction lastAction){
+    private static CategoryDataset buildDataset(SloccountBuildAction lastAction,
+            int numBuildsInGraph){
         DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
         Set<String> allLanguages = new HashSet<String>();
 
         SloccountBuildAction action = lastAction;
-        while(action != null){
+        int numBuilds = 0;
+
+        // numBuildsInGraph <= 1 means unlimited
+        while(action != null && (numBuildsInGraph <= 1 || numBuilds < numBuildsInGraph)){
             SloccountResult result = action.getResult();
             if(result != null){
                 NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
@@ -90,6 +94,8 @@ public class SloccountChartBuilder implements Serializable {
                     // Language disappeared
                     builder.add(0, language, buildLabel);
                 }
+
+                ++numBuilds;
             }
 
             action = action.getPreviousAction();
@@ -98,14 +104,15 @@ public class SloccountChartBuilder implements Serializable {
         return builder.build();
     }
     
-    public static JFreeChart buildChartDelta(SloccountBuildAction action){
-        
+    public static JFreeChart buildChartDelta(SloccountBuildAction action,
+            int numBuildsInGraph){
+
         String strLinesDelta = Messages.Sloccount_Trend_Lines()
                 + " " + Messages.Sloccount_Trend_Delta();
 
         JFreeChart chart = ChartFactory.createStackedAreaChart(null, null,
-                strLinesDelta, buildDatasetDelta(action), PlotOrientation.VERTICAL,
-                true, false, true);
+                strLinesDelta, buildDatasetDelta(action, numBuildsInGraph),
+                PlotOrientation.VERTICAL, true, false, true);
 
         chart.setBackgroundPaint(Color.white);
 
@@ -135,7 +142,8 @@ public class SloccountChartBuilder implements Serializable {
         return chart;
     }
 
-    private static CategoryDataset buildDatasetDelta(SloccountBuildAction lastAction){
+    private static CategoryDataset buildDatasetDelta(SloccountBuildAction lastAction,
+            int numBuildsInGraph){
         DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
         Set<String> allLanguages = new HashSet<String>();
         SloccountBuildAction action = lastAction;
@@ -145,7 +153,10 @@ public class SloccountChartBuilder implements Serializable {
             allLanguages.addAll(action.getResult().getStatistics().getAllLanguages());
         }
 
-        while(action != null){
+        int numBuilds = 0;
+
+        // numBuildsInGraph <= 1 means unlimited
+        while(action != null && (numBuildsInGraph <= 1 || numBuilds < numBuildsInGraph)){
             SloccountBuildAction previousAction = action.getPreviousAction();
             SloccountResult result = action.getResult();
             SloccountReportStatistics previousStatistics = null;
@@ -179,6 +190,8 @@ public class SloccountChartBuilder implements Serializable {
                     // Language disappeared (current - previous = 0 - previous)
                     builder.add(-previous.getLineCount(), language, buildLabel);
                 }
+
+                ++numBuilds;
             }
 
             action = previousAction;
