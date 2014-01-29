@@ -11,6 +11,7 @@
         <j:set var="diff" value="${it.diffSummary}"/>
         
         <style type="text/css">
+        #sloccountSummary { width: auto; }
         #sloccountSummary .number { text-align: right; }
         </style>
 
