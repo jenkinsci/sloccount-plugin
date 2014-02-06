@@ -7,7 +7,7 @@
     <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/dispatcher-min.js"></script>
 
     <script type="text/javascript">
-      var myTabs = new YAHOO.widget.TabView("statistics");
+        var myTabs = new YAHOO.widget.TabView("statistics");
 
         YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
             label: '${%Files}',
@@ -16,24 +16,32 @@
             active: false
         }), myTabs);
 
-      <j:if test="${it.report.folderCount > 1}">
-        YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-            label: '${%Folders}',
-            dataSrc: 'folders',
-            cacheData: true,
-            active: false
-        }), myTabs);
-    </j:if>
-    <j:if test="${it.report.languageCount > 1}">
-        YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-            label: '${%Languages}',
-            dataSrc: 'languages',
-            cacheData: true,
-            active: false
-        }), myTabs);
-    </j:if>
+        <j:if test="${it.report.partCount > 1}">
+            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
+                label: '${%Parts}',
+                dataSrc: 'parts',
+                cacheData: true,
+                active: false
+            }), myTabs);
+        </j:if>
+        <j:if test="${it.report.folderCount > 1}">
+            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
+                label: '${%Folders}',
+                dataSrc: 'folders',
+                cacheData: true,
+                active: false
+            }), myTabs);
+        </j:if>
+        <j:if test="${it.report.languageCount > 1}">
+            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
+                label: '${%Languages}',
+                dataSrc: 'languages',
+                cacheData: true,
+                active: false
+            }), myTabs);
+        </j:if>
 
-      myTabs.set('activeIndex', 0);
+        myTabs.set('activeIndex', 0);
 
     </script>
 

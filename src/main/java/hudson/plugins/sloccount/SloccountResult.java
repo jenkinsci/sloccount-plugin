@@ -129,6 +129,19 @@ public class SloccountResult implements Serializable {
         return new BreadCrumbResult(filtered, this.owner, language);
     }
 
+    /**
+     * Get result for a specific part.
+     * 
+     * @param part the part
+     * @return the result
+     */
+    public SloccountResult getPartResult(String part){
+        SloccountReport filtered = new SloccountReport(this.getReport(),
+                new PartFileFilter(part));
+
+        return new BreadCrumbResult(filtered, owner, part);
+    }
+
     public SloccountResult getFolderResult(String jumbledFolder){
         String folder = jumbledFolder.replace("|", SloccountReport.DIRECTORY_SEPARATOR);
         SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
@@ -147,6 +160,32 @@ public class SloccountResult implements Serializable {
 
         public boolean include(File file) {
             return file.getLanguage().equals(this.language);
+        }
+    }
+
+    /**
+     * File filter for parts.
+     * 
+     * @author Michal Turek
+     */
+    private static class PartFileFilter implements FileFilter, Serializable {
+        /** Serial version UID. */
+        private static final long serialVersionUID = 0L;
+
+        /** The part name. */
+        private String part;
+
+        /**
+         * Constructor.
+         * 
+         * @param part the part
+         */
+        public PartFileFilter(String part){
+            this.part = part;
+        }
+
+        public boolean include(File file) {
+            return file.getPart().equals(part);
         }
     }
 

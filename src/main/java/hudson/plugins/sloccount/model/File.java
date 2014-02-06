@@ -12,12 +12,17 @@ public class File implements Countable, Serializable {
     private static final long serialVersionUID = 0L;
 
     private String name;
-    private String language;
-    private int lineCount;
+    private final String language;
 
-    public File(String name, String language, int lineCount){
+    /** The part. */
+    private final String part;
+
+    private final int lineCount;
+
+    public File(String name, String language, String part, int lineCount){
         this.name = name;
         this.language = language;
+        this.part = part;
         this.lineCount = lineCount;
     }
 
@@ -35,6 +40,15 @@ public class File implements Countable, Serializable {
 
     public String getLanguage(){
         return this.language;
+    }
+
+    /**
+     * Get the part.
+     * 
+     * @return the part
+     */
+    public String getPart(){
+        return part;
     }
 
     public void simplifyName(String rootPath){
