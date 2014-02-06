@@ -59,7 +59,7 @@ public class SloccountPublisherReport implements Serializable,
         sourceFiles.add(new SlaveFile(sourceFile));
     }
 
-    public void add(String filePath, String languageName, int lineCount){
+    public void add(String filePath, String languageName, String partName, int lineCount){
         LanguageStatistics stat = statistics.get(languageName);
 
         if(stat == null){

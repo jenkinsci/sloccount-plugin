@@ -20,6 +20,9 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
 
+    /** The parts present in the SLOCCount report. */
+    private Map<String, Part> parts = new LinkedHashMap<String, Part>();
+
     /** The longest folder path common to all folders. */
     private String[] rootFolderPath = null;
 
@@ -31,18 +34,18 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         this();
         for(File f : old.getFiles()){
             if(filter.include(f)){
-                this.add(f.getName(), f.getLanguage(), f.getLineCount());
+                this.add(f.getName(), f.getLanguage(), f.getPart(), f.getLineCount());
             }
         }
     }
 
-    public void add(String filePath, String languageName, int lineCount){
+    public void add(String filePath, String languageName, String partName, int lineCount){
         // Get rid of Microsoft's incompatibility once and forever
         filePath = filePath.replace("\\", DIRECTORY_SEPARATOR);
 
         String folderPath = extractFolder(filePath);
 
-        File file = new File(filePath, languageName, lineCount);
+        File file = new File(filePath, languageName, partName, lineCount);
         this.addFile(file);
 
         Folder folder = this.getFolder(folderPath);
@@ -58,6 +61,13 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
             this.addLanguage(language);
         }
         language.addFile(file);
+
+        Part part = getPart(partName);
+        if(part == null){
+            part = new Part(partName);
+            this.addPart(part);
+        }
+        part.addFile(file);
     }
 
     /**
@@ -123,7 +133,49 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     public String getLanguageCountString() {
         return StringUtil.grouping(getLanguageCount());
     }
-    
+
+    /**
+     * Get part using its name.
+     * 
+     * @param name the part name
+     * @return the part or null if not defined
+     */
+    public Part getPart(String name) {
+        return parts.get(name);
+    }
+
+    /**
+     * Get all parts.
+     * 
+     * @return the parts or empty list if no part is defined
+     */
+    public List<Part> getParts(){
+        return new ArrayList<Part>(parts.values());
+    }
+
+    /**
+     * Get count of all parts.
+     * 
+     * @return the count
+     */
+    public int getPartCount(){
+        // Backward compatibility with plugin version 1.10 and less
+        if(parts == null) {
+            return 0;
+        }
+
+        return parts.size();
+    }
+
+    /**
+     * Get count of all parts as string.
+     * 
+     * @return the count
+     */
+    public String getPartCountString() {
+        return StringUtil.grouping(getPartCount());
+    }
+
     public void addFolder(Folder folder){
         this.folders.put(folder.getName(), folder);
 
@@ -132,6 +184,15 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
 
     public void addLanguage(Language language){
         this.languages.put(language.getName(), language);
+    }
+
+    /**
+     * Add a new part.
+     * 
+     * @param part the part
+     */
+    public void addPart(Part part){
+        parts.put(part.getName(), part);
     }
 
     public String getRootFolder(){
@@ -200,6 +261,23 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
                 longest = l;
             }
         }
+        return longest;
+    }
+
+    /**
+     * Get the longest part.
+     * 
+     * @return the longest part
+     */
+    public Part getLongestPart(){
+        Part longest = null;
+
+        for(Part part : getParts()){
+            if(longest == null || part.getLineCount() > longest.getLineCount()) {
+                longest = part;
+            }
+        }
+
         return longest;
     }
 
