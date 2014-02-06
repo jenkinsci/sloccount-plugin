@@ -19,7 +19,7 @@
           <td class="pane"><a href="folderResult/${container.urlName}">${container.name}</a></td>
           <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
           <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
-          <td class="pane"><st:include page="/tabview/distribution-graph.jelly" /></td>
+          <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
     </tbody>
@@ -28,7 +28,7 @@
         <td class="pane-header">${%Total} ${cachedReport.folderCountString}</td>
         <td class="pane-header number" data="${cachedReport.fileCount}">${cachedReport.fileCountString}</td>
         <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
-        <td class="pane-header"> </td>
+        <td class="pane-header" data="0"> </td>
       </tr>
     </tfoot>
   </table>
