@@ -7,7 +7,7 @@
       <tr>
         <td class="pane-header">${%File}</td>
         <td class="pane-header" style="width:2em">${%Language}</td>
-        <td class="pane-header" style="width:2em">${%Part}</td>
+        <td class="pane-header" style="width:2em">${%Module}</td>
         <td class="pane-header" style="width:2em">${%Lines}</td>
         <td class="pane-header" style="width:60%">${%Distribution}</td>
       </tr>
@@ -19,7 +19,7 @@
         <tr>
           <td class="pane">${container.name}</td>
           <td class="pane">${container.language}</td>
-          <td class="pane">${container.part}</td>
+          <td class="pane">${container.module}</td>
           <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
           <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>

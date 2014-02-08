@@ -130,16 +130,16 @@ public class SloccountResult implements Serializable {
     }
 
     /**
-     * Get result for a specific part.
+     * Get result for a specific module.
      * 
-     * @param part the part
+     * @param module the module
      * @return the result
      */
-    public SloccountResult getPartResult(String part){
+    public SloccountResult getModuleResult(String module){
         SloccountReport filtered = new SloccountReport(this.getReport(),
-                new PartFileFilter(part));
+                new ModuleFileFilter(module));
 
-        return new BreadCrumbResult(filtered, owner, part);
+        return new BreadCrumbResult(filtered, owner, module);
     }
 
     public SloccountResult getFolderResult(String jumbledFolder){
@@ -164,28 +164,28 @@ public class SloccountResult implements Serializable {
     }
 
     /**
-     * File filter for parts.
+     * File filter for modules.
      * 
      * @author Michal Turek
      */
-    private static class PartFileFilter implements FileFilter, Serializable {
+    private static class ModuleFileFilter implements FileFilter, Serializable {
         /** Serial version UID. */
         private static final long serialVersionUID = 0L;
 
-        /** The part name. */
-        private String part;
+        /** The module name. */
+        private String module;
 
         /**
          * Constructor.
          * 
-         * @param part the part
+         * @param module the module
          */
-        public PartFileFilter(String part){
-            this.part = part;
+        public ModuleFileFilter(String module){
+            this.module = module;
         }
 
         public boolean include(File file) {
-            return file.getPart().equals(part);
+            return file.getModule().equals(module);
         }
     }
 

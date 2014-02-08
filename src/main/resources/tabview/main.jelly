@@ -16,10 +16,10 @@
             active: false
         }), myTabs);
 
-        <j:if test="${it.report.partCount > 1}">
+        <j:if test="${it.report.moduleCount > 1}">
             YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-                label: '${%Parts}',
-                dataSrc: 'parts',
+                label: '${%Modules}',
+                dataSrc: 'modules',
                 cacheData: true,
                 active: false
             }), myTabs);

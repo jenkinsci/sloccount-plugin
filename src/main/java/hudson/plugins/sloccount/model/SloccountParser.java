@@ -111,16 +111,16 @@ public class SloccountParser implements
 
         int lineCount = Integer.parseInt(tokens[0]);
         String languageName = tokens[1];
-        String partName = tokens[2];
+        String moduleName = tokens[2];
         String filePath = tokens[3];
 
         if(LOG_ENABLED && (this.logger != null)){
             logger.println("lineCount: " + lineCount);
             logger.println("language : " + languageName);
             logger.println("file : " + filePath);
-            logger.println("part : " + partName);
+            logger.println("module : " + moduleName);
         }
 
-        report.add(filePath, languageName, partName, lineCount);
+        report.add(filePath, languageName, moduleName, lineCount);
     }
 }

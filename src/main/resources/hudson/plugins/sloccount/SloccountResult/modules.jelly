@@ -2,10 +2,10 @@
   xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
   xmlns:i="jelly:fmt" xmlns:local="local">
   <st:header name="Content-Type" value="text/html;charset=UTF-8" />
-  <table class="pane sortable" id="parts">
+  <table class="pane sortable" id="modules">
     <thead>
       <tr>
-        <td class="pane-header">${%Part}</td>
+        <td class="pane-header">${%Modules}</td>
         <td class="pane-header" style="width:2em">${%Files}</td>
         <td class="pane-header" style="width:2em">${%Lines}</td>
         <td class="pane-header" style="width:60%">${%Distribution}</td>
@@ -13,10 +13,10 @@
     </thead>
     <tbody>
       <j:set var="cachedReport" value="${it.report}"/>
-      <j:set var="max" value="${cachedReport.longestPart.lineCount}"/>
-      <j:forEach var="container" items="${cachedReport.parts}">
+      <j:set var="max" value="${cachedReport.longestModule.lineCount}"/>
+      <j:forEach var="container" items="${cachedReport.modules}">
         <tr>
-          <td class="pane"><a href="partResult/${container.name}">${container.name}</a></td>
+          <td class="pane"><a href="moduleResult/${container.name}">${container.name}</a></td>
           <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
           <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
           <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>
@@ -25,7 +25,7 @@
     </tbody>
     <tfoot>
       <tr class="sortbottom">
-        <td class="pane-header">${%Total} ${cachedReport.partCountString}</td>
+        <td class="pane-header">${%Total} ${cachedReport.moduleCountString}</td>
         <td class="pane-header number" data="${cachedReport.fileCount}">${cachedReport.fileCountString}</td>
         <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
         <td class="pane-header" data="0"> </td>
