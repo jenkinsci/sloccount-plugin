@@ -14,12 +14,12 @@ public interface SloccountReportInterface {
      *            the file
      * @param languageName
      *            the language name
-     * @param partName
-     *            the part name
+     * @param moduleName
+     *            the module name
      * @param lineCount
      *            the line count
      */
-    void add(String filePath, String languageName, String partName, int lineCount);
+    void add(String filePath, String languageName, String moduleName, int lineCount);
 
     /**
      * Get the root folder.

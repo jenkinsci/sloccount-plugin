@@ -20,8 +20,8 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     private Map<String, Folder> folders = new LinkedHashMap<String, Folder>();
     private Map<String, Language> languages = new LinkedHashMap<String, Language>();
 
-    /** The parts present in the SLOCCount report. */
-    private Map<String, Part> parts = new LinkedHashMap<String, Part>();
+    /** The modules present in the SLOCCount report. */
+    private Map<String, Module> modules = new LinkedHashMap<String, Module>();
 
     /** The longest folder path common to all folders. */
     private String[] rootFolderPath = null;
@@ -34,18 +34,18 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         this();
         for(File f : old.getFiles()){
             if(filter.include(f)){
-                this.add(f.getName(), f.getLanguage(), f.getPart(), f.getLineCount());
+                this.add(f.getName(), f.getLanguage(), f.getModule(), f.getLineCount());
             }
         }
     }
 
-    public void add(String filePath, String languageName, String partName, int lineCount){
+    public void add(String filePath, String languageName, String moduleName, int lineCount){
         // Get rid of Microsoft's incompatibility once and forever
         filePath = filePath.replace("\\", DIRECTORY_SEPARATOR);
 
         String folderPath = extractFolder(filePath);
 
-        File file = new File(filePath, languageName, partName, lineCount);
+        File file = new File(filePath, languageName, moduleName, lineCount);
         this.addFile(file);
 
         Folder folder = this.getFolder(folderPath);
@@ -62,12 +62,12 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         }
         language.addFile(file);
 
-        Part part = getPart(partName);
-        if(part == null){
-            part = new Part(partName);
-            this.addPart(part);
+        Module module = getModule(moduleName);
+        if(module == null){
+            module = new Module(moduleName);
+            this.addModule(module);
         }
-        part.addFile(file);
+        module.addFile(file);
     }
 
     /**
@@ -135,45 +135,45 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     /**
-     * Get part using its name.
+     * Get module using its name.
      * 
-     * @param name the part name
-     * @return the part or null if not defined
+     * @param name the module name
+     * @return the module or null if not defined
      */
-    public Part getPart(String name) {
-        return parts.get(name);
+    public Module getModule(String name) {
+        return modules.get(name);
     }
 
     /**
-     * Get all parts.
+     * Get all modules.
      * 
-     * @return the parts or empty list if no part is defined
+     * @return the modules or empty list if no module is defined
      */
-    public List<Part> getParts(){
-        return new ArrayList<Part>(parts.values());
+    public List<Module> getModules(){
+        return new ArrayList<Module>(modules.values());
     }
 
     /**
-     * Get count of all parts.
+     * Get count of all modules.
      * 
      * @return the count
      */
-    public int getPartCount(){
+    public int getModuleCount(){
         // Backward compatibility with plugin version 1.10 and less
-        if(parts == null) {
+        if(modules == null) {
             return 0;
         }
 
-        return parts.size();
+        return modules.size();
     }
 
     /**
-     * Get count of all parts as string.
+     * Get count of all modules as string.
      * 
      * @return the count
      */
-    public String getPartCountString() {
-        return StringUtil.grouping(getPartCount());
+    public String getModuleCountString() {
+        return StringUtil.grouping(getModuleCount());
     }
 
     public void addFolder(Folder folder){
@@ -187,12 +187,12 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     /**
-     * Add a new part.
+     * Add a new module.
      * 
-     * @param part the part
+     * @param module the module
      */
-    public void addPart(Part part){
-        parts.put(part.getName(), part);
+    public void addModule(Module module){
+        modules.put(module.getName(), module);
     }
 
     public String getRootFolder(){
@@ -265,16 +265,16 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
     }
 
     /**
-     * Get the longest part.
+     * Get the longest module.
      * 
-     * @return the longest part
+     * @return the longest module
      */
-    public Part getLongestPart(){
-        Part longest = null;
+    public Module getLongestModule(){
+        Module longest = null;
 
-        for(Part part : getParts()){
-            if(longest == null || part.getLineCount() > longest.getLineCount()) {
-                longest = part;
+        for(Module module : getModules()){
+            if(longest == null || module.getLineCount() > longest.getLineCount()) {
+                longest = module;
             }
         }
 

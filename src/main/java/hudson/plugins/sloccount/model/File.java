@@ -14,15 +14,15 @@ public class File implements Countable, Serializable {
     private String name;
     private final String language;
 
-    /** The part. */
-    private final String part;
+    /** The module. */
+    private final String module;
 
     private final int lineCount;
 
-    public File(String name, String language, String part, int lineCount){
+    public File(String name, String language, String module, int lineCount){
         this.name = name;
         this.language = language;
-        this.part = part;
+        this.module = module;
         this.lineCount = lineCount;
     }
 
@@ -43,12 +43,12 @@ public class File implements Countable, Serializable {
     }
 
     /**
-     * Get the part.
+     * Get the module.
      * 
-     * @return the part
+     * @return the module
      */
-    public String getPart(){
-        return part;
+    public String getModule(){
+        return module;
     }
 
     public void simplifyName(String rootPath){
