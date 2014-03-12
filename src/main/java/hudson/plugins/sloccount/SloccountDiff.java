@@ -41,7 +41,6 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
         this.fileCount = fileCount;
         this.fileCountDelta = fileCountDelta;
     }
-    
 
     /**
      * Compare two instances using lines count, descendant.
@@ -50,6 +49,32 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
      */
     public int compareTo(SloccountDiff o) {
         return o.lineCount - lineCount;
+    }
+
+    // Solve FindBugs warning "SloccountDiff defines compareTo(SloccountDiff)
+    // and uses Object.equals()"
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + lineCount;
+        return result;
+    }
+
+    // Solve FindBugs warning "SloccountDiff defines compareTo(SloccountDiff)
+    // and uses Object.equals()"
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SloccountDiff other = (SloccountDiff) obj;
+        if (lineCount != other.lineCount)
+            return false;
+        return true;
     }
 
     public int getLineCount() {

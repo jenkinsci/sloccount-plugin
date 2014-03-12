@@ -77,7 +77,9 @@ public class SloccountParser implements
             in = new InputStreamReader(new FileInputStream(file), encoding);
             this.parse(in, report);
         } finally {
-            in.close();
+            if(in != null) {
+                in.close();
+            }
         }
     }
 

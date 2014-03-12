@@ -205,7 +205,7 @@ public class SloccountResult implements Serializable {
         }
     }
 
-    private static class BreadCrumbResult extends SloccountResult implements ModelObject, Serializable {
+    private static class BreadCrumbResult extends SloccountResult implements ModelObject {
         /** Serial version UID. */
         private static final long serialVersionUID = 0L;
 
