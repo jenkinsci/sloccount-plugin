@@ -11,7 +11,7 @@ import hudson.plugins.sloccount.model.SloccountReport;
 import hudson.plugins.sloccount.model.SloccountReportStatistics;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +22,8 @@ public class SloccountResult implements Serializable {
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
 
-    private SloccountReport report;
+    private transient SloccountReport report;
+
     private final AbstractBuild<?,?> owner;
 
     /** The statistics. */
@@ -40,8 +41,7 @@ public class SloccountResult implements Serializable {
     }
 
     public SloccountReport getReport() {
-        lazyLoad();
-        return report;
+        return lazyLoadReport();
     }
 
     public AbstractBuild<?,?> getOwner() {
@@ -54,56 +54,55 @@ public class SloccountResult implements Serializable {
      * @return the statistics, always non-null value
      */
     public SloccountReportStatistics getStatistics() {
-        convertLegacyData();
         return statistics;
     }
 
     /**
-     * Convert legacy data in format of sloccount plugin version 1.10
-     * to the new one that uses statistics.
+     * Convert legacy data in format of plugin version 1.10 to the new one that
+     * uses statistics.
      * 
-     * If statistics are null for any reason, the object will be created.
-     * Statistics will be always non-null after this method is called (side
-     * effect).
+     * @return this with optionally updated data
      */
-    private void convertLegacyData() {
-        if(statistics != null) {
-            return;
-        }
+    private Object readResolve() {
+        if (report != null && statistics == null) {
+            List<SloccountLanguageStatistics> languages = new ArrayList<SloccountLanguageStatistics>();
 
-        List<SloccountLanguageStatistics> languages = new LinkedList<SloccountLanguageStatistics>();
-
-        if(report != null) {
             for(Language language : report.getLanguages()){
                 languages.add(new SloccountLanguageStatistics(language.getName(),
                         language.getLineCount(), language.getFileCount()));
             }
+
+            statistics = new SloccountReportStatistics(languages);
         }
 
-        statistics = new SloccountReportStatistics(languages);
+        // Just for sure
+        if (statistics == null) {
+            statistics = new SloccountReportStatistics(new ArrayList<SloccountLanguageStatistics>());
+        }
+
+        return this;
     }
 
     /**
      * Lazy load report data if they are not already loaded.
      */
-    private void lazyLoad() {
+    private SloccountReport lazyLoadReport() {
         if(report != null) {
-            return;
+            return report;
         }
 
         java.io.File destDir = new java.io.File(owner.getRootDir(),
                 SloccountPublisher.BUILD_SUBDIR);
 
         if (!destDir.exists()) {
-            report = new SloccountReport();
-            return;
+            return new SloccountReport();
         }
 
         String realEncoding = (encoding != null && !encoding.isEmpty())
                 ? encoding : SloccountPublisher.DEFAULT_ENCODING;
 
         SloccountParser parser = new SloccountParser(realEncoding, null, null);
-        report = parser.parseFiles(destDir.listFiles());
+        return parser.parseFiles(destDir.listFiles());
     }
 
     /**
@@ -205,7 +204,7 @@ public class SloccountResult implements Serializable {
         }
     }
 
-    private static class BreadCrumbResult extends SloccountResult implements ModelObject, Serializable {
+    private static class BreadCrumbResult extends SloccountResult implements ModelObject {
         /** Serial version UID. */
         private static final long serialVersionUID = 0L;
 

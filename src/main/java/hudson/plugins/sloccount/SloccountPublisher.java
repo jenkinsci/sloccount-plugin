@@ -87,7 +87,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
         }
 
         if (report.getSourceFiles().size() == 0) {
-            logger.format("[SLOCCount] No file is matching the input pattern: %s\n",
+            logger.format("[SLOCCount] No file is matching the input pattern: %s%n",
                     getRealPattern());
         }
 
