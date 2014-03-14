@@ -1,6 +1,7 @@
 package hudson.plugins.sloccount;
 
 import hudson.model.AbstractBuild;
+import hudson.model.Api;
 import hudson.model.ModelObject;
 import hudson.plugins.sloccount.model.File;
 import hudson.plugins.sloccount.model.FileFilter;
@@ -145,6 +146,15 @@ public class SloccountResult implements Serializable {
         String folder = jumbledFolder.replace("|", SloccountReport.DIRECTORY_SEPARATOR);
         SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
         return new BreadCrumbResult(filtered, this.owner, folder);
+    }
+
+    /**
+     * Gets the remote API for the build result.
+     *
+     * @return the remote API
+     */
+    public Api getApi() {
+        return new Api(getStatistics());
     }
 
     private static class LanguageFileFilter implements FileFilter, Serializable {

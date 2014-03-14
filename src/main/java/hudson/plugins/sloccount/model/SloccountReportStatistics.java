@@ -8,11 +8,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+
 /**
  * Report statistics. The class is thread safe.
  * 
  * @author Michal Turek
  */
+@ExportedBean
 public class SloccountReportStatistics implements Serializable {
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
@@ -26,7 +30,7 @@ public class SloccountReportStatistics implements Serializable {
      * @param statistics the statistics per language
      */
     public SloccountReportStatistics(List<SloccountLanguageStatistics> statistics) {
-    	this.statistics = new ArrayList<SloccountLanguageStatistics>(statistics);
+        this.statistics = new ArrayList<SloccountLanguageStatistics>(statistics);
     }
 
     /**
@@ -34,6 +38,7 @@ public class SloccountReportStatistics implements Serializable {
      * 
      * @return the statistics per language
      */
+    @Exported(name="languages")
     public List<SloccountLanguageStatistics> getStatistics() {
         return Collections.unmodifiableList(statistics);
     }
@@ -43,6 +48,7 @@ public class SloccountReportStatistics implements Serializable {
      * 
      * @return the lines count
      */
+    @Exported(name="totalLines")
     public int getLineCount() {
         int lineCount = 0;
 
@@ -58,6 +64,7 @@ public class SloccountReportStatistics implements Serializable {
      * 
      * @return the files count
      */
+    @Exported(name="totalFiles")
     public int getFileCount() {
         int fileCount = 0;
 
@@ -73,6 +80,7 @@ public class SloccountReportStatistics implements Serializable {
      * 
      * @return the languages count
      */
+    @Exported(name="totalLanguages")
     public int getLanguageCount() {
         return statistics.size();
     }
