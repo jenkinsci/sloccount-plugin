@@ -2,11 +2,15 @@ package hudson.plugins.sloccount.model;
 
 import java.io.Serializable;
 
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+
 /**
  * Statistic of one language. The class is thread safe.
  * 
  * @author Michal Turek
  */
+@ExportedBean
 public class SloccountLanguageStatistics implements Serializable {
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
@@ -42,6 +46,7 @@ public class SloccountLanguageStatistics implements Serializable {
      * 
      * @return the name
      */
+    @Exported(name="name")
     public String getName(){
         return name;
     }
@@ -51,6 +56,7 @@ public class SloccountLanguageStatistics implements Serializable {
      * 
      * @return the number of lines
      */
+    @Exported(name="lines")
     public int getLineCount(){
         return lineCount;
     }
@@ -60,6 +66,7 @@ public class SloccountLanguageStatistics implements Serializable {
      * 
      * @return the number of files
      */
+    @Exported(name="files")
     public int getFileCount(){
         return fileCount;
     }
