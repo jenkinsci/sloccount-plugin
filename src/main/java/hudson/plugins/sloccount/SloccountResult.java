@@ -64,7 +64,7 @@ public class SloccountResult implements Serializable {
      * 
      * @return this with optionally updated data
      */
-    private Object readResolve() {
+    protected Object readResolve() {
         if (report != null && statistics == null) {
             List<SloccountLanguageStatistics> languages = new ArrayList<SloccountLanguageStatistics>();
 
