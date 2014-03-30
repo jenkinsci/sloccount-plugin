@@ -46,13 +46,17 @@ public class SloccountPublisher extends Recorder implements Serializable {
      */
     private final int numBuildsInGraph;
 
-	@DataBoundConstructor
+    /** Try to process the report files even if the build state is marked as failed. */
+    private final boolean ignoreBuildFailure;
+
+    @DataBoundConstructor
     public SloccountPublisher(String pattern, String encoding,
-            int numBuildsInGraph){
+            int numBuildsInGraph, boolean ignoreBuildFailure){
         super();
         this.pattern = pattern;
         this.encoding = encoding;
         this.numBuildsInGraph = numBuildsInGraph;
+        this.ignoreBuildFailure = ignoreBuildFailure;
     }
 
     @Override
@@ -69,8 +73,13 @@ public class SloccountPublisher extends Recorder implements Serializable {
         PrintStream logger = listener.getLogger();
 
         if (!canContinue(build.getResult())) {
-            logger.println("[SLOCCount] Skipping results publication since the build is not successful");
-            return true;
+            if(ignoreBuildFailure) {
+                logger.println("[SLOCCount] Trying to process the report files even if the build is not successful");
+                // Continue as usual
+            } else {
+                logger.println("[SLOCCount] Skipping results publication since the build is not successful");
+                return true;
+            }
         }
 
         SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
@@ -89,6 +98,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
         if (report.getSourceFiles().size() == 0) {
             logger.format("[SLOCCount] No file is matching the input pattern: %s%n",
                     getRealPattern());
+            return false;
         }
 
         SloccountResult result = new SloccountResult(report.getStatistics(),
@@ -106,6 +116,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
             return false;
         }
 
+        logger.format("[SLOCCount] Report successfully processed and all data stored%n");
         return true;
     }
 
@@ -179,5 +190,9 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     public int getNumBuildsInGraph() {
         return numBuildsInGraph;
+    }
+
+    public boolean isIgnoreBuildFailure() {
+        return ignoreBuildFailure;
     }
 }
