@@ -15,7 +15,7 @@
 
         <f:entry>
             <f:checkbox name="ignoreBuildFailure" checked="${instance.ignoreBuildFailure}"/>
-            <label for="ignoreBuildFailure">${%Try to process the report files even if the build is not successful}</label>
+            <label class="attach-previous">${%Try to process the report files even if the build is not successful}</label>
         </f:entry>
     </f:advanced>
 </j:jelly>
