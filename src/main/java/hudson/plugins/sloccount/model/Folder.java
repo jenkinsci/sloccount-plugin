@@ -1,5 +1,7 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.HtmlUtil;
+
 /**
  *
  * @author lordofthepigs
@@ -23,6 +25,6 @@ public class Folder extends FileContainer {
     }
 
     public String getUrlName(){
-        return this.name.replace(SloccountReport.DIRECTORY_SEPARATOR, "|");
+        return HtmlUtil.urlEncode(name);
     }
 }

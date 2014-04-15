@@ -28,7 +28,7 @@
             <tbody>
                 <j:forEach var="language" items="${diff.languageDiffs}">
                 <tr>
-                    <td class="pane"><a href="sloccountResult/languageResult/${language.name}">${language.name}</a></td>
+                    <td class="pane"><a href="sloccountResult/languageResult/${language.urlName}">${language.name}</a></td>
                     <td class="pane number" data="${language.lineCount}">${language.lineCountString}</td>
                     <td class="pane number" data="${language.lineCountDelta}">${language.lineCountDeltaString}</td>
                     <td class="pane number" data="${language.fileCount}">${language.fileCountString}</td>
