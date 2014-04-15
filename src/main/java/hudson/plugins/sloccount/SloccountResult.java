@@ -142,8 +142,7 @@ public class SloccountResult implements Serializable {
         return new BreadCrumbResult(filtered, owner, module);
     }
 
-    public SloccountResult getFolderResult(String jumbledFolder){
-        String folder = jumbledFolder.replace("|", SloccountReport.DIRECTORY_SEPARATOR);
+    public SloccountResult getFolderResult(String folder){
         SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
         return new BreadCrumbResult(filtered, this.owner, folder);
     }

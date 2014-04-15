@@ -16,7 +16,7 @@
       <j:set var="max" value="${cachedReport.longestModule.lineCount}"/>
       <j:forEach var="container" items="${cachedReport.modules}">
         <tr>
-          <td class="pane"><a href="moduleResult/${container.name}">${container.name}</a></td>
+          <td class="pane"><a href="moduleResult/${container.urlName}">${container.name}</a></td>
           <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
           <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
           <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>

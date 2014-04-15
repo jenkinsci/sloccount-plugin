@@ -1,5 +1,7 @@
 package hudson.plugins.sloccount;
 
+import hudson.plugins.sloccount.util.HtmlUtil;
+
 /**
  * Storage for differences of a language between two reports.
  * 
@@ -33,5 +35,9 @@ public class SloccountDiffLanguage extends SloccountDiff {
 
     public String getName() {
         return name;
+    }
+
+    public String getUrlName() {
+    	return HtmlUtil.urlEncode(name);
     }
 }

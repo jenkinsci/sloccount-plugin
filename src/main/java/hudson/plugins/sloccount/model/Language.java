@@ -1,5 +1,7 @@
 package hudson.plugins.sloccount.model;
 
+import hudson.plugins.sloccount.util.HtmlUtil;
+
 /**
  *
  * @author lordofthepigs
@@ -16,5 +18,9 @@ public class Language extends FileContainer {
 
     public String getName() {
         return this.name;
+    }
+
+    public String getUrlName() {
+        return HtmlUtil.urlEncode(name);
     }
 }
