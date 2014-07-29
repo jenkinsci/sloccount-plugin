@@ -41,7 +41,7 @@ public class SloccountProjectAction implements Action, Serializable {
     }
 
     public String getDisplayName() {
-        return Messages.Sloccount_ProjectAction_Name();
+        return Messages.Sloccount_SloccountResults();
     }
 
     public String getUrlName() {
@@ -81,6 +81,16 @@ public class SloccountProjectAction implements Action, Serializable {
             lastBuild = lastBuild.getPreviousBuild();
         }
         return lastBuild;
+    }
+
+    /**
+     * Get build action of the last finished build.
+     *
+     * @return the build action or null
+     */
+    public SloccountBuildAction getLastFinishedBuildAction() {
+        AbstractBuild<?, ?> lastBuild = getLastFinishedBuild();
+        return (lastBuild != null) ? lastBuild.getAction(SloccountBuildAction.class) : null;
     }
 
     public final boolean hasValidResults() {
