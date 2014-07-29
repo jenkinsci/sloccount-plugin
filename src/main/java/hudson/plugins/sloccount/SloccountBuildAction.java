@@ -31,7 +31,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     }
 
     public String getDisplayName() {
-        return "SLOCCount";
+        return Messages.Sloccount_SloccountResults();
     }
 
     public String getUrlName() {
@@ -101,7 +101,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return null;
     }
 
-    AbstractBuild<?,?> getBuild(){
+    public AbstractBuild<?,?> getBuild(){
         return this.build;
     }
 

@@ -1,0 +1,15 @@
+<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:st="jelly:stapler">
+    <table style="margin-left:1em;">
+        <t:summary icon="/plugin/sloccount/icons/sloccount-48.png">
+            <div><a href="${it.urlName}">${it.displayName}</a></div>
+
+            <j:set var="lastBuildAction" value="${it.lastFinishedBuildAction}"/>
+
+            <j:if test="${lastBuildAction != null}">
+                <j:set var="diff" value="${lastBuildAction.diffSummary}"/>
+                <j:set var="buildNumber" value="${lastBuildAction.build.number}"/>
+                <st:include page="/hudson/plugins/sloccount/SloccountBuildAction/statistics.jelly"/>
+            </j:if>
+        </t:summary>
+    </table>
+</j:jelly>
