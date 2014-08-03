@@ -1,5 +1,4 @@
 <j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson" xmlns:st="jelly:stapler">
-
     <t:summary icon="/plugin/sloccount/icons/sloccount-48.png">
         <div><a href="${it.urlName}">${it.displayName}</a></div>
 

@@ -1,10 +1,8 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
-  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
-  xmlns:i="jelly:fmt" xmlns:local="local">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
     <st:header name="Content-Type" value="text/html;charset=UTF-8" />
-    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/utilities.js"></script>
-    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/tabview-min.js"></script>
-    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/dispatcher-min.js"></script>
+    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/utilities.js"/>
+    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/tabview-min.js"/>
+    <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/dispatcher-min.js"/>
 
     <script type="text/javascript">
         var myTabs = new YAHOO.widget.TabView("statistics");

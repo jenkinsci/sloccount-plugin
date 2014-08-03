@@ -1,8 +1,4 @@
-<j:jelly xmlns:j="jelly:core"
-    xmlns:st="jelly:stapler" 
-    xmlns:l="/lib/layout"
-    xmlns:t="/lib/hudson"
-    xmlns:dp="/hudson/plugins/view/dashboard">
+<j:jelly xmlns:j="jelly:core" xmlns:dp="/hudson/plugins/view/dashboard">
 
     <style type="text/css">
         .sloccountTablePortlet .number { text-align: right; }
