@@ -1,14 +1,13 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="${%SLOCCount reports}"
-           description="${%description.pattern('http://ant.apache.org/manual/Types/fileset.html')}">
+    <f:entry title="${%SLOCCount reports}" field="pattern">
         <f:textbox name="pattern" value="${instance.pattern}"/>
     </f:entry>
     <f:advanced>
-        <f:entry title="${%Report charset}" description="${%description.encoding}">
+        <f:entry title="${%Report charset}" field="encoding">
             <f:textbox name="encoding" value="${instance.encoding}"/>
         </f:entry>
 
-        <f:entry title="${%Builds in graph}" description="${%description.numBuildsInGraph}">
+        <f:entry title="${%Builds in graph}" field="numBuildsInGraph">
             <f:textbox name="numBuildsInGraph" value="${instance.numBuildsInGraph}"/>
         </f:entry>
 
