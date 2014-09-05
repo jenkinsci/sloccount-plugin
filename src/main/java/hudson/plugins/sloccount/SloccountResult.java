@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class SloccountResult implements Serializable {
     /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
 
     private transient SloccountReport report;
 
@@ -33,10 +33,14 @@ public class SloccountResult implements Serializable {
     /** The encoding that was active at the time of the build. */
     private final String encoding;
 
+    private final boolean commentIsCode;
+
     public SloccountResult(SloccountReportStatistics statistics, String encoding,
+            boolean commentIsCode,
             SloccountReport report, AbstractBuild<?,?> owner){
         this.statistics = statistics;
         this.encoding = encoding;
+        this.commentIsCode = commentIsCode;
         this.report = report;
         this.owner = owner;
     }
@@ -102,7 +106,8 @@ public class SloccountResult implements Serializable {
         String realEncoding = (encoding != null && !encoding.isEmpty())
                 ? encoding : SloccountPublisher.DEFAULT_ENCODING;
 
-        SloccountParser parser = new SloccountParser(realEncoding, null, null);
+        SloccountParser parser = new SloccountParser(realEncoding, null, null,
+                commentIsCode);
         return parser.parseFiles(destDir.listFiles());
     }
 
@@ -126,7 +131,7 @@ public class SloccountResult implements Serializable {
 
     public SloccountResult getLanguageResult(String language){
         SloccountReport filtered = new SloccountReport(this.getReport(), new LanguageFileFilter(language));
-        return new BreadCrumbResult(filtered, this.owner, language);
+        return new BreadCrumbResult(filtered, this.owner, language, commentIsCode);
     }
 
     /**
@@ -139,12 +144,12 @@ public class SloccountResult implements Serializable {
         SloccountReport filtered = new SloccountReport(this.getReport(),
                 new ModuleFileFilter(module));
 
-        return new BreadCrumbResult(filtered, owner, module);
+        return new BreadCrumbResult(filtered, owner, module, commentIsCode);
     }
 
     public SloccountResult getFolderResult(String folder){
         SloccountReport filtered = new SloccountReport(this.getReport(), new FolderFileFilter(folder));
-        return new BreadCrumbResult(filtered, this.owner, folder);
+        return new BreadCrumbResult(filtered, this.owner, folder, commentIsCode);
     }
 
     /**
@@ -219,8 +224,9 @@ public class SloccountResult implements Serializable {
 
         private String displayName = null;
         
-        public BreadCrumbResult(SloccountReport report, AbstractBuild<?,?> owner, String displayName){
-            super(null, null, report, owner);
+        public BreadCrumbResult(SloccountReport report, AbstractBuild<?,?> owner,
+                                String displayName, boolean commentIsCode){
+            super(null, null, commentIsCode, report, owner);
             this.displayName = displayName;
         }
 

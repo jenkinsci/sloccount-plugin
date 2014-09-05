@@ -1,9 +1,11 @@
 package hudson.plugins.sloccount.model;
 
 import hudson.FilePath;
+import hudson.plugins.sloccount.model.cloc.ClocReport;
 import hudson.plugins.sloccount.util.FileFinder;
 import hudson.remoting.VirtualChannel;
 
+import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,18 +20,21 @@ import java.io.Reader;
 public class SloccountParser implements
         FilePath.FileCallable<SloccountPublisherReport> {
     /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
 
     private static final boolean LOG_ENABLED = false;
 
     private final String encoding;
     private final String filePattern;
     private transient PrintStream logger = null;
+    private final boolean commentIsCode;
 
-    public SloccountParser(String encoding, String filePattern, PrintStream logger){
+    public SloccountParser(String encoding, String filePattern, PrintStream logger,
+                           boolean commentIsCode) {
         this.logger = logger;
         this.filePattern = filePattern;
         this.encoding = encoding;
+        this.commentIsCode = commentIsCode;
     }
 
 
@@ -46,10 +51,10 @@ public class SloccountParser implements
 
         return report;
     }
-    
+
     /**
      * Parse a list of input files. All errors are silently ignored.
-     * 
+     *
      * @param files
      *            the files
      * @return the content of the parsed files in form of a report
@@ -71,14 +76,24 @@ public class SloccountParser implements
     }
 
     private void parse(java.io.File file, SloccountReportInterface report) throws IOException {
-        InputStreamReader in = null;
-        
         try {
-            in = new InputStreamReader(new FileInputStream(file), encoding);
-            this.parse(in, report);
-        } finally {
-            if(in != null) {
-                in.close();
+            // Try cloc report file first, XML has precise structure
+            ClocReport.parse(file).toSloccountReport(report, commentIsCode);
+        } catch (JAXBException e) {
+            if(LOG_ENABLED && (this.logger != null)){
+                this.logger.println("Parsing of cloc format unsuccessful, trying SLOCCount format: " + e);
+            }
+
+            // Try SLOCCount report file
+            InputStreamReader in = null;
+
+            try {
+                in = new InputStreamReader(new FileInputStream(file), encoding);
+                this.parse(in, report);
+            } finally {
+                if(in != null) {
+                    in.close();
+                }
             }
         }
     }

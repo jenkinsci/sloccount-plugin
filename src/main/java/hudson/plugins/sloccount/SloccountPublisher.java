@@ -39,6 +39,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     private final String pattern;
     private final String encoding;
+    private final boolean commentIsCode;
 
     /** 
      * Maximal number of last successful builds displayed in the trend graphs.
@@ -50,11 +51,12 @@ public class SloccountPublisher extends Recorder implements Serializable {
     private final boolean ignoreBuildFailure;
 
     @DataBoundConstructor
-    public SloccountPublisher(String pattern, String encoding,
+    public SloccountPublisher(String pattern, String encoding, boolean commentIsCode,
             int numBuildsInGraph, boolean ignoreBuildFailure){
         super();
         this.pattern = pattern;
         this.encoding = encoding;
+        this.commentIsCode = commentIsCode;
         this.numBuildsInGraph = numBuildsInGraph;
         this.ignoreBuildFailure = ignoreBuildFailure;
     }
@@ -82,7 +84,8 @@ public class SloccountPublisher extends Recorder implements Serializable {
             }
         }
 
-        SloccountParser parser = new SloccountParser(this.getRealEncoding(), this.getRealPattern(), logger);
+        SloccountParser parser = new SloccountParser(getRealEncoding(),
+                getRealPattern(), logger, commentIsCode);
         SloccountPublisherReport report;
 
         try{
@@ -102,7 +105,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
         }
 
         SloccountResult result = new SloccountResult(report.getStatistics(),
-                getRealEncoding(), null, build);
+                getRealEncoding(), commentIsCode, null, build);
         build.addAction(new SloccountBuildAction(build, result));
 
         try{
@@ -194,5 +197,9 @@ public class SloccountPublisher extends Recorder implements Serializable {
 
     public boolean isIgnoreBuildFailure() {
         return ignoreBuildFailure;
+    }
+
+    public boolean isCommentIsCode() {
+        return commentIsCode;
     }
 }
