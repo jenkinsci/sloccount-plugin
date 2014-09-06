@@ -11,6 +11,11 @@
             <f:textbox name="numBuildsInGraph" value="${instance.numBuildsInGraph}"/>
         </f:entry>
 
+        <f:entry field="comments">
+            <f:checkbox name="commentIsCode" checked="${instance.commentIsCode}"/>
+            <label class="attach-previous">${%Include comments to code lines}</label>
+        </f:entry>
+
         <f:entry>
             <f:checkbox name="ignoreBuildFailure" checked="${instance.ignoreBuildFailure}"/>
             <label class="attach-previous">${%Try to process the report files even if the build is not successful}</label>
