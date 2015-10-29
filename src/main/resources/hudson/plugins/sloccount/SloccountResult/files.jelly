@@ -7,6 +7,7 @@
         <td class="pane-header" style="width:2em">${%Language}</td>
         <td class="pane-header" style="width:2em">${%Module}</td>
         <td class="pane-header" style="width:2em">${%Lines}</td>
+        <td class="pane-header" style="width:2em">${%Comments}</td>
         <td class="pane-header" style="width:60%">${%Distribution}</td>
       </tr>
     </thead>
@@ -19,6 +20,7 @@
           <td class="pane">${container.language}</td>
           <td class="pane">${container.module}</td>
           <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
+          <td class="pane number" data="${container.commentCount}">${container.commentCountString}</td>
           <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
@@ -29,6 +31,7 @@
         <td class="pane-header"> </td>
         <td class="pane-header"> </td>
         <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
+        <td class="pane-header number" data="${cachedReport.commentCount}">${cachedReport.commentCountString}</td>
         <td class="pane-header" data="0"> </td>
       </tr>
     </tfoot>

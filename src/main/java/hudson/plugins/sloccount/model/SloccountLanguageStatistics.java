@@ -23,6 +23,9 @@ public class SloccountLanguageStatistics implements Serializable {
 
     /** Number of files containing this language. */
     private final int fileCount;
+    
+    /** Number of comments containing this language. */
+    private final int commentCount;
 
     /**
      * Constructor initializing members.
@@ -35,10 +38,11 @@ public class SloccountLanguageStatistics implements Serializable {
      *            number of files containing this language
      */
     public SloccountLanguageStatistics(String languageName, int lineCount,
-            int fileCount){
+            int fileCount, int commentCount){
         this.name = languageName;
         this.lineCount = lineCount;
         this.fileCount = fileCount;
+        this.commentCount = commentCount;
     }
 
     /**
@@ -69,5 +73,15 @@ public class SloccountLanguageStatistics implements Serializable {
     @Exported(name="files")
     public int getFileCount(){
         return fileCount;
+    }
+    
+    /**
+     * Get number of comments containing this language.
+     * 
+     * @return the number of comments
+     */
+    @Exported(name="comments")
+    public int getCommentCount(){
+        return commentCount;
     }
 }

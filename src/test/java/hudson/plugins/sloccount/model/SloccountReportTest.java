@@ -45,22 +45,22 @@ public class SloccountReportTest {
         SloccountReport report = new SloccountReport();
         Assert.assertEquals("", report.getRootFolder());
 
-        report.add("/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar/fubar", report.getRootFolder());
 
-        report.add("/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar/fubar", report.getRootFolder());
 
-        report.add("/foo/bar/fubar/dir/test.java", "java", "", 42);
+        report.add("/foo/bar/fubar/dir/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar/fubar", report.getRootFolder());
 
-        report.add("/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar/fubar", report.getRootFolder());
 
-        report.add("/foo/bar/test.java", "java", "", 42);
+        report.add("/foo/bar/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar", report.getRootFolder());
 
-        report.add("/foo/bar/dir/test.java", "java", "", 42);
+        report.add("/foo/bar/dir/test.java", "java", "", 42, 50);
         Assert.assertEquals("/foo/bar", report.getRootFolder());
     }
 
@@ -69,22 +69,22 @@ public class SloccountReportTest {
         SloccountReport report = new SloccountReport();
         Assert.assertEquals("", report.getRootFolder());
 
-        report.add("C:/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("C:/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("C:/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:/foo/bar/fubar/dir/test.java", "java", "", 42);
+        report.add("C:/foo/bar/fubar/dir/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:/foo/bar/fubar/test.java", "java", "", 42);
+        report.add("C:/foo/bar/fubar/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:/foo/bar/test.java", "java", "", 42);
+        report.add("C:/foo/bar/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar", report.getRootFolder());
 
-        report.add("C:/foo/bar/dir/test.java", "java", "", 42);
+        report.add("C:/foo/bar/dir/test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar", report.getRootFolder());
     }
 
@@ -93,22 +93,22 @@ public class SloccountReportTest {
         SloccountReport report = new SloccountReport();
         Assert.assertEquals("", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\fubar\\dir\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\fubar\\dir\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\fubar\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar/fubar", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar", report.getRootFolder());
 
-        report.add("C:\\foo\\bar\\dir\\test.java", "java", "", 42);
+        report.add("C:\\foo\\bar\\dir\\test.java", "java", "", 42, 50);
         Assert.assertEquals("C:/foo/bar", report.getRootFolder());
     }
 }

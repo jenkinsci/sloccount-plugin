@@ -34,7 +34,7 @@ public class SloccountPublisherReport implements Serializable,
 
         for(Map.Entry<String, LanguageStatistics> it : statistics.entrySet()){
             ret.add(new SloccountLanguageStatistics(it.getKey(),
-                    it.getValue().numLines, it.getValue().numFiles));
+                    it.getValue().numLines, it.getValue().numFiles, it.getValue().numComments));
         }
 
         return new SloccountReportStatistics(ret);
@@ -59,7 +59,7 @@ public class SloccountPublisherReport implements Serializable,
         sourceFiles.add(new SlaveFile(sourceFile));
     }
 
-    public void add(String filePath, String languageName, String moduleName, int lineCount){
+    public void add(String filePath, String languageName, String moduleName, int lineCount, int commentCount){
         LanguageStatistics stat = statistics.get(languageName);
 
         if(stat == null){
@@ -68,6 +68,7 @@ public class SloccountPublisherReport implements Serializable,
         }
 
         stat.numLines += lineCount;
+        stat.numComments += commentCount;
         ++stat.numFiles;
     }
 
@@ -90,6 +91,9 @@ public class SloccountPublisherReport implements Serializable,
 
         /** The number of files. */
         int numFiles = 0;
+        
+        /** The number of comments. */
+        int numComments = 0;
     }
 
     /**

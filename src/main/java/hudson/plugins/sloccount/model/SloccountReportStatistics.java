@@ -84,6 +84,22 @@ public class SloccountReportStatistics implements Serializable {
     public int getLanguageCount() {
         return statistics.size();
     }
+    
+    /**
+     * Get total comments count.
+     * 
+     * @return the comments count
+     */
+    @Exported(name="totalComments")
+    public int getCommentCount() {
+        int commentCount = 0;
+
+        for(SloccountLanguageStatistics it : statistics) {
+        	commentCount += it.getCommentCount();
+        }
+
+        return commentCount;
+    }
 
     /**
      * Get total lines count.
@@ -101,6 +117,15 @@ public class SloccountReportStatistics implements Serializable {
      */
     public String getFileCountString() {
         return StringUtil.grouping(getFileCount());
+    }
+    
+    /**
+     * Get total comments count.
+     * 
+     * @return the comments count
+     */
+    public String getCommentCountString() {
+        return StringUtil.grouping(getCommentCount());
     }
 
     /**
@@ -125,7 +150,7 @@ public class SloccountReportStatistics implements Serializable {
             }
         }
 
-        return new SloccountLanguageStatistics(name, 0, 0);
+        return new SloccountLanguageStatistics(name, 0, 0, 0);
     }
 
     /**

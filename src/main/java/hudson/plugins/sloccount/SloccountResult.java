@@ -74,7 +74,7 @@ public class SloccountResult implements Serializable {
 
             for(Language language : report.getLanguages()){
                 languages.add(new SloccountLanguageStatistics(language.getName(),
-                        language.getLineCount(), language.getFileCount()));
+                        language.getLineCount(), language.getFileCount(), language.getCommentCount()));
             }
 
             statistics = new SloccountReportStatistics(languages);

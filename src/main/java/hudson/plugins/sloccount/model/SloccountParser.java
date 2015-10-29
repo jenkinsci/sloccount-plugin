@@ -127,6 +127,7 @@ public class SloccountParser implements
         }
 
         int lineCount = Integer.parseInt(tokens[0]);
+        int commentCount = Integer.parseInt(tokens[1]);
         String languageName = tokens[1];
         String moduleName = tokens[2];
         String filePath = tokens[3];
@@ -134,10 +135,11 @@ public class SloccountParser implements
         if(LOG_ENABLED && (this.logger != null)){
             logger.println("lineCount: " + lineCount);
             logger.println("language : " + languageName);
+            logger.println("commentCount: " + commentCount);
             logger.println("file : " + filePath);
             logger.println("module : " + moduleName);
         }
 
-        report.add(filePath, languageName, moduleName, lineCount);
+        report.add(filePath, languageName, moduleName, lineCount, commentCount);
     }
 }

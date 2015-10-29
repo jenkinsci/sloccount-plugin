@@ -88,7 +88,7 @@ public class ClocReport implements Serializable {
                     lineCount += file.getComment();
                 }
 
-                report.add(filePath, file.getLanguage(), moduleName, lineCount);
+                report.add(filePath, file.getLanguage(), moduleName, lineCount, file.getComment());
             }
         } catch (RuntimeException e) {
             throw new JAXBException("Broken cloc report file: " + e, e);
