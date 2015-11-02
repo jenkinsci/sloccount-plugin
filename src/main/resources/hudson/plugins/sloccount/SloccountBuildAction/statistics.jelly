@@ -11,6 +11,8 @@
                 <td class="pane-header">${%Language}</td>
                 <td class="pane-header">${%Lines}</td>
                 <td class="pane-header">${%Lines} ${%Delta}</td>
+                <td class="pane-header">${%Comments}</td>
+                <td class="pane-header">${%Comments} ${%Delta}</td>
                 <td class="pane-header">${%Files}</td>
                 <td class="pane-header">${%Files} ${%Delta}</td>
             </tr>
@@ -26,6 +28,8 @@
                     </j:if>
                     <td class="pane number" data="${language.lineCount}">${language.lineCountString}</td>
                     <td class="pane number" data="${language.lineCountDelta}">${language.lineCountDeltaString}</td>
+                    <td class="pane number" data="${language.commentCount}">${language.commentCountString}</td>
+                    <td class="pane number" data="${language.commentCountDelta}">${language.commentCountDeltaString}</td>
                     <td class="pane number" data="${language.fileCount}">${language.fileCountString}</td>
                     <td class="pane number" data="${language.fileCountDelta}">${language.fileCountDeltaString}</td>
                 </tr>
@@ -36,6 +40,8 @@
                 <td class="pane-header">${%Total}</td>
                 <td class="pane-header number" data="${diff.lineCount}">${diff.lineCountString}</td>
                 <td class="pane-header number" data="${diff.lineCountDelta}">${diff.lineCountDeltaString}</td>
+                <td class="pane-header number" data="${diff.commentCount}">${diff.commentCountString}</td>
+                <td class="pane-header number" data="${diff.commentCountDelta}">${diff.commentCountDeltaString}</td>
                 <td class="pane-header number" data="${diff.fileCount}">${diff.fileCountString}</td>
                 <td class="pane-header number" data="${diff.fileCountDelta}">${diff.fileCountDeltaString}</td>
             </tr>

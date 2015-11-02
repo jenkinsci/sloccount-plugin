@@ -19,6 +19,12 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
 
     /** Difference of files count between current and previous report. */
     private final int fileCountDelta;
+    
+    /** Comments count in the newer report. */
+    private final int commentCount;
+
+    /** Difference of comments count between current and previous report. */
+    private final int commentCountDelta;
 
     /**
      * Constructor.
@@ -28,18 +34,25 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
      * @param lineCountDelta
      *            difference of lines count between current and previous
      *            report
-     * @param fileCount files
-     *            count in the newer report
+     * @param fileCount
+     *            files count in the newer report
      * @param fileCountDelta
      *            difference of files count between current and previous
      *            report
+     * @param commentCount
+     *            comments count in the newer report
+     * @param commentCountDelta
+     *            difference of comments count between current and previous
+     *            report
      */
     public SloccountDiff(int lineCount,
-            int lineCountDelta, int fileCount, int fileCountDelta) {
+            int lineCountDelta, int fileCount, int fileCountDelta, int commentCount, int commentCountDelta) {
         this.lineCount = lineCount;
         this.lineCountDelta = lineCountDelta;
         this.fileCount = fileCount;
         this.fileCountDelta = fileCountDelta;
+        this.commentCount = commentCount;
+        this.commentCountDelta = commentCountDelta;
     }
 
     /**
@@ -84,6 +97,14 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
     public int getLineCountDelta() {
         return lineCountDelta;
     }
+    
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public int getCommentCountDelta() {
+        return commentCountDelta;
+    }
 
     public int getFileCount() {
         return fileCount;
@@ -105,6 +126,20 @@ public abstract class SloccountDiff implements Comparable<SloccountDiff> {
         // Negative prefix '-' is added automatically
         String result = StringUtil.grouping(lineCountDelta);
         return (lineCountDelta > 0) ? "+" + result : result;
+    }
+    
+    public String getCommentCountString() {
+        return StringUtil.grouping(commentCount);
+    }
+
+    public String getCommentCountDeltaString() {
+        if(commentCountDelta == 0) {
+            return "";
+        }
+
+        // Negative prefix '-' is added automatically
+        String result = StringUtil.grouping(commentCountDelta);
+        return (commentCountDelta > 0) ? "+" + result : result;
     }
 
     public String getFileCountString() {
