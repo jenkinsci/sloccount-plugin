@@ -17,13 +17,14 @@ public class File implements Countable, Serializable {
     /** The module. */
     private final String module;
 
-    private final int lineCount;
+    private final int lineCount, commentCount;
 
-    public File(String name, String language, String module, int lineCount){
+    public File(String name, String language, String module, int lineCount, int commentCount){
         this.name = name;
         this.language = language;
         this.module = module;
         this.lineCount = lineCount;
+        this.commentCount = commentCount;
     }
 
     public int getLineCount() {
@@ -34,6 +35,14 @@ public class File implements Countable, Serializable {
         return StringUtil.grouping(getLineCount());
     }
     
+    public int getCommentCount() {
+		return this.commentCount;
+    }
+	
+    public String getCommentCountString() {
+        return StringUtil.grouping(getCommentCount());
+    }
+        
     public String getName() {
         return this.name;
     }

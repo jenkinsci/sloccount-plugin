@@ -17,6 +17,7 @@ public abstract class FileContainer implements Countable, Serializable {
 
     private Map<String, File> files = new LinkedHashMap<String, File>();
     private int lineCount = 0;
+    private int commentCount = 0;
 
     public File getFile(String name){
         return this.files.get(name);
@@ -37,6 +38,7 @@ public abstract class FileContainer implements Countable, Serializable {
     public void addFile(File file){
         this.files.put(file.getName(), file);
         this.lineCount += file.getLineCount();
+        this.commentCount += file.getCommentCount();
     }
 
     public int getLineCount(){
@@ -45,5 +47,13 @@ public abstract class FileContainer implements Countable, Serializable {
 
     public String getLineCountString() {
         return StringUtil.grouping(getLineCount());
+    }
+    
+    public int getCommentCount(){
+        return this.commentCount;
+    }
+
+    public String getCommentCountString() {
+        return StringUtil.grouping(getCommentCount());
     }
 }

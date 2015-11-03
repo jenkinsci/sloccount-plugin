@@ -26,10 +26,15 @@ public class SloccountDiffLanguage extends SloccountDiff {
      * @param fileCountDelta
      *            difference of files count between current and previous
      *            report
+     * @param commentCount
+     *            comments count in the newer report
+     * @param commentCountDelta
+     *            difference of comments count between current and previous
+     *            report
      */
     public SloccountDiffLanguage(String name, int lineCount,
-            int lineCountDelta, int fileCount, int fileCountDelta) {
-        super(lineCount, lineCountDelta, fileCount, fileCountDelta);
+            int lineCountDelta, int fileCount, int fileCountDelta, int commentCount, int commentCountDelta) {
+        super(lineCount, lineCountDelta, fileCount, fileCountDelta, commentCount, commentCountDelta);
         this.name = name;
     }
 

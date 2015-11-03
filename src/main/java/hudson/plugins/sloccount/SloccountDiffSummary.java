@@ -33,12 +33,16 @@ public class SloccountDiffSummary extends SloccountDiff {
      * @param fileCountDelta
      *            difference of files count between current and previous
      *            report
-     * 
+     * @param commentCount
+     *            comments count in the newer report
+     * @param commentCountDelta
+     *            difference of comments count between current and previous
+     *            report 
      * @see #getDiffSummary(SloccountReportStatistics, SloccountReportStatistics)
      */
     private SloccountDiffSummary(List<SloccountDiffLanguage> languageDiffs,
-            int lineCount, int lineCountDelta, int fileCount, int fileCountDelta) {
-        super(lineCount, lineCountDelta, fileCount, fileCountDelta);
+            int lineCount, int lineCountDelta, int fileCount, int fileCountDelta, int commentCount, int commentCountDelta) {
+        super(lineCount, lineCountDelta, fileCount, fileCountDelta, commentCount, commentCountDelta);
 
         // No copy, can be called only internally
         this.languageDiffs = languageDiffs;
@@ -70,6 +74,8 @@ public class SloccountDiffSummary extends SloccountDiff {
         int lineCountDelta = 0;
         int fileCount = 0;
         int fileCountDelta = 0;
+        int commentCount = 0;
+        int commentCountDelta = 0;
 
         for(String language: languages) {
             // Quadratic complexity can be optimized, but languages count is small
@@ -80,16 +86,21 @@ public class SloccountDiffSummary extends SloccountDiff {
                     curStats.getLineCount(),
                     curStats.getLineCount() - prevStats.getLineCount(),
                     curStats.getFileCount(),
-                    curStats.getFileCount() - prevStats.getFileCount()));
+                    curStats.getFileCount() - prevStats.getFileCount(),
+                    curStats.getCommentCount(),
+                    curStats.getCommentCount() - prevStats.getCommentCount()));
 
             lineCount += curStats.getLineCount();
             lineCountDelta += curStats.getLineCount() - prevStats.getLineCount();
             fileCount += curStats.getFileCount();
             fileCountDelta += curStats.getFileCount() - prevStats.getFileCount();
+            commentCount += curStats.getCommentCount();
+            commentCountDelta += curStats.getCommentCount() - prevStats.getCommentCount();
         }
 
         return new SloccountDiffSummary(result, lineCount, lineCountDelta,
-                fileCount, fileCountDelta);
+                fileCount, fileCountDelta,
+                commentCount, commentCountDelta);
     }
 
     /**
@@ -107,16 +118,18 @@ public class SloccountDiffSummary extends SloccountDiff {
         List<SloccountDiffLanguage> result = new ArrayList<SloccountDiffLanguage>();
         int lineCount = 0;
         int fileCount = 0;
+        int commentCount = 0;
 
         for(SloccountLanguageStatistics language: current.getStatistics()) {
             result.add(new SloccountDiffLanguage(language.getName(),
-                    language.getLineCount(), 0, language.getFileCount(), 0));
+                    language.getLineCount(), 0, language.getFileCount(), 0, language.getCommentCount(), 0));
 
             lineCount += language.getLineCount();
             fileCount += language.getFileCount();
+            commentCount += language.getCommentCount();
         }
 
-        return new SloccountDiffSummary(result, lineCount, 0, fileCount, 0);
+        return new SloccountDiffSummary(result, lineCount, 0, fileCount, 0, commentCount, 0);
     }
 
     /**
@@ -127,7 +140,7 @@ public class SloccountDiffSummary extends SloccountDiff {
      */
     private static SloccountDiffSummary getDiffSummary() {
         return new SloccountDiffSummary(
-                Collections.<SloccountDiffLanguage>emptyList(), 0, 0, 0, 0);
+                Collections.<SloccountDiffLanguage>emptyList(), 0, 0, 0, 0, 0, 0);
     }
 
     /**

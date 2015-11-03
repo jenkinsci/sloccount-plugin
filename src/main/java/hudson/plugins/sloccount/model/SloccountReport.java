@@ -34,18 +34,18 @@ public class SloccountReport extends FileContainer implements SloccountReportInt
         this();
         for(File f : old.getFiles()){
             if(filter.include(f)){
-                this.add(f.getName(), f.getLanguage(), f.getModule(), f.getLineCount());
+                this.add(f.getName(), f.getLanguage(), f.getModule(), f.getLineCount(), f.getCommentCount());
             }
         }
     }
 
-    public void add(String filePath, String languageName, String moduleName, int lineCount){
+    public void add(String filePath, String languageName, String moduleName, int lineCount, int commentCount){
         // Get rid of Microsoft's incompatibility once and forever
         filePath = filePath.replace("\\", DIRECTORY_SEPARATOR);
 
         String folderPath = extractFolder(filePath);
 
-        File file = new File(filePath, languageName, moduleName, lineCount);
+        File file = new File(filePath, languageName, moduleName, lineCount, commentCount);
         this.addFile(file);
 
         Folder folder = this.getFolder(folderPath);

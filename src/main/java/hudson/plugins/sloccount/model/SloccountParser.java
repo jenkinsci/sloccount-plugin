@@ -138,6 +138,6 @@ public class SloccountParser implements
             logger.println("module : " + moduleName);
         }
 
-        report.add(filePath, languageName, moduleName, lineCount);
+        report.add(filePath, languageName, moduleName, lineCount, 0);
     }
 }
