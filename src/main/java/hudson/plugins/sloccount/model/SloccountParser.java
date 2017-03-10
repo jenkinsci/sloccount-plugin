@@ -4,6 +4,7 @@ import hudson.FilePath;
 import hudson.plugins.sloccount.model.cloc.ClocReport;
 import hudson.plugins.sloccount.util.FileFinder;
 import hudson.remoting.VirtualChannel;
+import org.jenkinsci.remoting.RoleChecker;
 
 import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
@@ -140,4 +141,10 @@ public class SloccountParser implements
 
         report.add(filePath, languageName, moduleName, lineCount, 0);
     }
+
+    @Override
+    public void checkRoles(RoleChecker roleChecker) throws SecurityException {
+
+    }
+
 }

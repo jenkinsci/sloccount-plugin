@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
+import org.jenkinsci.remoting.RoleChecker;
 
 /**
  * Scans the workspace and finds all Java files.
@@ -67,4 +68,10 @@ public class FileFinder implements FileCallable<String[]> {
             return new String[0];
         }
     }
+
+    @Override
+    public void checkRoles(RoleChecker roleChecker) throws SecurityException {
+
+    }
+
 }
