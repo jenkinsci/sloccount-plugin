@@ -1,7 +1,7 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Run;
 import hudson.plugins.sloccount.model.SloccountReportStatistics;
 
 import java.io.Serializable;
@@ -18,11 +18,11 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
 
     public static final String URL_NAME = "sloccountResult";
 
-    private AbstractBuild<?,?> build;
+    private Run<?,?> run;
     private SloccountResult result;
 
-    public SloccountBuildAction(AbstractBuild<?,?> build, SloccountResult result){
-        this.build = build;
+    public SloccountBuildAction(Run<?,?> run, SloccountResult result){
+        this.run = run;
         this.result = result;
     }
 
@@ -77,11 +77,11 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
      * @return the action or null
      */
     SloccountBuildAction getPreviousAction(){
-        if(this.build == null){
+        if(this.run == null){
             return null;
         }
 
-        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+        Run<?,?> previousBuild = this.run.getPreviousBuild();
 
         while(previousBuild != null){
             SloccountBuildAction action = previousBuild
@@ -101,8 +101,8 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return null;
     }
 
-    public AbstractBuild<?,?> getBuild(){
-        return this.build;
+    public Run<?,?> getRun(){
+        return this.run;
     }
 
     public Object getTarget() {

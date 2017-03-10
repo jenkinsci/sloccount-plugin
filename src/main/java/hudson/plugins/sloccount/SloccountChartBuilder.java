@@ -80,7 +80,7 @@ public class SloccountChartBuilder implements Serializable {
         while(action != null && (numBuildsInGraph <= 1 || numBuilds < numBuildsInGraph)){
             SloccountResult result = action.getResult();
             if(result != null){
-                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
+                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getRun());
 
                 allLanguages.addAll(result.getStatistics().getAllLanguages());
                 Set<String> remainingLanguages = new HashSet<String>(allLanguages);
@@ -161,7 +161,7 @@ public class SloccountChartBuilder implements Serializable {
             SloccountReportStatistics previousStatistics = null;
 
             if(result != null){
-                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
+                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getRun());
 
                 if(previousAction != null && previousAction.getResult() != null){
                     previousStatistics = previousAction.getResult().getStatistics();
