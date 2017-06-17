@@ -1,10 +1,14 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.model.Action;
+import jenkins.model.RunAction2;
 import hudson.plugins.sloccount.model.SloccountReportStatistics;
+import jenkins.tasks.SimpleBuildStep;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.kohsuke.stapler.StaplerProxy;
 
@@ -12,18 +16,22 @@ import org.kohsuke.stapler.StaplerProxy;
  *
  * @author lordofthepigs
  */
-public class SloccountBuildAction implements Action, Serializable, StaplerProxy {
+public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBuildStep.LastBuildAction  {
     /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
 
     public static final String URL_NAME = "sloccountResult";
 
-    private AbstractBuild<?,?> build;
-    private SloccountResult result;
+    private transient Run<?,?> build;
+    private final SloccountResult result;
+    private final int numBuildsInGraph;
+    
+    private transient List<SloccountProjectAction> projectActions;
 
-    public SloccountBuildAction(AbstractBuild<?,?> build, SloccountResult result){
-        this.build = build;
+    public SloccountBuildAction(SloccountResult result, int numBuildsInGraph){
         this.result = result;
+        this.numBuildsInGraph = numBuildsInGraph;
+        
+        this.projectActions = new ArrayList<>();  
     }
 
     public String getIconFileName() {
@@ -37,6 +45,12 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     public String getUrlName() {
         return URL_NAME;
     }
+    
+    @Override  
+    public Collection<? extends Action> getProjectActions() {  
+        return this.projectActions;  
+    }  
+
 
     /**
      * Get differences between two report statistics.
@@ -81,7 +95,7 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
             return null;
         }
 
-        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+        Run<?,?> previousBuild = this.build.getPreviousBuild();
 
         while(previousBuild != null){
             SloccountBuildAction action = previousBuild
@@ -101,11 +115,33 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return null;
     }
 
-    public AbstractBuild<?,?> getBuild(){
+    public Run<?,?> getBuild(){
         return this.build;
     }
 
     public Object getTarget() {
         return this.result;
+    }
+    
+    @Override
+    public void onLoad(Run<?,?> r)
+    {
+        this.build = r;
+        if( this.projectActions == null )
+        {
+            this.projectActions = new ArrayList<>();  
+        }
+        this.projectActions.add(new SloccountProjectAction(this.build.getParent(), this.numBuildsInGraph));  
+    }
+    
+    @Override
+    public void onAttached(Run<?,?> r)
+    {
+        this.build = r;
+        if( this.projectActions == null )
+        {
+            this.projectActions = new ArrayList<>();  
+        }
+        this.projectActions.add(new SloccountProjectAction(this.build.getParent(), this.numBuildsInGraph));  
     }
 }

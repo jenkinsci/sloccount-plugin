@@ -36,6 +36,7 @@ public class SloccountLanguageStatistics implements Serializable {
      *            number of lines in this language
      * @param fileCount
      *            number of files containing this language
+     * @param commentCount commentCount
      */
     public SloccountLanguageStatistics(String languageName, int lineCount,
             int fileCount, int commentCount){

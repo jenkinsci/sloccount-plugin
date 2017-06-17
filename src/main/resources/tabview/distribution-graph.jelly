@@ -1,3 +1,4 @@
+<?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core">
 
   <table cellpadding="0" cellspacing="0" width="100%">

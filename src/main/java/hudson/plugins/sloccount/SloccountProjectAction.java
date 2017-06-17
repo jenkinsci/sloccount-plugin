@@ -1,11 +1,10 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
+import hudson.model.Run;
+import hudson.model.Job;
 import hudson.model.Action;
 import hudson.util.ChartUtil;
 import java.io.IOException;
-import java.io.Serializable;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -13,16 +12,14 @@ import org.kohsuke.stapler.StaplerResponse;
  *
  * @author lordofthepigs
  */
-public class SloccountProjectAction implements Action, Serializable {
-    /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
+public class SloccountProjectAction implements Action {
 
     public static final String URL_NAME = "sloccountResult";
 
     public static final int CHART_WIDTH = 500;
     public static final int CHART_HEIGHT = 200;
 
-    public AbstractProject<?,?> project;
+    public transient Job<?,?> project;
 
     /** 
      * Maximal number of last successful builds displayed in the trend graphs.
@@ -30,7 +27,7 @@ public class SloccountProjectAction implements Action, Serializable {
      */
     private final int numBuildsInGraph;
 
-    public SloccountProjectAction(final AbstractProject<?, ?> project,
+    public SloccountProjectAction(final Job<?, ?> project,
             int numBuildsInGraph) {
         this.project = project;
         this.numBuildsInGraph = numBuildsInGraph;
@@ -60,7 +57,7 @@ public class SloccountProjectAction implements Action, Serializable {
      *             in case of an error
      */
     public void doIndex(final StaplerRequest request, final StaplerResponse response) throws IOException {
-        AbstractBuild<?, ?> build = getLastFinishedBuild();
+        Run<?, ?> build = getLastFinishedBuild();
         if (build != null) {
             response.sendRedirect2(String.format("../%d/%s", build.getNumber(), SloccountBuildAction.URL_NAME));
         }else{
@@ -75,8 +72,8 @@ public class SloccountProjectAction implements Action, Serializable {
      * @return the last finished build or <code>null</code> if there is no
      *         such build
      */
-    public AbstractBuild<?, ?> getLastFinishedBuild() {
-        AbstractBuild<?, ?> lastBuild = project.getLastBuild();
+    public Run<?, ?> getLastFinishedBuild() {
+        Run<?, ?> lastBuild = project.getLastBuild();
         while (lastBuild != null && (lastBuild.isBuilding() || lastBuild.getAction(SloccountBuildAction.class) == null)) {
             lastBuild = lastBuild.getPreviousBuild();
         }
@@ -89,12 +86,12 @@ public class SloccountProjectAction implements Action, Serializable {
      * @return the build action or null
      */
     public SloccountBuildAction getLastFinishedBuildAction() {
-        AbstractBuild<?, ?> lastBuild = getLastFinishedBuild();
+        Run<?, ?> lastBuild = getLastFinishedBuild();
         return (lastBuild != null) ? lastBuild.getAction(SloccountBuildAction.class) : null;
     }
 
     public final boolean hasValidResults() {
-        AbstractBuild<?, ?> build = getLastFinishedBuild();
+        Run<?, ?> build = getLastFinishedBuild();
 
         if (build != null) {
             SloccountBuildAction resultAction = build.getAction(SloccountBuildAction.class);
@@ -130,8 +127,7 @@ public class SloccountProjectAction implements Action, Serializable {
      *             in case of an error
      */
     public void doTrendMap(final StaplerRequest request, final StaplerResponse response) throws IOException {
-        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
-        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+        SloccountBuildAction lastAction = getLastFinishedBuildAction();
 
         ChartUtil.generateClickableMap(
                 request,
@@ -152,8 +148,7 @@ public class SloccountProjectAction implements Action, Serializable {
      *             in case of an error
      */
     public void doTrend(final StaplerRequest request, final StaplerResponse response) throws IOException {
-        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
-        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+        SloccountBuildAction lastAction = getLastFinishedBuildAction();
 
         ChartUtil.generateGraph(
                 request,
@@ -174,8 +169,7 @@ public class SloccountProjectAction implements Action, Serializable {
      *             in case of an error
      */
     public void doTrendDeltaMap(final StaplerRequest request, final StaplerResponse response) throws IOException {
-        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
-        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+        SloccountBuildAction lastAction = getLastFinishedBuildAction();
 
         ChartUtil.generateClickableMap(
                 request,
@@ -196,8 +190,7 @@ public class SloccountProjectAction implements Action, Serializable {
      *             in case of an error
      */
     public void doTrendDelta(final StaplerRequest request, final StaplerResponse response) throws IOException {
-        AbstractBuild<?,?> lastBuild = this.getLastFinishedBuild();
-        SloccountBuildAction lastAction = lastBuild.getAction(SloccountBuildAction.class);
+        SloccountBuildAction lastAction = getLastFinishedBuildAction();
 
         ChartUtil.generateGraph(
                 request,

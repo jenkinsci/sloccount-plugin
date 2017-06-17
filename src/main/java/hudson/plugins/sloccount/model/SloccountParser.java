@@ -1,6 +1,6 @@
 package hudson.plugins.sloccount.model;
 
-import hudson.FilePath;
+import jenkins.MasterToSlaveFileCallable;
 import hudson.plugins.sloccount.model.cloc.ClocReport;
 import hudson.plugins.sloccount.util.FileFinder;
 import hudson.remoting.VirtualChannel;
@@ -17,8 +17,8 @@ import java.io.Reader;
  * 
  * @author lordofthepigs
  */
-public class SloccountParser implements
-        FilePath.FileCallable<SloccountPublisherReport> {
+public class SloccountParser extends
+        MasterToSlaveFileCallable<SloccountPublisherReport> {
     /** Serial version UID. */
     private static final long serialVersionUID = 1L;
 

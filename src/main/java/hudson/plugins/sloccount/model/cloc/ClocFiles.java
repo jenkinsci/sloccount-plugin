@@ -21,6 +21,8 @@ public class ClocFiles implements Serializable {
 
     /**
      * Constructor.
+     * @param files files
+     * @param total total
      */
     public ClocFiles(List<ClocFile> files, ClocTotal total) {
         this.files = files;

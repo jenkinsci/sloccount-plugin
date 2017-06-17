@@ -23,6 +23,9 @@ public class ClocTotal implements Serializable {
 
     /**
      * Constructor.
+     * @param blank blank
+     * @param comment comment
+     * @param code code
      */
     public ClocTotal(int blank, int comment, int code) {
         this.blank = blank;

@@ -1,5 +1,6 @@
 package hudson.plugins.sloccount;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.util.StackedAreaRenderer2;
 import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 
@@ -10,6 +11,7 @@ import org.jfree.data.category.CategoryDataset;
  * links. This renderer does not render tooltips, these need to be defined in
  * sub-classes.
  */
+@SuppressFBWarnings(value="EQ_DOESNT_OVERRIDE_EQUALS", justification="Equals method is not needed.")
 public class SloccountAreaRenderer extends StackedAreaRenderer2 {
     /** Unique identifier of this class. */
     private static final long serialVersionUID = 1440842055316682192L;
@@ -30,7 +32,7 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
     /** {@inheritDoc} */
     @Override
     public final String generateURL(final CategoryDataset dataset, final int row, final int column) {
-        return getLabel(dataset, column).build.getNumber() + url;
+        return getLabel(dataset, column).getRun().getNumber() + url;
     }
 
     /**

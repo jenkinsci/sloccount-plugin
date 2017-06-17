@@ -63,6 +63,7 @@ public class SloccountTablePortlet extends DashboardPortlet {
     /**
      * Format an integer to contain a thousands separator.
      * 
+     * @param value value to format
      * @return the formatted string
      */
     public String grouping(int value) {
