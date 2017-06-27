@@ -132,6 +132,8 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
             this.projectActions = new ArrayList<>();  
         }
         this.projectActions.add(new SloccountProjectAction(this.build.getParent(), this.numBuildsInGraph));  
+        
+        this.result.setOwner(r);
     }
     
     @Override

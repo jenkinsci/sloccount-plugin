@@ -25,7 +25,7 @@ public class SloccountResult implements Serializable {
 
     private transient SloccountReport report;
 
-    private transient final Run<?,?> owner;
+    private transient Run<?,?> owner;
 
     /** The statistics. */
     private SloccountReportStatistics statistics;
@@ -51,6 +51,10 @@ public class SloccountResult implements Serializable {
 
     public Run<?,?> getOwner() {
         return owner;
+    }
+    
+    public void setOwner(Run<?,?> o) {
+        this.owner = o;
     }
 
     /**
