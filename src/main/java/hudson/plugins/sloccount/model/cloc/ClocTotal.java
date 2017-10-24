@@ -21,12 +21,6 @@ public class ClocTotal implements Serializable {
     @XmlAttribute
     private final int code;
 
-    /**
-     * Constructor.
-     * @param blank blank
-     * @param comment comment
-     * @param code code
-     */
     public ClocTotal(int blank, int comment, int code) {
         this.blank = blank;
         this.comment = comment;
