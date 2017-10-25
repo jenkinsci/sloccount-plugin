@@ -51,6 +51,7 @@
 
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <jenkins.version>1.625.3</jenkins.version>
   </properties>
 
   <dependencies>

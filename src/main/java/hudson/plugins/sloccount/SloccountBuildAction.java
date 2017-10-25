@@ -1,13 +1,12 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
 import hudson.model.Run;
 import hudson.model.Action;
 import jenkins.model.RunAction2;
 import hudson.plugins.sloccount.model.SloccountReportStatistics;
 import jenkins.tasks.SimpleBuildStep;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +17,7 @@ import org.kohsuke.stapler.StaplerProxy;
  *
  * @author lordofthepigs
  */
-public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBuildStep.LastBuildAction  {
+public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBuildStep.LastBuildAction {
     public static final String URL_NAME = "sloccountResult";
 
     private transient Run<?,?> build;
@@ -46,7 +45,8 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
     
     @Override  
     public Collection<? extends Action> getProjectActions() {
-        return this.projectActions;
+        buildProjectActions();
+        return Collections.unmodifiableList(this.projectActions);
     }
 
     private void buildProjectActions() {
@@ -54,7 +54,7 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
             return;
         }
 
-        this.projectActions = Collections.synchronizedList(new ArrayList<SloccountProjectAction>());
+        this.projectActions = new CopyOnWriteArrayList<>();
         this.projectActions.add(new SloccountProjectAction(this.build.getParent(), this.numBuildsInGraph));
     }
 

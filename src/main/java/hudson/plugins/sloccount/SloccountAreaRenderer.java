@@ -49,11 +49,14 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
     /**
      * Checks this instance for equality with an arbitrary object.
      *
-     * @param obj  the object (<code>null</code> not permitted).
+     * @param obj the object
      *
      * @return A boolean.
      */
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         if (obj == this) {
             return true;
         }
