@@ -50,12 +50,14 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
     }
 
     private void buildProjectActions() {
-        if (this.projectActions != null) {
+        if (projectActions != null) {
             return;
         }
 
-        this.projectActions = new CopyOnWriteArrayList<>();
-        this.projectActions.add(new SloccountProjectAction(this.build.getParent(), this.numBuildsInGraph));
+        CopyOnWriteArrayList<SloccountProjectAction> actions = new CopyOnWriteArrayList<>();
+        actions.add(new SloccountProjectAction(build.getParent(), numBuildsInGraph));
+
+        projectActions = actions;
     }
 
     /**
