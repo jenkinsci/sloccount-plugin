@@ -26,7 +26,7 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
     
     private transient List<SloccountProjectAction> projectActions;
 
-    public SloccountBuildAction(SloccountResult result, int numBuildsInGraph){
+    public SloccountBuildAction(SloccountResult result, int numBuildsInGraph) {
         this.result = result;
         this.numBuildsInGraph = numBuildsInGraph;
     }
@@ -68,23 +68,25 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
                 result.getStatistics());
     }
 
-    public SloccountResult getResult(){
+    public SloccountResult getResult() {
         return this.result;
     }
 
-    private SloccountReportStatistics getPreviousStatistics(){
+    private SloccountReportStatistics getPreviousStatistics() {
         SloccountResult previous = this.getPreviousResult();
-        if(previous == null){
+
+        if (previous == null) {
             return null;
-        }else{
+        } else {
            return previous.getStatistics();
         }
     }
 
-    SloccountResult getPreviousResult(){
+    SloccountResult getPreviousResult() {
         SloccountBuildAction previousAction = this.getPreviousAction();
         SloccountResult previousResult = null;
-        if(previousAction != null){
+
+        if (previousAction != null) {
             previousResult = previousAction.getResult();
         }
         
@@ -96,21 +98,20 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
      * 
      * @return the action or null
      */
-    SloccountBuildAction getPreviousAction(){
-        if(this.build == null){
+    SloccountBuildAction getPreviousAction() {
+        if (this.build == null) {
             return null;
         }
 
         Run<?,?> previousBuild = this.build.getPreviousBuild();
 
-        while(previousBuild != null){
-            SloccountBuildAction action = previousBuild
-                    .getAction(SloccountBuildAction.class);
+        while (previousBuild != null) {
+            SloccountBuildAction action = previousBuild.getAction(SloccountBuildAction.class);
 
             if (action != null) {
                 SloccountResult result = action.getResult();
                 
-                if(result != null && !result.isEmpty()) {
+                if (result != null && !result.isEmpty()) {
                     return action;
                 }
             }
@@ -121,7 +122,7 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
         return null;
     }
 
-    public Run<?,?> getBuild(){
+    public Run<?,?> getBuild() {
         return this.build;
     }
 
@@ -130,16 +131,14 @@ public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBui
     }
     
     @Override
-    public void onLoad(Run<?,?> r)
-    {
+    public void onLoad(Run<?,?> r) {
         this.build = r;
         this.result.setOwner(r);
         buildProjectActions();
     }
     
     @Override
-    public void onAttached(Run<?,?> r)
-    {
+    public void onAttached(Run<?,?> r) {
         this.build = r;
         buildProjectActions();
     }
