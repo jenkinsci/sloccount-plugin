@@ -1,10 +1,15 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.model.Action;
+import jenkins.model.RunAction2;
 import hudson.plugins.sloccount.model.SloccountReportStatistics;
+import jenkins.tasks.SimpleBuildStep;
 
-import java.io.Serializable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.kohsuke.stapler.StaplerProxy;
 
@@ -12,18 +17,18 @@ import org.kohsuke.stapler.StaplerProxy;
  *
  * @author lordofthepigs
  */
-public class SloccountBuildAction implements Action, Serializable, StaplerProxy {
-    /** Serial version UID. */
-    private static final long serialVersionUID = 0L;
-
+public class SloccountBuildAction implements RunAction2, StaplerProxy, SimpleBuildStep.LastBuildAction {
     public static final String URL_NAME = "sloccountResult";
 
-    private AbstractBuild<?,?> build;
-    private SloccountResult result;
+    private transient Run<?,?> build;
+    private final SloccountResult result;
+    private final int numBuildsInGraph;
+    
+    private transient List<SloccountProjectAction> projectActions;
 
-    public SloccountBuildAction(AbstractBuild<?,?> build, SloccountResult result){
-        this.build = build;
+    public SloccountBuildAction(SloccountResult result, int numBuildsInGraph) {
         this.result = result;
+        this.numBuildsInGraph = numBuildsInGraph;
     }
 
     public String getIconFileName() {
@@ -37,6 +42,23 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
     public String getUrlName() {
         return URL_NAME;
     }
+    
+    @Override  
+    public Collection<? extends Action> getProjectActions() {
+        buildProjectActions();
+        return Collections.unmodifiableList(this.projectActions);
+    }
+
+    private void buildProjectActions() {
+        if (projectActions != null) {
+            return;
+        }
+
+        CopyOnWriteArrayList<SloccountProjectAction> actions = new CopyOnWriteArrayList<>();
+        actions.add(new SloccountProjectAction(build.getParent(), numBuildsInGraph));
+
+        projectActions = actions;
+    }
 
     /**
      * Get differences between two report statistics.
@@ -48,23 +70,25 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
                 result.getStatistics());
     }
 
-    public SloccountResult getResult(){
+    public SloccountResult getResult() {
         return this.result;
     }
 
-    private SloccountReportStatistics getPreviousStatistics(){
+    private SloccountReportStatistics getPreviousStatistics() {
         SloccountResult previous = this.getPreviousResult();
-        if(previous == null){
+
+        if (previous == null) {
             return null;
-        }else{
+        } else {
            return previous.getStatistics();
         }
     }
 
-    SloccountResult getPreviousResult(){
+    SloccountResult getPreviousResult() {
         SloccountBuildAction previousAction = this.getPreviousAction();
         SloccountResult previousResult = null;
-        if(previousAction != null){
+
+        if (previousAction != null) {
             previousResult = previousAction.getResult();
         }
         
@@ -76,21 +100,20 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
      * 
      * @return the action or null
      */
-    SloccountBuildAction getPreviousAction(){
-        if(this.build == null){
+    SloccountBuildAction getPreviousAction() {
+        if (this.build == null) {
             return null;
         }
 
-        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+        Run<?,?> previousBuild = this.build.getPreviousBuild();
 
-        while(previousBuild != null){
-            SloccountBuildAction action = previousBuild
-                    .getAction(SloccountBuildAction.class);
+        while (previousBuild != null) {
+            SloccountBuildAction action = previousBuild.getAction(SloccountBuildAction.class);
 
             if (action != null) {
                 SloccountResult result = action.getResult();
                 
-                if(result != null && !result.isEmpty()) {
+                if (result != null && !result.isEmpty()) {
                     return action;
                 }
             }
@@ -101,11 +124,24 @@ public class SloccountBuildAction implements Action, Serializable, StaplerProxy 
         return null;
     }
 
-    public AbstractBuild<?,?> getBuild(){
+    public Run<?,?> getBuild() {
         return this.build;
     }
 
     public Object getTarget() {
         return this.result;
+    }
+    
+    @Override
+    public void onLoad(Run<?,?> r) {
+        this.build = r;
+        this.result.setOwner(r);
+        buildProjectActions();
+    }
+    
+    @Override
+    public void onAttached(Run<?,?> r) {
+        this.build = r;
+        buildProjectActions();
     }
 }

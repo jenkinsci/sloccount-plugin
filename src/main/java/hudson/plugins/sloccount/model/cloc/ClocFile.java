@@ -29,6 +29,12 @@ public class ClocFile implements Serializable {
 
     /**
      * Constructor.
+     * 
+     * @param name file name
+     * @param blank blank
+     * @param comment comment
+     * @param code code
+     * @param language language
      */
     public ClocFile(String name, int blank, int comment, int code, String language) {
         this.name = name;

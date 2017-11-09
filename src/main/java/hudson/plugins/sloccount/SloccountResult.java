@@ -1,6 +1,6 @@
 package hudson.plugins.sloccount;
 
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.model.Api;
 import hudson.model.ModelObject;
 import hudson.plugins.sloccount.model.File;
@@ -25,7 +25,7 @@ public class SloccountResult implements Serializable {
 
     private transient SloccountReport report;
 
-    private final AbstractBuild<?,?> owner;
+    private transient Run<?,?> owner;
 
     /** The statistics. */
     private SloccountReportStatistics statistics;
@@ -37,7 +37,7 @@ public class SloccountResult implements Serializable {
 
     public SloccountResult(SloccountReportStatistics statistics, String encoding,
             boolean commentIsCode,
-            SloccountReport report, AbstractBuild<?,?> owner){
+            SloccountReport report, Run<?,?> owner){
         this.statistics = statistics;
         this.encoding = encoding;
         this.commentIsCode = commentIsCode;
@@ -49,8 +49,12 @@ public class SloccountResult implements Serializable {
         return lazyLoadReport();
     }
 
-    public AbstractBuild<?,?> getOwner() {
+    public Run<?,?> getOwner() {
         return owner;
+    }
+    
+    public void setOwner(Run<?,?> o) {
+        this.owner = o;
     }
 
     /**
@@ -108,7 +112,15 @@ public class SloccountResult implements Serializable {
 
         SloccountParser parser = new SloccountParser(realEncoding, null, null,
                 commentIsCode);
-        return parser.parseFiles(destDir.listFiles());
+        java.io.File[] files = destDir.listFiles();
+        if( files != null)
+        {
+            return parser.parseFiles(files);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -224,7 +236,7 @@ public class SloccountResult implements Serializable {
 
         private String displayName = null;
         
-        public BreadCrumbResult(SloccountReport report, AbstractBuild<?,?> owner,
+        public BreadCrumbResult(SloccountReport report, Run<?,?> owner,
                                 String displayName, boolean commentIsCode){
             super(null, null, commentIsCode, report, owner);
             this.displayName = displayName;

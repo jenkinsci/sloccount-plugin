@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<?jelly escape-by-default='true'?>  
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">  
+    <f:entry field="pattern" title="SLOCCount reports" description="Reports.">
+        <f:textbox/>
+    </f:entry>
+    
+    <f:advanced>
+        <f:entry field="encoding" title="Report charset" description="The character encoding of SLOCCount result files. If no value is set, default 'UTF-8' will be used. This option is considered only in the SLOCCount report parser and is ignored in the cloc one.">
+            <f:textbox/>
+        </f:entry>
+    
+        <f:entry field="numBuildsInGraph" title="Builds in graph" description="Maximal number of last successful builds, that are displayed in the trend graphs. Use 1 or less for unlimited.">
+            <f:textbox/>
+        </f:entry>
+
+        <f:entry field="commentIsCode" title="Comment is code" description="Blank lines and comments are not counted to code lines by default. But they often contain Javadoc or Doxygen documentation which is tightly connected to the code. This option is considered only in the cloc report parser and is ignored in the SLOCCount one.">
+            <f:checkbox/>
+        </f:entry>
+    
+        <f:entry field="ignoreBuildFailure" title="Ignore build failure" description="Try to process the report files even if the build is not successful.">
+            <f:checkbox/>
+        </f:entry>
+    </f:advanced>
+</j:jelly>

@@ -38,6 +38,14 @@ public class ClocHeader implements Serializable {
 
     /**
      * Constructor.
+     * @param clocUrl URL of CLOC
+     * @param clocVersion version of CLOC
+     * @param elapsedSeconds time elapsed in seconds
+     * @param filesCount number of files
+     * @param linesCount number of lines
+     * @param filesPerSecond number of files per second
+     * @param linesPerSecond number of lines per second
+     * @param reportFile file with report
      */
     public ClocHeader(ClocParameter clocUrl, ClocParameter clocVersion,
                       ClocParameter elapsedSeconds, ClocParameter filesCount,

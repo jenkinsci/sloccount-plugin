@@ -31,6 +31,8 @@ public class ClocReport implements Serializable {
 
     /**
      * Constructor.
+     * @param header header
+     * @param files files
      */
     public ClocReport(ClocHeader header, ClocFiles files) {
         this.header = header;
@@ -70,7 +72,7 @@ public class ClocReport implements Serializable {
      *
      * @param report        output report
      * @param commentIsCode include comments to the measured lines
-     * @throws javax.xml.bind.JAXBContext if the report has unexpected structure
+     * @throws JAXBException if the report has unexpected structure
      */
     public void toSloccountReport(SloccountReportInterface report, boolean commentIsCode)
             throws JAXBException {

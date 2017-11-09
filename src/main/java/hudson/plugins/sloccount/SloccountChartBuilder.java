@@ -5,6 +5,7 @@ import hudson.plugins.sloccount.model.SloccountReportStatistics;
 import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 import hudson.util.DataSetBuilder;
 import hudson.util.ShiftedCategoryAxis;
+import hudson.model.Run;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -70,8 +71,8 @@ public class SloccountChartBuilder implements Serializable {
 
     private static CategoryDataset buildDataset(SloccountBuildAction lastAction,
             int numBuildsInGraph){
-        DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
-        Set<String> allLanguages = new HashSet<String>();
+        DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<>();
+        Set<String> allLanguages = new HashSet<>();
 
         SloccountBuildAction action = lastAction;
         int numBuilds = 0;
@@ -80,10 +81,10 @@ public class SloccountChartBuilder implements Serializable {
         while(action != null && (numBuildsInGraph <= 1 || numBuilds < numBuildsInGraph)){
             SloccountResult result = action.getResult();
             if(result != null){
-                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
+                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel((Run<?,?>)action.getBuild());
 
                 allLanguages.addAll(result.getStatistics().getAllLanguages());
-                Set<String> remainingLanguages = new HashSet<String>(allLanguages);
+                Set<String> remainingLanguages = new HashSet<>(allLanguages);
 
                 for(SloccountLanguageStatistics l : result.getStatistics().getStatistics()){
                     builder.add(l.getLineCount(), l.getName(), buildLabel);
@@ -143,8 +144,8 @@ public class SloccountChartBuilder implements Serializable {
 
     private static CategoryDataset buildDatasetDelta(SloccountBuildAction lastAction,
             int numBuildsInGraph){
-        DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<String, NumberOnlyBuildLabel>();
-        Set<String> allLanguages = new HashSet<String>();
+        DataSetBuilder<String, NumberOnlyBuildLabel> builder = new DataSetBuilder<>();
+        Set<String> allLanguages = new HashSet<>();
         SloccountBuildAction action = lastAction;
 
         // Initial languages from the first action
@@ -158,10 +159,10 @@ public class SloccountChartBuilder implements Serializable {
         while(action != null && (numBuildsInGraph <= 1 || numBuilds < numBuildsInGraph)){
             SloccountBuildAction previousAction = action.getPreviousAction();
             SloccountResult result = action.getResult();
-            SloccountReportStatistics previousStatistics = null;
+            SloccountReportStatistics previousStatistics;
 
             if(result != null){
-                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel(action.getBuild());
+                NumberOnlyBuildLabel buildLabel = new NumberOnlyBuildLabel((Run<?, ?>) action.getBuild());
 
                 if(previousAction != null && previousAction.getResult() != null){
                     previousStatistics = previousAction.getResult().getStatistics();
@@ -171,7 +172,7 @@ public class SloccountChartBuilder implements Serializable {
                 }
 
                 allLanguages.addAll(previousStatistics.getAllLanguages());
-                Set<String> remainingLanguages = new HashSet<String>(allLanguages);
+                Set<String> remainingLanguages = new HashSet<>(allLanguages);
 
                 for(SloccountLanguageStatistics current : result.getStatistics().getStatistics()){
                     SloccountLanguageStatistics previous = previousStatistics.getLanguage(current.getName());

@@ -2,10 +2,8 @@ package hudson.plugins.sloccount;
 
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.Action;
-import hudson.model.BuildListener;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.model.Result;
 import hudson.plugins.sloccount.model.SloccountPublisherReport;
 import hudson.plugins.sloccount.model.SloccountParser;
@@ -13,6 +11,7 @@ import hudson.plugins.sloccount.model.SloccountPublisherReport.SlaveFile;
 import hudson.remoting.VirtualChannel;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Recorder;
+import jenkins.tasks.SimpleBuildStep;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.List;
 import java.io.File;
+import javax.annotation.Nonnull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -27,7 +27,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  *
  * @author lordofthepigs
  */
-public class SloccountPublisher extends Recorder implements Serializable {
+public class SloccountPublisher extends Recorder implements SimpleBuildStep, Serializable {
     /** Serial version UID. */
     private static final long serialVersionUID = 0L;
 
@@ -61,17 +61,12 @@ public class SloccountPublisher extends Recorder implements Serializable {
         this.ignoreBuildFailure = ignoreBuildFailure;
     }
 
-    @Override
-    public Action getProjectAction(AbstractProject<?,?> project){
-        return new SloccountProjectAction(project, numBuildsInGraph);
-    }
-
     protected boolean canContinue(final Result result) {
         return result != Result.ABORTED && result != Result.FAILURE;
     }
 
     @Override
-    public boolean perform(AbstractBuild<?,?> build, Launcher launcher, BuildListener listener){
+    public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) {
         PrintStream logger = listener.getLogger();
 
         if (!canContinue(build.getResult())) {
@@ -80,7 +75,7 @@ public class SloccountPublisher extends Recorder implements Serializable {
                 // Continue as usual
             } else {
                 logger.println("[SLOCCount] Skipping results publication since the build is not successful");
-                return true;
+                return;
             }
         }
 
@@ -89,38 +84,37 @@ public class SloccountPublisher extends Recorder implements Serializable {
         SloccountPublisherReport report;
 
         try{
-            report = build.getWorkspace().act(parser);
+            report = workspace.act(parser);
         }catch(IOException ioe){
             ioe.printStackTrace(logger);
-            return false;
+            return;
         }catch(InterruptedException ie){
             ie.printStackTrace(logger);
-            return false;
+            return;
         }
 
         if (report.getSourceFiles().size() == 0) {
             logger.format("[SLOCCount] No file is matching the input pattern: %s%n",
                     getRealPattern());
-            return false;
+            return;
         }
 
         SloccountResult result = new SloccountResult(report.getStatistics(),
                 getRealEncoding(), commentIsCode, null, build);
-        build.addAction(new SloccountBuildAction(build, result));
+        build.addAction(new SloccountBuildAction( result, this.numBuildsInGraph));
 
         try{
             copyFilesToBuildDirectory(report.getSourceFiles(),
                     build.getRootDir(), launcher.getChannel());
         }catch(IOException e){
             e.printStackTrace(logger);
-            return false;
+            return;
         }catch(InterruptedException e){
             e.printStackTrace(logger);
-            return false;
+            return;
         }
 
         logger.format("[SLOCCount] Report successfully processed and all data stored%n");
-        return true;
     }
 
     /**

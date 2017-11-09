@@ -30,7 +30,7 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
     /** {@inheritDoc} */
     @Override
     public final String generateURL(final CategoryDataset dataset, final int row, final int column) {
-        return getLabel(dataset, column).build.getNumber() + url;
+        return getLabel(dataset, column).getRun().getNumber() + url;
     }
 
     /**
@@ -44,5 +44,31 @@ public class SloccountAreaRenderer extends StackedAreaRenderer2 {
      */
     private NumberOnlyBuildLabel getLabel(final CategoryDataset dataset, final int column) {
         return (NumberOnlyBuildLabel)dataset.getColumnKey(column);
+    }
+
+    /**
+     * Checks this instance for equality with an arbitrary object.
+     *
+     * @param obj the object
+     *
+     * @return A boolean.
+     */
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof SloccountAreaRenderer)) {
+            return false;
+        }
+        SloccountAreaRenderer that = (SloccountAreaRenderer) obj;
+        return url.equals(that.url) && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hashCode(this.url);
     }
 }
