@@ -20,34 +20,31 @@
 
   <developers>
     <developer>
-      <id>npiguet</id>
-      <name>Nicolas Piguet</name>
-    </developer>
-    <developer>
-      <id>ohtake</id>
-      <name>OHTAKE Tomohiro</name>
-    </developer>
-    <developer>
-      <id>jieryn</id>
-      <name>Jesse Farinacci</name>
-      <email>jieryn@gmail.com</email>
-    </developer>
-    <developer>
-      <id>ssogabe</id>
-      <name>Seiji Sogabe</name>
-      <email>s.sogabe@gmail.com</email>
-    </developer>      
-    <developer>
-      <id>kbrandt</id>
-      <name>Karsten Brandt</name>
-    </developer>
-    <developer>
-      <id>mixalturek</id>
-      <name>Michal Turek</name>
-      <email>mixalturek@users.sf.net</email>
+      <id>imarinkov</id>
+      <name>Ivaïlo Marinkov</name>
+      <email>ivo+jenkins@ivo.qa</email>
     </developer>
   </developers>
 
+  <contributors>
+    <contributor>
+      <name>Nicolas Piguet</name>
+    </contributor>
+    <contributor>
+      <name>OHTAKE Tomohiro</name>
+    </contributor>
+    <contributor>
+      <name>Jesse Farinacci</name>
+      <email>jieryn@gmail.com</email>
+    </contributor>
+    <contributor>
+      <name>Seiji Sogabe</name>
+      <email>s.sogabe@gmail.com</email>
+    </contributor>
+    <contributor>
+      <name>Karsten Brandt</name>
+    </contributor>
+  </contributors>
 
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
