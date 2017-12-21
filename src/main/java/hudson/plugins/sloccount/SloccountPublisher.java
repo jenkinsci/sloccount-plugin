@@ -158,7 +158,7 @@ public class SloccountPublisher extends Recorder implements SimpleBuildStep, Ser
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
-        return BuildStepMonitor.BUILD;
+        return BuildStepMonitor.NONE;
     }
 
     private String getRealEncoding(){
