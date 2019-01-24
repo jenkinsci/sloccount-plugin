@@ -79,7 +79,7 @@
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>jaxb</artifactId>
-      <version>2.2.11-alpha-1-20190118.085516-2</version>
+      <version>2.2.11-alpha-1</version>
     </dependency>
 
     <!-- dependencies on Jenkins Pipeline plugins for tests-->  
