@@ -98,8 +98,8 @@ public class SloccountParser extends
                 }
             }
         } finally {
-    	    Thread.currentThread().setContextClassLoader(originalClassLoader);
-    	}
+            Thread.currentThread().setContextClassLoader(originalClassLoader);
+        }
     }
 
     private void parse(Reader reader, SloccountReportInterface report) throws IOException {
