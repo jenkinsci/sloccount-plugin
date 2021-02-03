@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 
 /**
@@ -61,10 +63,15 @@ public class ClocReport implements Serializable {
      * @return the content of the parsed file in form of a report
      * @throws javax.xml.bind.JAXBException if a XML related error occurs
      */
-    public static ClocReport parse(File file) throws JAXBException {
+    public static ClocReport parse(File file) throws JAXBException, java.io.IOException {
         JAXBContext context = JAXBContext.newInstance(ClocReport.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        return (ClocReport) unmarshaller.unmarshal(file);
+        // Jenkins replaces ASCII symbols like colons found in filenames to Unicode.
+        // Using File() here causes converting Unicode symbols back to ASCII.
+        // Such files could not be found of course.
+        try (InputStream is = new FileInputStream(file)) {
+          return (ClocReport) unmarshaller.unmarshal(is);
+        }
     }
 
     /**
