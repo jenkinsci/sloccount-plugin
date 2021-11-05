@@ -11,7 +11,7 @@
   <artifactId>sloccount</artifactId>
   <packaging>hpi</packaging>
   <name>Jenkins SLOCCount Plug-in</name>
-  <version>1.25</version>
+  <version>${revision}${changelist}</version>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/SLOCCount+Plugin</url>
   <description>This plug-in generates the trend report for SLOCCount,
     an open source program which counts the number of lines of codes in over
@@ -109,7 +109,7 @@
     <connection>scm:git:git://github.com/jenkinsci/sloccount-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/sloccount-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/sloccount-plugin</url>
-    <tag>sloccount-1.25</tag>
+    <tag>{scmTag}</tag>
   </scm>
 
 </project>
