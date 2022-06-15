@@ -161,34 +161,38 @@ Data
 
 Example of XML data:
 
-    <sloccountReportStatistics>
-        <language>
-            <files>7</files>
-            <lines>513</lines>
-            <name>xml</name>
-        </language>
-        <language>
-            <files>116</files>
-            <lines>8174</lines>
-            <name>java</name>
-        </language>
-        <totalFiles>123</totalFiles>
-        <totalLanguages>2</totalLanguages>
-        <totalLines>8687</totalLines>
-    </sloccountReportStatistics>
+```xml
+<sloccountReportStatistics>
+    <language>
+        <files>7</files>
+        <lines>513</lines>
+        <name>xml</name>
+    </language>
+    <language>
+        <files>116</files>
+        <lines>8174</lines>
+        <name>java</name>
+    </language>
+    <totalFiles>123</totalFiles>
+    <totalLanguages>2</totalLanguages>
+    <totalLines>8687</totalLines>
+</sloccountReportStatistics>
+```
 
 Example of JSON data:
 
-    {
-        "languages":
-        [
-            {"files":7,"lines":513,"name":"xml"},
-            {"files":116,"lines":8174,"name":"java"},
-        ],
-        "totalFiles":123,
-        "totalLanguages":2,
-        "totalLines":8687
-    }
+```json
+{
+    "languages":
+    [
+        {"files":7,"lines":513,"name":"xml"},
+        {"files":116,"lines":8174,"name":"java"},
+    ],
+    "totalFiles":123,
+    "totalLanguages":2,
+    "totalLines":8687
+}
+```
 
 ## Support for cloc tool
 
