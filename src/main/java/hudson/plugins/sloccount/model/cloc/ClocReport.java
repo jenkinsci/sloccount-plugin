@@ -11,8 +11,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 
 /**
  * Cloc report parser and the parsed file.
@@ -63,14 +65,24 @@ public class ClocReport implements Serializable {
      * @return the content of the parsed file in form of a report
      * @throws javax.xml.bind.JAXBException if a XML related error occurs
      */
-    public static ClocReport parse(File file) throws JAXBException, java.io.IOException {
-        JAXBContext context = JAXBContext.newInstance(ClocReport.class);
+    public static ClocReport parse(File file) throws JAXBException {
+        JAXBContext context;
+        Thread currentThread = Thread.currentThread();
+        ClassLoader initialClassLoader = currentThread.getContextClassLoader();
+        currentThread.setContextClassLoader(ClocReport.class.getClassLoader());
+        try {
+            context = JAXBContext.newInstance(ClocReport.class);
+        } finally {
+            currentThread.setContextClassLoader(initialClassLoader);
+        }
         Unmarshaller unmarshaller = context.createUnmarshaller();
         // Jenkins replaces ASCII symbols like colons found in filenames to Unicode.
         // Using File() here causes converting Unicode symbols back to ASCII.
         // Such files could not be found of course.
         try (InputStream is = new FileInputStream(file)) {
-          return (ClocReport) unmarshaller.unmarshal(is);
+            return (ClocReport) unmarshaller.unmarshal(is);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 

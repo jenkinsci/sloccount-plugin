@@ -19,7 +19,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.List;
 import java.io.File;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -66,7 +66,7 @@ public class SloccountPublisher extends Recorder implements SimpleBuildStep, Ser
     }
 
     @Override
-    public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) {
+    public void perform(@NonNull Run<?, ?> build, @NonNull FilePath workspace, @NonNull Launcher launcher, @NonNull TaskListener listener) {
         PrintStream logger = listener.getLogger();
 
         if (!canContinue(build.getResult())) {
