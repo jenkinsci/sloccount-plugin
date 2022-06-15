@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
 /* `buildPlugin` step provided by: https://github.com/jenkins-infra/pipeline-library */
-buildPlugin(useAci: false, configurations: [
-        [ platform: "linux", jdk: "8" ],
-        [ platform: "windows", jdk: "8" ],
-        [ platform: "linux", jdk: "11", jenkins: "2.222.3" ]
+buildPlugin(useContainerAgent: true, configurations: [
+  [ platform: 'linux', jdk: '8' ],
+  [ platform: 'linux', jdk: '11' ],
+  [ platform: 'windows', jdk: '11' ],
 ])

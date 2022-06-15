@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.util.Set;
 import java.io.Serializable;
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 
 import org.jenkinsci.plugins.workflow.steps.StepExecution;
@@ -116,7 +116,7 @@ public class SloccountPublisherStep extends Step implements Serializable {
         } 
 
  
-        @Nonnull
+        @NonNull
         @Override 
         public String getDisplayName() { 
             return "Publish Sloccount reports"; 
