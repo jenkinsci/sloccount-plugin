@@ -48,7 +48,7 @@
   <properties>
     <revision>1.26</revision>
     <changelist>-SNAPSHOT</changelist>
-    <jenkins.version>2.289.1</jenkins.version>
+    <jenkins.version>2.289.3</jenkins.version>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
   </properties>
 
@@ -68,7 +68,6 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>dashboard-view</artifactId>
-      <version>2.0</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -82,6 +81,11 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-cps</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>jaxb</artifactId>
+      <version>2.3.6-1</version>
     </dependency>
 
     <!-- dependencies on Jenkins Pipeline plugins for tests-->
