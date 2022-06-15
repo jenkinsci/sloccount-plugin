@@ -76,9 +76,7 @@ public class SloccountParser extends
     }
 
     private void parse(java.io.File file, SloccountReportInterface report) throws IOException {
-        ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             // Try cloc report file first, XML has precise structure
             ClocReport.parse(file).toSloccountReport(report, commentIsCode);
         } catch (JAXBException e) {
@@ -97,8 +95,6 @@ public class SloccountParser extends
                     in.close();
                 }
             }
-        } finally {
-            Thread.currentThread().setContextClassLoader(originalClassLoader);
         }
     }
 
