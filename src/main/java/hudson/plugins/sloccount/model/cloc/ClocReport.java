@@ -62,16 +62,17 @@ public class ClocReport implements Serializable {
      * @throws javax.xml.bind.JAXBException if a XML related error occurs
      */
     public static ClocReport parse(File file) throws JAXBException {
+        JAXBContext context;
         Thread currentThread = Thread.currentThread();
         ClassLoader initialClassLoader = currentThread.getContextClassLoader();
+        currentThread.setContextClassLoader(ClocReport.class.getClassLoader());
         try {
-            currentThread.setContextClassLoader(ClocReport.class.getClassLoader());
-            JAXBContext context = JAXBContext.newInstance(ClocReport.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (ClocReport) unmarshaller.unmarshal(file);
+            context = JAXBContext.newInstance(ClocReport.class);
         } finally {
             currentThread.setContextClassLoader(initialClassLoader);
         }
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        return (ClocReport) unmarshaller.unmarshal(file);
     }
 
     /**
