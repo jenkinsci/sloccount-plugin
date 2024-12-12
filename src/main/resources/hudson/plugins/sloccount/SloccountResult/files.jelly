@@ -38,7 +38,5 @@
     </tfoot>
   </table>
 
-  <script type="text/javascript">
-          Behaviour.applySubtree(document.getElementById('statistics'));
-  </script>
+  <st:adjunct includes="hudson.plugins.sloccount.SloccountResult.apply-subtree-behaviour"/>
 </j:jelly>
