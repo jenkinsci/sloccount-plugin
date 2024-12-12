@@ -5,44 +5,10 @@
     <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/tabview-min.js"/>
     <script type="text/javascript" src="${rootURL}/plugin/sloccount/yui/dispatcher-min.js"/>
 
-    <script type="text/javascript">
-        var myTabs = new YAHOO.widget.TabView("statistics");
-
-        YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-            label: '${%Files}',
-            dataSrc: 'files',
-            cacheData: true,
-            active: false
-        }), myTabs);
-
-        <j:if test="${it.report.moduleCount > 1}">
-            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-                label: '${%Modules}',
-                dataSrc: 'modules',
-                cacheData: true,
-                active: false
-            }), myTabs);
-        </j:if>
-        <j:if test="${it.report.folderCount > 1}">
-            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-                label: '${%Folders}',
-                dataSrc: 'folders',
-                cacheData: true,
-                active: false
-            }), myTabs);
-        </j:if>
-        <j:if test="${it.report.languageCount > 1}">
-            YAHOO.plugin.Dispatcher.delegate (new YAHOO.widget.Tab({
-                label: '${%Languages}',
-                dataSrc: 'languages',
-                cacheData: true,
-                active: false
-            }), myTabs);
-        </j:if>
-
-        myTabs.set('activeIndex', 0);
-
-    </script>
+    <span class="tabview-data" data-files-label="${%Files}" data-modules-label="${%Modules}" data-folders-label="${%Folders}"
+          data-languages-label="${%Languages}" data-render-modules="${it.report.moduleCount > 1}" data-render-folders="${it.report.folderCount > 1}"
+          data-render-languages="${it.report.languageCount > 1}"/>
+    <st:adjunct includes="tabview.render-tabview"/>
 
     <st:include page="/tabview/css.jelly" />
 
