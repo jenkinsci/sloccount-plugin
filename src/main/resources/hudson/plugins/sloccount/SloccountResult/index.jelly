@@ -1,10 +1,31 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
     <l:layout norefresh="true" title="${%SLOCCount Results}">
+      <l:header>
+        <script src="${resURL}/jsbundles/section-to-tabs.js" type="text/javascript" defer="true" />
+      </l:header>
         <st:include it="${it.owner}" page="sidepanel.jelly" />
+        <st:adjunct includes="hudson.plugins.sloccount.SloccountResult.style"/>
         <l:main-panel>
             <h1>${%SLOCCount Results}</h1>
-            <st:include page="/tabview/main.jelly" />
+          <l:tabPane title="${%Files}">
+            <st:include page="files.jelly"/>
+          </l:tabPane>
+          <j:if test="${it.report.moduleCount > 1}">
+            <l:tabPane title="${%Modules}">
+              <st:include page="modules.jelly"/>
+            </l:tabPane>
+          </j:if>
+          <j:if test="${it.report.folderCount > 1}">
+            <l:tabPane title="${%Folders}">
+              <st:include page="folders.jelly"/>
+            </l:tabPane>
+          </j:if>
+          <j:if test="${it.report.languageCount > 1}">
+            <l:tabPane title="${%Languages}">
+              <st:include page="languages.jelly"/>
+            </l:tabPane>
+          </j:if>
         </l:main-panel>
     </l:layout>
 </j:jelly>

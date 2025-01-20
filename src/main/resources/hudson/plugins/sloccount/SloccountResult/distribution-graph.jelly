@@ -1,0 +1,7 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:t="/lib/hudson">
+
+  <div class="slc-distribution-bar">
+    <span style="width: ${container.lineCount / max * 100}%;"/>
+  </div>
+</j:jelly>

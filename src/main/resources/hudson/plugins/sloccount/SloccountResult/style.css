@@ -1,0 +1,43 @@
+.slc-distribution-bar {
+  --color: var(--accent-color);
+
+  height: 20px;
+  width: 100%;
+  padding: 4px;
+  border-radius: 10px;
+  background-color: color-mix(
+  in sRGB,
+  var(--text-color-secondary) 25%,
+  transparent
+  );
+  display: block;
+  opacity: 1 !important;
+}
+
+.slc-distribution-bar > span {
+  height: 100%;
+  min-width: 8%;
+  background-color: var(--color);
+  display: block;
+  border-radius: 8px;
+}
+
+.number {
+  text-align: right;
+  padding-right: 0;
+}
+
+.slc-left {
+  text-align: left;
+  padding-left: calc(var(--table-padding) * 2);
+}
+
+.slc-distribution {
+  width: 100%;
+}
+
+#sloccountSummary tr > th:last-of-type,
+#sloccountSummary tr > td:last-of-type{
+  padding-right: calc(var(--table-padding) * 2);
+}
+

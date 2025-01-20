@@ -1,14 +1,14 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
   <st:header name="Content-Type" value="text/html;charset=UTF-8" />
-  <table class="pane sortable" id="files">
+  <table class="jenkins-table sortable jenkins-table--small" id="files">
     <thead>
       <tr>
-        <td class="pane-header">${%Language}</td>
-        <td class="pane-header" style="width:2em">${%Files}</td>
-        <td class="pane-header" style="width:2em">${%Lines}</td>
-        <td class="pane-header" style="width:2em">${%Comments}</td>
-        <td class="pane-header" style="width:60%">${%Distribution}</td>
+        <th>${%Language}</th>
+        <th align="right">${%Files}</th>
+        <th align="right">${%Lines}</th>
+        <th align="right">${%Comments}</th>
+        <th>${%Distribution}</th>
       </tr>
     </thead>
     <tbody>
@@ -16,26 +16,22 @@
       <j:set var="max" value="${cachedReport.longestLanguage.lineCount}"/>
       <j:forEach var="container" items="${cachedReport.languages}">
         <tr>
-          <td class="pane"><a href="languageResult/${container.urlName}">${container.name}</a></td>
-          <td class="pane number" data="${container.fileCount}">${container.fileCountString}</td>
-          <td class="pane number" data="${container.lineCount}">${container.lineCountString}</td>
-          <td class="pane number" data="${container.commentCount}">${container.commentCountString}</td>
-          <td class="pane" data="${container.lineCount}"><st:include page="/tabview/distribution-graph.jelly" /></td>
+          <td><a href="languageResult/${container.urlName}">${container.name}</a></td>
+          <td class="number" data="${container.fileCount}">${container.fileCountString}</td>
+          <td class="number" data="${container.lineCount}">${container.lineCountString}</td>
+          <td class="number" data="${container.commentCount}">${container.commentCountString}</td>
+          <td class="slc-distribution" data="${container.lineCount}"><st:include page="distribution-graph.jelly" /></td>
         </tr>
       </j:forEach>
     </tbody>
     <tfoot>
       <tr class="sortbottom">
-        <td class="pane-header">${%Total} ${cachedReport.languageCountString}</td>
-        <td class="pane-header number" data="${cachedReport.fileCount}">${cachedReport.fileCountString}</td>
-        <td class="pane-header number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</td>
-        <td class="pane-header number" data="${cachedReport.commentCount}">${cachedReport.commentCountString}</td>
-        <td class="pane-header" data="0"> </td>
+        <th class="slc-left">${%Total} ${cachedReport.languageCountString}</th>
+        <th class="number" data="${cachedReport.fileCount}">${cachedReport.fileCountString}</th>
+        <th class="number" data="${cachedReport.lineCount}">${cachedReport.lineCountString}</th>
+        <th class="number" data="${cachedReport.commentCount}">${cachedReport.commentCountString}</th>
+        <th data="0"> </th>
       </tr>
     </tfoot>
   </table>
-
-  <script type="text/javascript">
-          Behaviour.applySubtree(document.getElementById('statistics'));
-  </script>
 </j:jelly>

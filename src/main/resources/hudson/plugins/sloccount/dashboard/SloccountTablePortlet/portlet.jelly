@@ -4,11 +4,7 @@
     xmlns:dp="/hudson/plugins/view/dashboard">
 
     <!-- According to https://wiki.jenkins-ci.org/display/JENKINS/Dashboard+View -->
-    <dp:decorate portlet="${it}">
-        <tr><td>
-            <div align="center">
-                <st:include page="table.jelly"/>
-            </div>
-        </td></tr>
-    </dp:decorate>
+    <dp:decorate-table portlet="${it}" class="sortable jenkins-table--small">
+        <st:include page="table.jelly"/>
+    </dp:decorate-table>
 </j:jelly>

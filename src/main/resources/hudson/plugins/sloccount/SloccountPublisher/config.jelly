@@ -5,21 +5,19 @@
     </f:entry>
     <f:advanced>
         <f:entry title="${%Report charset}" field="encoding">
-            <f:textbox name="encoding" value="${instance.encoding}"/>
+            <f:textbox value="${instance.encoding}"/>
         </f:entry>
 
         <f:entry title="${%Builds in graph}" field="numBuildsInGraph">
-            <f:textbox name="numBuildsInGraph" value="${instance.numBuildsInGraph}"/>
+            <f:number/>
         </f:entry>
 
-        <f:entry field="comments">
-            <f:checkbox name="commentIsCode" checked="${instance.commentIsCode}"/>
-            <label class="attach-previous">${%Include comments to code lines}</label>
+        <f:entry field="commentIsCode" title="${%Include comments to code lines}">
+            <f:checkbox/>
         </f:entry>
 
-        <f:entry>
-            <f:checkbox name="ignoreBuildFailure" checked="${instance.ignoreBuildFailure}"/>
-            <label class="attach-previous">${%Try to process the report files even if the build is not successful}</label>
+        <f:entry field="ignoreBuildFailure" title="${%Try to process the report files even if the build is not successful}">
+            <f:checkbox/>
         </f:entry>
     </f:advanced>
 </j:jelly>

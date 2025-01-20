@@ -1,21 +1,14 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:dp="/hudson/plugins/view/dashboard">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:t="/lib/hudson">
 
-    <style type="text/css">
-        .sloccountTablePortlet .number { text-align: right; }
-    </style>
-
-    <table class="pane sortable sloccountTablePortlet">
-        <j:set var="totalLines" value="${0}"/>
-        <j:set var="totalFiles" value="${0}"/>
-
+  <st:adjunct includes="hudson.plugins.sloccount.SloccountResult.style"/>
         <thead>
             <tr>
-                <td class="pane-header">${%Job}</td>
-                <td class="pane-header">${%Lines}</td>
-                <td class="pane-header">${%Comments}</td>
-                <td class="pane-header">${%Files}</td>
-                <td class="pane-header">${%Languages}</td>
+                <th>${%Job}</th>
+                <th align="right">${%Lines}</th>
+                <th align="right">${%Comments}</th>
+                <th align="right">${%Files}</th>
+                <th align="right">${%Languages}</th>
             </tr>
         </thead>
         <tbody>
@@ -23,11 +16,11 @@
                 <tr>
                     <j:set var="stats" value="${it.getStatistics(job)}" />
 
-                    <td class="pane"><dp:jobLink job="${job}" /></td>
-                    <td class="pane number" data="${stats.lineCount}">${stats.lineCountString}</td>
-                    <td class="pane number" data="${stats.commentCount}">${stats.commentCountString}</td>
-                    <td class="pane number" data="${stats.fileCount}">${stats.fileCountString}</td>
-                    <td class="pane number" data="${stats.languageCount}">${stats.languageCountString}</td>
+                    <td><div class="dbv-cell"><t:buildHealth td="false"/><t:jobLink job="${job}"/></div></td>
+                    <td class="number" data="${stats.lineCount}">${stats.lineCountString}</td>
+                    <td class="number" data="${stats.commentCount}">${stats.commentCountString}</td>
+                    <td class="number" data="${stats.fileCount}">${stats.fileCountString}</td>
+                    <td class="number" data="${stats.languageCount}">${stats.languageCountString}</td>
 
                     <j:set var="totalLines" value="${totalLines + stats.lineCount}"/>
                     <j:set var="totalFiles" value="${totalFiles + stats.fileCount}"/>
@@ -36,12 +29,11 @@
         </tbody>
         <tfoot>
             <tr class="sortbottom">
-                <td class="pane-header">${%Total}</td>
-                <td class="pane-header number" data="${totalLines}">${it.grouping(totalLines)}</td>
-                <td class="pane-header number" data="${totalComments}">${it.grouping(totalComments)}</td>
-                <td class="pane-header number" data="${totalFiles}">${it.grouping(totalFiles)}</td>
-                <td class="pane-header number" data="0">-</td>
+                <th class="slc-left">${%Total}</th>
+                <th class="number" data="${totalLines}">${it.grouping(totalLines)}</th>
+                <th class="number" data="${totalComments}">${it.grouping(totalComments)}</th>
+                <th class="number" data="${totalFiles}">${it.grouping(totalFiles)}</th>
+                <th class="number" data="0">-</th>
             </tr>
         </tfoot>
-    </table>
 </j:jelly>
