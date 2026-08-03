@@ -9,7 +9,6 @@ package jenkins.plugins.sloccount.steps;
  *
  * @author tzbjxk
  */
-import org.apache.commons.lang.StringUtils; 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition; 
 import org.jenkinsci.plugins.workflow.job.WorkflowJob; 
 import org.jenkinsci.plugins.workflow.job.WorkflowRun; 
@@ -21,7 +20,6 @@ import hudson.model.Action;
 import hudson.plugins.sloccount.SloccountBuildAction;  
 
 import java.util.ArrayList;  
-import java.util.Arrays; 
 import java.util.List; 
 
 public class SloccountPublisherStepTest extends Assert { 
@@ -34,7 +32,7 @@ public class SloccountPublisherStepTest extends Assert {
     public void archive_1() throws Exception { 
         // job setup 
         WorkflowJob foo = j.jenkins.createProject(WorkflowJob.class, "foo"); 
-        foo.setDefinition(new CpsFlowDefinition(StringUtils.join(Arrays.asList( 
+        foo.setDefinition(new CpsFlowDefinition(String.join("\n", 
                 "node {", 
                 "  writeFile file: 'sloc.xml', text: '<?xml version=\"1.0\" ?><results><files><file code=\"50\" comment=\"50\" language=\"C/C++\" name=\"file.h\"/><file code=\"300\" comment=\"100\" language=\"C/C++\" name=\"file.c\"/></files></results>'",
                 "  sloccountPublish ( ",
@@ -43,7 +41,7 @@ public class SloccountPublisherStepTest extends Assert {
                 "     commentIsCode: false,",
                 "     numBuildsInGraph: 1,",
                 "     ignoreBuildFailure: false )",
-                "}"), "\n"),false)); 
+                "}"),false)); 
  
         // get the build going, and wait until workflow pauses 
         WorkflowRun b = j.assertBuildStatusSuccess(foo.scheduleBuild2(0).get()); 
@@ -69,7 +67,7 @@ public class SloccountPublisherStepTest extends Assert {
     public void archive_2() throws Exception { 
         // job setup 
         WorkflowJob foo = j.jenkins.createProject(WorkflowJob.class, "foo"); 
-        foo.setDefinition(new CpsFlowDefinition(StringUtils.join(Arrays.asList( 
+        foo.setDefinition(new CpsFlowDefinition(String.join("\n", 
                 "node {", 
                 "  writeFile file: 'sloc.xml', text: '<?xml version=\"1.0\" ?><results><files><file code=\"50\" comment=\"50\" language=\"C/C++\" name=\"file.h\"/><file code=\"300\" comment=\"100\" language=\"C/C++\" name=\"file.c\"/></files></results>'",
                 "  step([$class: 'SloccountPublisher',",
@@ -78,7 +76,7 @@ public class SloccountPublisherStepTest extends Assert {
                 "     commentIsCode: false,",
                 "     numBuildsInGraph: 1,",
                 "     ignoreBuildFailure: false])",
-                "}"), "\n"),false)); 
+                "}"),false)); 
  
         // get the build going, and wait until workflow pauses 
         WorkflowRun b = j.assertBuildStatusSuccess(foo.scheduleBuild2(0).get()); 
